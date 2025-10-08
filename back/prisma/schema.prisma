@@ -108,7 +108,7 @@ model Status {
 
 model Transaction {
   id          Int      @id @default(autoincrement())
-  amount      String
+  amount      Int
   description String
   date        DateTime
   total       Int

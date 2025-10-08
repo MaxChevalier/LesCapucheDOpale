@@ -14,6 +14,7 @@ model User {
   password  String
   roleId    Int
   role      Role     @relation(fields: [roleId], references: [id])
+  quests    Quest[]
 }
 
 model Role {
@@ -94,6 +95,8 @@ model Quest {
   recommendedXP    Int
   adventurers      Adventurer[]
   equipments       Equipment[]
+  UserId          Int
+  user            User                @relation(fields: [UserId], references: [id])
 }
 
 model Status {

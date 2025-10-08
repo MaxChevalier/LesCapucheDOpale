@@ -28,12 +28,10 @@ model Adventurer {
   specialtyId    Int
   specialty      Specialty    @relation(fields: [specialtyId], references: [id])
   dailyRate      Int
-  equipmentTypeId    Int?
-  equipmentType      EquipmentType?   @relation(fields: [equipmentTypeId], references: [id])
-  consumableTypeId   Int?
-  consumableType     ConsumableType?  @relation(fields: [consumableTypeId], references: [id])
-  experience     Int
-  quests         Quest[]
+  equipmentTypes      EquipmentType[]
+  consumableTypes    ConsumableType[]
+  experience         Int
+  quests             Quest[]
 }
 
 model Specialty {

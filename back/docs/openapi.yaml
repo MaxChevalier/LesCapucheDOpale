@@ -8,7 +8,7 @@ info:
     
     Some useful links:
     - [Les capuches d'Opale repository](https://github.com/MaxChevalier/LesCapucheDOpale)
-    - [The source API definition for the Pet Store](https://github.com/MaxChevalier/LesCapucheDOpale/openapi.yaml)
+    - [The source API definition for Les capuches d'Opale](https://github.com/MaxChevalier/LesCapucheDOpale/openapi.yaml)
   termsOfService: https://swagger.io/terms/
   license:
     name: Apache 2.0
@@ -164,7 +164,7 @@ paths:
         '200':
           description: User deleted
         '400':
-          description: Invalid username supplied
+          description: Invalid id supplied
         '404':
           description: User not found
         default:

@@ -1,6 +1,6 @@
-import { Body, Controller, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import {Body, Controller, Param, ParseIntPipe, Patch, Post} from '@nestjs/common';
 import { AdventurersService } from '../services/adventurers.service';
-import CreateAdventurerDto from '../dto/create-adventurer.dto';
+import { CreateAdventurerDto } from '../dto/create-adventurer.dto';
 import { UpdateAdventurerDto } from '../dto/update-adventurer.dto';
 
 @Controller('adventurers')
@@ -12,7 +12,7 @@ export class AdventurersController {
         return this.adventurersService.create(createAdventurerDto);
     }
 
-    @Put(':id')
+    @Patch(':id')
     update(
         @Param('id', ParseIntPipe) id: number,
         @Body() updateAdventurerDto: UpdateAdventurerDto

@@ -9,59 +9,61 @@ export class AdventurersService {
     constructor(private prisma: PrismaService) {}
 
     async create(createAdventurerDto: CreateAdventurerDto) {
-        const exists = await this.prisma.adventurer.findFirst({ where: { name: createAdventurerDto.name } });
-        if (exists) {
-            throw new ConflictException('Adventurer name already exists');
-        }
-
         const {
             name,
-            specialty,
+            specialtyId,
             dailyRate,
-            experience,
-            equipmentTypes,
-            consumableTypes,
+            equipmentTypeIds = [],
+            consumableTypeIds = [],
         } = createAdventurerDto;
 
-        // Find existing specialty
-        const specialtyEntity = await this.prisma.specialty.findFirst({ where: { name: specialty.name } });
+        const specialtyEntity = await this.prisma.specialty.findUnique({
+            where: { id: specialtyId },
+            select: { id: true },
+        });
         if (!specialtyEntity) {
-            throw new NotFoundException('Specialty not found');
+            throw new NotFoundException("Specialty not found");
         }
 
-        // Find existing equipment types
-        const equipmentTypeEntities = await Promise.all(
-            equipmentTypes.map(async (et) => {
-                const entity = await this.prisma.equipmentType.findFirst({ where: { name: et.name } });
-                if (!entity) {
-                    throw new NotFoundException(`EquipmentType '${et.name}' not found`);
-                }
-                return entity;
-            })
-        );
+        if (equipmentTypeIds.length) {
+            const found = await this.prisma.equipmentType.findMany({
+                where: { id: { in: equipmentTypeIds } },
+                select: { id: true },
+            });
+            if (found.length !== equipmentTypeIds.length) {
+                const foundSet = new Set(found.map((e) => e.id));
+                const missing = equipmentTypeIds.filter((id) => !foundSet.has(id));
+                throw new NotFoundException(
+                    `EquipmentType id(s) not found: ${missing.join(", ")}`
+                );
+            }
+        }
 
-        // Find existing consumable types
-        const consumableTypeEntities = await Promise.all(
-            consumableTypes.map(async (ct) => {
-                const entity = await this.prisma.consumableType.findFirst({ where: { name: ct.name } });
-                if (!entity) {
-                    throw new NotFoundException(`ConsumableType '${ct.name}' not found`);
-                }
-                return entity;
-            })
-        );
+        if (consumableTypeIds.length) {
+            const found = await this.prisma.consumableType.findMany({
+                where: { id: { in: consumableTypeIds } },
+                select: { id: true },
+            });
+            if (found.length !== consumableTypeIds.length) {
+                const foundSet = new Set(found.map((e) => e.id));
+                const missing = consumableTypeIds.filter((id) => !foundSet.has(id));
+                throw new NotFoundException(
+                    `ConsumableType id(s) not found: ${missing.join(", ")}`
+                );
+            }
+        }
 
         return this.prisma.adventurer.create({
             data: {
                 name,
-                specialtyId: specialtyEntity.id,
+                specialtyId,
                 dailyRate,
-                experience,
-                equipmentTypes: equipmentTypeEntities.length
-                    ? { connect: equipmentTypeEntities.map(et => ({ id: et.id })) }
+                experience: 0,
+                equipmentTypes: equipmentTypeIds.length
+                    ? { connect: equipmentTypeIds.map((id) => ({ id })) }
                     : undefined,
-                consumableTypes: consumableTypeEntities.length
-                    ? { connect: consumableTypeEntities.map(ct => ({ id: ct.id })) }
+                consumableTypes: consumableTypeIds.length
+                    ? { connect: consumableTypeIds.map((id) => ({ id })) }
                     : undefined,
             },
             include: {
@@ -74,57 +76,54 @@ export class AdventurersService {
 
     async update(id: number, dto: UpdateAdventurerDto) {
         const {
-            specialty,
-            equipmentTypes,
-            consumableTypes,
+            specialtyId,
+            equipmentTypeIds,
+            consumableTypeIds,
             ...scalars
         } = dto;
 
-        let specialtyId: number | undefined;
-        if (specialty) {
-            let specialtyEntity = await this.prisma.specialty.findFirst({ where: { name: specialty.name } });
-            if (!specialtyEntity) {
-                specialtyEntity = await this.prisma.specialty.create({ data: { name: specialty.name } });
+        if (typeof specialtyId === 'number') {
+            const spec = await this.prisma.specialty.findUnique({
+                where: { id: specialtyId },
+                select: { id: true },
+            });
+            if (!spec) {
+                throw new NotFoundException('Specialty not found');
             }
-            specialtyId = specialtyEntity.id;
         }
 
-        let equipmentTypeIds: { id: number }[] | undefined;
-        if (equipmentTypes) {
-            const entities = await Promise.all(
-                equipmentTypes.map(async (et) => {
-                    let entity = await this.prisma.equipmentType.findFirst({ where: { name: et.name } });
-                    if (!entity) {
-                        entity = await this.prisma.equipmentType.create({ data: { name: et.name } });
-                    }
-                    return entity;
-                })
-            );
-            equipmentTypeIds = entities.map(et => ({ id: et.id }));
+        if (Array.isArray(equipmentTypeIds) && equipmentTypeIds.length > 0) {
+            const found = await this.prisma.equipmentType.findMany({
+                where: { id: { in: equipmentTypeIds } },
+                select: { id: true },
+            });
+            if (found.length !== equipmentTypeIds.length) {
+                const foundSet = new Set(found.map(e => e.id));
+                const missing = equipmentTypeIds.filter(x => !foundSet.has(x));
+                throw new NotFoundException(`EquipmentType id(s) not found: ${missing.join(', ')}`);
+            }
         }
 
-        let consumableTypeIds: { id: number }[] | undefined;
-        if (consumableTypes) {
-            const entities = await Promise.all(
-                consumableTypes.map(async (ct) => {
-                    let entity = await this.prisma.consumableType.findFirst({ where: { name: ct.name } });
-                    if (!entity) {
-                        entity = await this.prisma.consumableType.create({ data: { name: ct.name } });
-                    }
-                    return entity;
-                })
-            );
-            consumableTypeIds = entities.map(ct => ({ id: ct.id }));
+        if (Array.isArray(consumableTypeIds) && consumableTypeIds.length > 0) {
+            const found = await this.prisma.consumableType.findMany({
+                where: { id: { in: consumableTypeIds } },
+                select: { id: true },
+            });
+            if (found.length !== consumableTypeIds.length) {
+                const foundSet = new Set(found.map(e => e.id));
+                const missing = consumableTypeIds.filter(x => !foundSet.has(x));
+                throw new NotFoundException(`ConsumableType id(s) not found: ${missing.join(', ')}`);
+            }
         }
 
         const data: Prisma.AdventurerUpdateInput = {
             ...scalars,
-            ...(specialtyId ? { specialtyId } : {}),
-            ...(equipmentTypeIds
-                ? { equipmentTypes: { set: equipmentTypeIds } }
+            ...(typeof specialtyId === 'number' ? { specialtyId } : {}),
+            ...(Array.isArray(equipmentTypeIds)
+                ? { equipmentTypes: { set: equipmentTypeIds.map(id => ({ id })) } }
                 : {}),
-            ...(consumableTypeIds
-                ? { consumableTypes: { set: consumableTypeIds } }
+            ...(Array.isArray(consumableTypeIds)
+                ? { consumableTypes: { set: consumableTypeIds.map(id => ({ id })) } }
                 : {}),
         };
 
@@ -139,8 +138,8 @@ export class AdventurersService {
                 },
             });
         } catch (e: any) {
-            if (e.code === 'P2025') {
-                throw new NotFoundException('Aventurier introuvable');
+            if (e.code === "P2025") {
+                throw new NotFoundException("Adventurer not found");
             }
             throw e;
         }

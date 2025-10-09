@@ -1,19 +1,11 @@
-export class AdventurerDto {
-    id: number;
-    name: string;
-    specialtyId: number;
-    specialty: {
-        id: number;
-        name: string;
-    };
-    dailyRate: number;
-    equipmentTypes: Array<{
-        id: number;
-        name: string;
-    }>;
-    consumableTypes: Array<{
-        id: number;
-        name: string;
-    }>;
-    experience: number;
-}
+import { Prisma } from '@prisma/client';
+
+export const adventurerInclude = Prisma.validator<Prisma.AdventurerInclude>()({
+    specialty: true,
+    equipmentTypes: true,
+    consumableTypes: true,
+});
+
+export type AdventurerDto = Prisma.AdventurerGetPayload<{
+    include: typeof adventurerInclude;
+}>;

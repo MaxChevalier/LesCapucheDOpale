@@ -1,47 +1,27 @@
-import { IsString, IsArray, IsInt, Min, IsNotEmpty, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-
-class Specialty {
-    @IsString()
-    name: string;
-}
-
-class EquipmentType {
-    @IsString()
-    name: string;
-}
-
-class ConsumableType {
-    @IsString()
-    name: string;
-}
+import { IsString, IsArray, IsInt, Min, IsNotEmpty, IsPositive, IsOptional } from 'class-validator';
 
 export class CreateAdventurerDto {
     @IsString()
     @IsNotEmpty()
     name: string;
 
-    @ValidateNested()
-    @Type(() => Specialty)
-    specialty: Specialty;
+    @IsInt()
+    @IsPositive()
+    specialtyId!: number;
 
     @IsInt()
     @Min(0)
     dailyRate: number;
 
+    @IsOptional()
     @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => EquipmentType)
-    equipmentTypes: EquipmentType[];
+    @IsInt({ each: true })
+    @IsPositive({ each: true })
+    equipmentTypeIds?: number[];
 
+    @IsOptional()
     @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => ConsumableType)
-    consumableTypes: ConsumableType[];
-
-    @IsInt()
-    @Min(0)
-    experience: number;
+    @IsInt({ each: true })
+    @IsPositive({ each: true })
+    consumableTypeIds?: number[];
 }
-
-export default CreateAdventurerDto

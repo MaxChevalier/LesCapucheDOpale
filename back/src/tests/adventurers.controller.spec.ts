@@ -47,7 +47,24 @@ describe('AdventurersController', () => {
     afterEach(() => jest.clearAllMocks());
 
     it('should call service.create()', async () => {
-        const dto = { name: 'Aragorn', specialty: { name: 'Warrior' }, dailyRate: 100, experience: 5, equipmentTypes: [{ name: 'Sword' }], consumableTypes: [{ name: 'Potion' }] };
+        const dto = {
+            name: 'Aragorn',
+            specialty: {
+                name: 'Warrior'
+            },
+            dailyRate: 100,
+            experience: 5,
+            equipmentTypes: [
+                {
+                    name: 'Sword'
+                }
+            ],
+            consumableTypes: [
+                {
+                    name: 'Potion'
+                }
+            ]
+        };
         mockAdventurersService.create.mockResolvedValue({ id: 1, ...dto });
 
         const result = await controller.create(dto);

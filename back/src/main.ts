@@ -1,10 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import * as swaggerUi from 'swagger-ui-express';
+import * as YAML from 'yamljs';
+import * as path from 'path';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const swaggerDocument = YAML.load(path.join(process.cwd(), 'docs', 'openapi.yaml'));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  
   app.useGlobalPipes(new ValidationPipe({ whitelist: true,forbidNonWhitelisted: true,transform: true,}),);
 
   app.enableCors();

@@ -18,7 +18,7 @@ externalDocs:
   description: Find out more about Swagger
   url: https://swagger.io
 servers:
-  - url: HTTPS
+  - url: https://localhost:3000
 paths:
   /users:
     get:

@@ -8,11 +8,11 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class ConsumableService {
-  private readonly baseUrl = `${environment.apiUrl}/consumableType`;
+  private readonly baseUrlType = `${environment.apiUrl}/consumable-type`;
 
   constructor(private readonly http: HttpClient) { }
 
   getConsumables(): Observable<ConsumableType[]> {
-    return this.http.get<ConsumableType[]>(this.baseUrl);
+    return this.http.get<ConsumableType[]>(this.baseUrlType);
   }
 }

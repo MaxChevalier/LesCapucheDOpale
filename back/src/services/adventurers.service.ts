@@ -11,7 +11,7 @@ export class AdventurersService {
     async create(createAdventurerDto: CreateAdventurerDto) {
         const exists = await this.prisma.adventurer.findFirst({ where: { name: createAdventurerDto.name } });
         if (exists) {
-            throw new ConflictException('Adventurer name already exist');
+            throw new ConflictException('Adventurer name already exists');
         }
 
         const {

@@ -50,7 +50,7 @@ describe('AuthService', () => {
   const result = await authService.login('admin@mail.com', 'password123');
   expect(result).toEqual({ access_token: 'mockedToken' });
   expect(jwtService.signAsync).toHaveBeenCalledWith(
-    expect.objectContaining({ sub: 1, email: 'admin@mail.com', role: 1 }),
+    expect.objectContaining({ sub: 1, email: 'admin@mail.com', roleId: 1 }),
     expect.any(Object),
   );
 });
@@ -62,7 +62,7 @@ it('should return a token for regular user (roleId != 1)', async () => {
   const result = await authService.login('user@mail.com', 'password123');
   expect(result).toEqual({ access_token: 'mockedToken' });
   expect(jwtService.signAsync).toHaveBeenCalledWith(
-    expect.objectContaining({ sub: 2, email: 'user@mail.com', role: 2 }),
+    expect.objectContaining({ sub: 2, email: 'user@mail.com', roleId: 2 }),
     expect.any(Object),
   );
 });

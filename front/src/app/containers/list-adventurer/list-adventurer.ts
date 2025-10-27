@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-list-adventurer',
   imports: [ItemAdventurer],
-  standalone: true, 
   templateUrl: './list-adventurer.html',
   styleUrl: './list-adventurer.scss'
 })

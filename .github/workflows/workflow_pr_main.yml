@@ -16,19 +16,14 @@ jobs:
               with:
                 node-version: '18'
 
-            - name: Front - Install dependencies
-              run: npm -i ci
+            - name: Front - Install
+              run: npm install
+              working-directory: ./front
+            
+            - name: Front - Run CI
+              run: npm run testCi
               working-directory: ./front
 
-            - name: Install Google Chrome
-              uses: browser-actions/setup-chrome@v1
-
-            - name: Front - Install and Test
-              env:
-                CHROME_BIN: /usr/bin/google-chrome-stable
-              run: |
-                npm run testCi
-              working-directory: ./front
     test-back:
         runs-on: ubuntu-latest
         steps:
@@ -37,9 +32,18 @@ jobs:
               with:
                 node-version: '18'
 
+            - name: Back - Install
+              run: npm install
+              working-directory: ./back
+            
+            - name: Back - Build
+              run: npm run build
+              working-directory: ./back
+
             - name: Back - Lint
-              run: |
-                npm run lint
-                npm run build
-                npm run test
+              run: npm run test
+              working-directory: ./back
+              
+            - name: Back - Build
+              run: npm run build
               working-directory: ./back

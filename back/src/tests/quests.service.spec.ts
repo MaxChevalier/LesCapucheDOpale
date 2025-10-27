@@ -21,6 +21,9 @@ describe('QuestsService', () => {
     quest: {
       create: jest.fn(),
       update: jest.fn(),
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+
     },
   };
 
@@ -63,7 +66,7 @@ describe('QuestsService', () => {
           statusId: 7,
           UserId: 42,
           adventurers: { connect: (dto.adventurerIds ?? []).map(id => ({ id })) },
-          questStockEquipments: { connect: (dto.equipmentStockIds ?? []).map(id => ({ id })) },
+          questStockEquipments: { create: (dto.equipmentStockIds ?? []).map(id => ({ equipmentStockId: id })) },
         },
         include: {
           status: true,
@@ -172,4 +175,47 @@ describe('QuestsService', () => {
       await expect(service.update(1, dto)).rejects.toThrow(/EquipmentStock id\(s\) not found/);
     });
   });
+
+  it('should return quests with relations', async () => {
+  const quests = [{ id: 1, name: 'Quest1' }];
+  mockPrisma.quest.findMany.mockResolvedValue(quests);
+  const res = await service.findAll();
+  expect(res).toBe(quests);
+  expect(mockPrisma.quest.findMany).toHaveBeenCalledWith({
+    include: { status: true, adventurers: true, questStockEquipments: true, user: true },
+    orderBy: { id: 'desc' },
+  });
+});
+
+it('should return quest by id', async () => {
+  const quest = { id: 1, name: 'Quest1' };
+  mockPrisma.quest.findUnique.mockResolvedValue(quest);
+  const res = await service.findOne(1);
+  expect(res).toBe(quest);
+});
+
+it('should throw NotFoundException if quest not found', async () => {
+  mockPrisma.quest.findUnique.mockResolvedValue(null);
+  await expect(service.findOne(999)).rejects.toThrow(NotFoundException);
+});
+
+it('should update quest status by id', async () => {
+  const quest = { id: 1, statusId: 2 };
+  mockPrisma.status.findFirst.mockResolvedValue({ id: 2 });
+  mockPrisma.quest.update.mockResolvedValue(quest);
+
+  const res = await service.updateStatus(1, { statusName: 'Active' });
+  expect(res).toBe(quest);
+});
+
+it('should throw NotFoundException if status not found', async () => {
+  mockPrisma.status.findFirst.mockResolvedValue(null);
+  await expect(service.updateStatus(1, { statusName: 'Bad' })).rejects.toThrow(NotFoundException);
+});
+
+it('should throw BadRequestException if no status info provided', async () => {
+  await expect(service.updateStatus(1, {})).rejects.toThrow('Provide statusId or statusName');
+});
+
+
 });

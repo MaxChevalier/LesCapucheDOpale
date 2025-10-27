@@ -17,7 +17,7 @@ jobs:
                 node-version: '18'
 
             - name: Front - Install dependencies
-              run: npm ci
+              run: npm -i ci
               working-directory: ./front
 
             - name: Install Google Chrome

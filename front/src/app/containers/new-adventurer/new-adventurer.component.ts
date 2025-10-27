@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormAdventurerComponent } from '../../component/form-adventurer/form-adventurer.component';
+import { FormAdventurerComponent } from '../../components/form-adventurer/form-adventurer.component';
 import { AdventurerFormData } from '../../models/models';
 import { AdventurerService } from '../../services/adventurer/adventurer.service';
 

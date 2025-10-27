@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Adventurer, AdventurerFormData } from '../../models/models';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -13,5 +13,17 @@ export class AdventurerService {
 
   createAdventurer(data: AdventurerFormData): Observable<Adventurer> {
     return this.http.post<Adventurer>(this.baseUrl, data);
+  }
+
+  getAll(): Observable<Adventurer[]> {
+    return this.http.get<Adventurer[]>(this.baseUrl);
+  }
+
+  getAdventurerById(id: number): Observable<Adventurer> {
+    return this.http.get<Adventurer>(`${this.baseUrl}/${id}`);
+  }
+
+  updateAdventurer(data: AdventurerFormData): Observable<Adventurer> {
+    return this.http.put<Adventurer>(this.baseUrl, data);
   }
 }

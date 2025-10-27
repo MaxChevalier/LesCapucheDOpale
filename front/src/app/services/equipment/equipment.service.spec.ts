@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { EquipmentService } from './equipment.service';
 import { EquipmentType } from '../../models/equipment-type';
-import { environment } from '../../../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('EquipmentService', () => {
@@ -38,7 +37,7 @@ describe('EquipmentService', () => {
       expect(equipment[0].name).toBe('ECG');
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/equipment-type`);
+    const req = httpMock.expectOne(`/api/equipment-type`);
     expect(req.request.method).toBe('GET');
     req.flush(mockEquipment); // Simule la réponse du serveur
   });

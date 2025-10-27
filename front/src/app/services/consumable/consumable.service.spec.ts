@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ConsumableService } from './consumable.service';
 import { ConsumableType } from '../../models/models';
-import { environment } from '../../../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('ConsumableService', () => {
@@ -38,7 +37,7 @@ describe('ConsumableService', () => {
       expect(consumables[0].name).toBe('Gloves');
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/consumable-type`);
+    const req = httpMock.expectOne(`/api/consumable-type`);
     expect(req.request.method).toBe('GET');
     req.flush(mockConsumables); // Simule la réponse du serveur
   });

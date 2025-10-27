@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { AdventurerService } from './adventurer.service';
 import { Adventurer, AdventurerFormData } from '../../models/models';
-import { environment } from '../../../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('AdventurerService', () => {
@@ -54,7 +53,7 @@ describe('AdventurerService', () => {
       expect(adventurer.name).toBe('Aragorn');
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/adventurers`);
+    const req = httpMock.expectOne(`/api/adventurers`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(formData);
 

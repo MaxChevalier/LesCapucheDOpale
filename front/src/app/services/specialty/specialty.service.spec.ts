@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { SpecialtyService } from './specialty.service';
 import { Specialty } from '../../models/models';
-import { environment } from '../../../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('SpecialtyService', () => {
@@ -38,7 +37,7 @@ describe('SpecialtyService', () => {
       expect(specialties[0].name).toBe('Cardiology');
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/specialty`);
+    const req = httpMock.expectOne(`/api/specialty`);
     expect(req.request.method).toBe('GET');
     req.flush(mockSpecialties);
   });

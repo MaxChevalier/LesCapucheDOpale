@@ -27,10 +27,6 @@ jobs:
               with:
                 node-version: '18'
 
-            - name: Back - Install dependencies
-              run: npm ci
-              working-directory: ./back
-
             - name: Back - Lint
               run: npm run lint
               working-directory: ./back

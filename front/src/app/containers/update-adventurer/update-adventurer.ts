@@ -17,10 +17,18 @@ export class UpdateAdventurer implements OnInit {
   constructor(
     private readonly adventurerService: AdventurerService,
     private readonly route: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    const idStr = this.route.snapshot.paramMap.get('id');
+    this.id = idStr ? Number(idStr) : -1;
+
+    console.log('Adventurer ID:', this.id);
+
+    if (!idStr || !/^\d+$/.test(idStr) || this.id < 0 || isNaN(this.id)) {
+      console.error('Invalid adventurer ID');
+      return;
+    }
 
     this.adventurerService.getAdventurerById(this.id).subscribe(adventurer => {
       this.adventurer = {
@@ -29,7 +37,7 @@ export class UpdateAdventurer implements OnInit {
         equipmentType: adventurer.equipmentType.map(e => e.id),
         consumableType: adventurer.consumableType.map(c => c.id),
         dailyRate: adventurer.dailyRate
-      }
+      };
     });
   }
 

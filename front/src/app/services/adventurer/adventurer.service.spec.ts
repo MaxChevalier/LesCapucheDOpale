@@ -122,7 +122,7 @@ describe('AdventurerService', () => {
       expect(adventurer.name).toBe('Gimli the Brave');
     });
 
-    const req = httpMock.expectOne(`/api/adventurers`);
+    const req = httpMock.expectOne(`/api/adventurers/1`);
     expect(req.request.method).toBe('PUT');
     expect(req.request.body).toEqual(updateData);
     req.flush(mockResponse);

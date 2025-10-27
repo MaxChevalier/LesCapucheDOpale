@@ -31,6 +31,7 @@ describe('UpdateAdventurer', () => {
   let component: UpdateAdventurer;
   let fixture: ComponentFixture<UpdateAdventurer>;
   let adventurerService: MockAdventurerService;
+  let route: ActivatedRoute;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -51,6 +52,7 @@ describe('UpdateAdventurer', () => {
     fixture = TestBed.createComponent(UpdateAdventurer);
     component = fixture.componentInstance;
     adventurerService = TestBed.inject(AdventurerService) as any;
+    route = TestBed.inject(ActivatedRoute);
     fixture.detectChanges();
   });
 
@@ -58,7 +60,7 @@ describe('UpdateAdventurer', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load adventurer data on init', () => {
+  it('should load adventurer data on init when ID is valid', () => {
     expect(adventurerService.getAdventurerById).toHaveBeenCalledWith(1);
     expect(component.adventurer).toEqual({
       name: 'Lara',
@@ -79,10 +81,11 @@ describe('UpdateAdventurer', () => {
     };
 
     const consoleSpy = spyOn(console, 'log');
+    component.id = 1;
 
     (component as any).onFormSubmitted(mockFormData);
 
-    expect(adventurerService.updateAdventurer).toHaveBeenCalledWith(mockFormData);
+    expect(adventurerService.updateAdventurer).toHaveBeenCalledWith(1, mockFormData);
     expect(consoleSpy).toHaveBeenCalledWith(
       'Adventurer updated successfully:',
       jasmine.objectContaining({ name: 'Updated Lara' })
@@ -99,14 +102,50 @@ describe('UpdateAdventurer', () => {
     };
 
     const consoleErrorSpy = spyOn(console, 'error');
+    component.id = 1;
     adventurerService.updateAdventurer.and.returnValue(throwError(() => new Error('Update failed')));
 
     (component as any).onFormSubmitted(mockFormData);
 
-    expect(adventurerService.updateAdventurer).toHaveBeenCalledWith(mockFormData);
+    expect(adventurerService.updateAdventurer).toHaveBeenCalledWith(1, mockFormData);
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Error updating adventurer:',
       jasmine.any(Error)
     );
+  });
+
+  describe('invalid ID scenarios', () => {
+    beforeEach(() => {
+      spyOn(console, 'error');
+      adventurerService.getAdventurerById.calls.reset();
+    });
+
+    it('should not call service if id is null', () => {
+      (route.snapshot.paramMap as any).get = () => null;
+      component.ngOnInit();
+      expect(adventurerService.getAdventurerById).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalledWith('Invalid adventurer ID');
+    });
+
+    it('should not call service if id is not numeric', () => {
+      (route.snapshot.paramMap as any).get = () => 'abc';
+      component.ngOnInit();
+      expect(adventurerService.getAdventurerById).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalledWith('Invalid adventurer ID');
+    });
+
+    it('should not call service if id is negative', () => {
+      (route.snapshot.paramMap as any).get = () => '-5';
+      component.ngOnInit();
+      expect(adventurerService.getAdventurerById).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalledWith('Invalid adventurer ID');
+    });
+
+    it('should not call service if id is NaN', () => {
+      (route.snapshot.paramMap as any).get = () => 'NaN';
+      component.ngOnInit();
+      expect(adventurerService.getAdventurerById).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalledWith('Invalid adventurer ID');
+    });
   });
 });

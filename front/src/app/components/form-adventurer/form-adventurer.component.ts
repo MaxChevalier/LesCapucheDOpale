@@ -15,7 +15,7 @@ import { ConsumableService } from '../../services/consumable/consumable.service'
 })
 export class FormAdventurerComponent implements OnInit {
   @Output() formSubmitted = new EventEmitter<AdventurerFormData>();
-  @Input() initialData: any = null;
+  @Input() initialData: Partial<AdventurerFormData> | null = null;
 
   protected adventurerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),

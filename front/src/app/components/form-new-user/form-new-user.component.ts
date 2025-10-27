@@ -23,7 +23,7 @@ export class FormNewUserComponent {
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
 
-  constructor(private accountService: AccountService, private router: Router) {
+  constructor(private accountService: AccountService) {
 
   }
 

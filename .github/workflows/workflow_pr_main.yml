@@ -51,7 +51,3 @@ jobs:
             - name: Back - Test
               run: npm run test --coverage
               working-directory: ./back
-              
-            - name: Back - Test
-              run: npm run test
-              working-directory: ./back

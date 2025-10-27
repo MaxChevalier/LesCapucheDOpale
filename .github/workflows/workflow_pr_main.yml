@@ -15,10 +15,11 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                 node-version: '18'
+
             - name: Front - Install and Test
               run: |
-                cd front
                 npm run testCi
+              working-directory: ./front
     test-back:
         runs-on: ubuntu-latest
         steps:

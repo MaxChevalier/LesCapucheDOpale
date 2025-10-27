@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { FormLogin } from './form-login';
 import { AccountService } from '../../services/account/account.service';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('FormLogin', () => {
@@ -14,7 +14,6 @@ describe('FormLogin', () => {
   let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    // 🔹 Création des mocks
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['login']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
@@ -23,7 +22,7 @@ describe('FormLogin', () => {
       providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: Router, useValue: routerSpy },
-        provideHttpClient(),
+        provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
     }).compileComponents();
@@ -38,14 +37,12 @@ describe('FormLogin', () => {
   });
 
   it('should initialize form with empty values', () => {
-    expect((component as any).formulaire.value).toEqual({
-      email: '',
-      password: '',
-    });
+    expect((component as any).formulaire.value).toEqual({ email: '', password: '' });
     expect((component as any).formulaire.valid).toBeFalse();
   });
 
   it('should mark form as invalid if email or password missing', () => {
+    (component as any).formulaire.patchValue({ email: '', password: '' });
     expect((component as any).formulaire.invalid).toBeTrue();
   });
 
@@ -64,8 +61,7 @@ describe('FormLogin', () => {
   });
 
   it('should call login with form data when form is valid', () => {
-    // ✅ Le composant attend un champ access_token
-    const mockResponse = { access_token: 'abc123' };
+    const mockResponse = { token: 'abc123', user: { id: 1, name: 'John' } };
     accountServiceSpy.login.and.returnValue(of(mockResponse));
 
     spyOn(localStorage, 'setItem');
@@ -81,8 +77,11 @@ describe('FormLogin', () => {
       email: 'john@example.com',
       password: 'Password1!',
     });
-
     expect(localStorage.setItem).toHaveBeenCalledWith('token', 'abc123');
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'user',
+      JSON.stringify({ id: 1, name: 'John' })
+    );
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
   });
 
@@ -97,9 +96,7 @@ describe('FormLogin', () => {
 
     component.submitForm();
 
-    expect((component as any).errorMessage).toBe(
-      'Adresse e-mail ou mot de passe incorrect.'
-    );
+    expect((component as any).errorMessage).toBe('Adresse e-mail ou mot de passe incorrect.');
   });
 
   it('should show generic error message for other errors', () => {

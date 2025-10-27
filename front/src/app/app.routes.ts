@@ -3,10 +3,12 @@ import { NewAdventurerComponent } from './containers/new-adventurer/new-adventur
 import { ListAdventurer } from './containers/list-adventurer/list-adventurer';
 import { UpdateAdventurer } from './containers/update-adventurer/update-adventurer';
 import { NewUserComponent } from '../app/containers/new-user/new-user.component';
+import { Login } from './containers/login/login';
 
 export const routes: Routes = [
     { path: 'adventurer/new', component: NewAdventurerComponent },
     { path: 'adventurers', component: ListAdventurer},
     { path: 'adventurer/:id', component: UpdateAdventurer},
-    { path: 'user/new', component: NewUserComponent }
-]
+    { path: 'user/new', component: NewUserComponent },
+    { path: 'login', component: Login }
+];

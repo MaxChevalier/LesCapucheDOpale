@@ -1,4 +1,3 @@
-// src/tests/quests.controller.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
 import { QuestsController } from '../controllers/quests.controller';
 import { QuestsService } from '../services/quests.service';

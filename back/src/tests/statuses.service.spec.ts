@@ -1,4 +1,3 @@
-// src/tests/statuses.service.spec.ts
 import { NotFoundException } from '@nestjs/common';
 import { StatusesService } from '../services/statuses.service';
 import { PrismaService } from '../prisma/prisma.service';

@@ -46,7 +46,6 @@ describe('FormLogin', () => {
   });
 
   it('should mark form as invalid if email or password missing', () => {
-    (component as any).formulaire.patchValue({ email: '', password: '' });
     expect((component as any).formulaire.invalid).toBeTrue();
   });
 

@@ -23,7 +23,7 @@ export class AdventurerService {
     return this.http.get<Adventurer>(`${this.baseUrl}/${id}`);
   }
 
-  updateAdventurer(data: AdventurerFormData): Observable<Adventurer> {
-    return this.http.put<Adventurer>(this.baseUrl, data);
+  updateAdventurer(id: number, data: AdventurerFormData): Observable<Adventurer> {
+    return this.http.put<Adventurer>(`${this.baseUrl}/${id}`, data);
   }
 }

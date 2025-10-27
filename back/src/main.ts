@@ -10,8 +10,8 @@ async function bootstrap() {
 
   const swaggerDocument = YAML.load(path.join(process.cwd(), '..', 'back', 'docs', 'openapi.yaml'));
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-  
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true,forbidNonWhitelisted: true,transform: true}));
+
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
 
   app.enableCors();
 

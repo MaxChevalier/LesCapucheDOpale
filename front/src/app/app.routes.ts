@@ -7,6 +7,7 @@ import { HomeComponent } from '../app/containers/home/home'
 import { NewQuest } from './containers/new-quest/new-quest';
 import { ListQuest } from './containers/list-quest/list-quest';
 import { UpdateQuest } from './containers/update-quest/update-quest';
+import { Login } from './containers/login/login';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -18,6 +19,7 @@ export const routes: Routes = [
 
     // User routes
     { path: 'user/new', component: NewUserComponent },
+    { path: 'login', component: Login },
 
     // Quest routes
     { path: 'quest/new', component: NewQuest },

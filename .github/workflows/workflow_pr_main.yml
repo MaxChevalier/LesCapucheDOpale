@@ -19,15 +19,20 @@ jobs:
               run: |
                 cd front
                 npm run testCi
+
+                
             - name: Back - Install dependencies
               run: npm ci
               working-directory: ./back
+
             - name: Back - Lint
               run: npm run lint
               working-directory: ./back
+
             - name: Back - Build
               run: npm run build
               working-directory: ./back
+
             - name: Back - Test
               run: npm run test
               working-directory: ./back

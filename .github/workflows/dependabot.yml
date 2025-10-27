@@ -15,11 +15,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Update dependencies
+      - name: Update dependencies front
         run: |
-          cd front && npm install && npm update
-          cd back && npm install && npm update
-
+          cd front
+          npm install
+          npm update
+          
+      - name: Update dependencies back
+        run: |
+          cd back
+          npm install
+          npm update
+          
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:

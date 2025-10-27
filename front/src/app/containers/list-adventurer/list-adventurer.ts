@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Adventurer } from '../../models/adventurer';
 import { AdventurerService } from '../../services/adventurer/adventurer.service';
 import { ItemAdventurer } from '../../components/item-adventurer/item-adventurer';

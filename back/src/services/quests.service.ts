@@ -113,7 +113,7 @@ if (Array.isArray(dto.adventurerIds)) {
 }
 
 if (Array.isArray(dto.equipmentStockIds)) {
-  data.equipmentStocks = {
+  data.questStockEquipments = {
     set: dto.equipmentStockIds.map(id => ({ id })),
   };
 }

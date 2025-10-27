@@ -48,8 +48,7 @@ module.exports = function (config) {
           '--disable-gpu',
           '--disable-dev-shm-usage',
           '--disable-software-rasterizer',
-          '--mute-audio',
-          '--single-process',
+          '--mute-audio'
         ],
       },
     },

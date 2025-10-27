@@ -1,9 +1,8 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import {AccountService} from '../../services/account/account.service'
-import e from 'cors';
 
 @Component({
   selector: 'app-form-new-user',
@@ -14,7 +13,7 @@ import e from 'cors';
 })
 export class FormNewUserComponent {
   selectedOption = 2;
-
+  errorMessage = '';
   roles: number[] = [1, 2];    
   formSignUp = new FormGroup({
     role: new FormControl(this.roles[0], [Validators.required]),
@@ -31,13 +30,19 @@ export class FormNewUserComponent {
 
   onSubmit() {
     if (this.formSignUp.invalid) {
-      console.log('Form is invalid');
-    }
-    else if (this.formSignUp.value.password !== this.formSignUp.value.confirmPassword) {
-      console.log('Le mot de passe et la confirmation doivent être identiques');
-    } 
-    else if (!this.formSignUp.value.password?.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/)) {
-      console.log("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial");
+      this.errorMessage = 'Le formulaire est invalide. Veuillez vérifier les champs.';
+      if (this.formSignUp.controls['username'].invalid) {
+        this.errorMessage = 'Le nom d\'utilisateur doit contenir au moins 3 caractères.';
+      } 
+      else if (this.formSignUp.controls['email'].invalid) {
+        this.errorMessage = 'L\'adresse e-mail n\'est pas valide.';
+      }
+      else if (this.formSignUp.controls['password'].invalid) {
+        this.errorMessage = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial";
+      }
+      else if (this.formSignUp.controls['confirmPassword'].value !== this.formSignUp.controls['password'].value) {
+        this.errorMessage = 'Le mot de passe et la confirmation doivent être identiques';
+      }
     }
     else {
       const user = {
@@ -48,10 +53,10 @@ export class FormNewUserComponent {
       };
       this.accountService.signUp(user).subscribe({
         next: (response) => {
-          console.log('User créé', response);
+          this.errorMessage = 'L\'utilisateur a été créé avec succès.';
         },
         error: (error) => {
-          console.error('ca marche pas', error);
+          this.errorMessage = 'Une erreur est survenue lors de la création de l\'utilisateur.';
         }
       });
 

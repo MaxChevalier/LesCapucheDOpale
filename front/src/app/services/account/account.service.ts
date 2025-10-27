@@ -16,5 +16,3 @@ export class AccountService {
   }
 
 }
-
-//http://localhost:3000/users

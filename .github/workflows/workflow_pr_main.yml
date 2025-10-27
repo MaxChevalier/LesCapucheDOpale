@@ -19,13 +19,8 @@ jobs:
             - name: Front - Install
               run: npm install
               working-directory: ./front
-            
-            - name: Install Google Chrome
-              uses: browser-actions/setup-chrome@v1
 
             - name: Front - Run CI
-              env:
-                CHROME_BIN: /usr/bin/google-chrome-stable
               run: npm run testCi
               working-directory: ./front
 

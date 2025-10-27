@@ -15,13 +15,13 @@ import { ConsumableService } from '../../services/consumable/consumable.service'
 })
 export class FormAdventurerComponent implements OnInit {
   @Output() formSubmitted = new EventEmitter<AdventurerFormData>();
-  @Input() initialData: Partial<AdventurerFormData> | null = null;
+  @Input() initialData: AdventurerFormData | null = null;
 
   protected adventurerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    specialty: new FormControl('', [Validators.required]),
-    equipmentType: new FormControl([], []),
-    consumableType: new FormControl([], []),
+    specialty: new FormControl(0, [Validators.required]),
+    equipmentType: new FormControl([] as number[], []),
+    consumableType: new FormControl([] as number[], []),
     dailyRatePo: new FormControl(0, [Validators.required, Validators.min(0)]),
     dailyRatePa: new FormControl(0, [Validators.required, Validators.min(0)]),
     dailyRatePc: new FormControl(0, [Validators.required, Validators.min(0)]),
@@ -55,9 +55,9 @@ export class FormAdventurerComponent implements OnInit {
         specialty: this.initialData.specialty,
         equipmentType: this.initialData.equipmentType,
         consumableType: this.initialData.consumableType,
-        dailyRatePo: Math.floor(this.initialData.dailyRate / 100),
-        dailyRatePa: Math.floor((this.initialData.dailyRate / 10) % 10),
-        dailyRatePc: this.initialData.dailyRate % 10,
+        dailyRatePo: Math.floor((this.initialData.dailyRate || 0) / 100),
+        dailyRatePa: Math.floor((this.initialData.dailyRate || 0) / 10) % 10,
+        dailyRatePc: Math.floor(this.initialData.dailyRate || 0) % 10,
       });
     }
   }

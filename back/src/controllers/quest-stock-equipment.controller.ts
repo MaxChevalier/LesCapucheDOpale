@@ -10,8 +10,8 @@ export class QuestStockEquipmentController {
   constructor(private readonly service: QuestStockEquipmentService) {}
 
   @Get()
-  list(@Query('questId') questId?: string) {
-    return this.service.findAll(questId ? Number(questId) : undefined);
+  list(@Query('questId') questId?: number) {
+    return this.service.findAll(questId);
   }
 
   @Post()

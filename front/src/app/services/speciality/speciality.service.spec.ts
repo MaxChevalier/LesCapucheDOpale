@@ -1,19 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { SpecialtyService } from './specialty.service';
+import { SpecialityService } from './speciality.service';
 import { Specialty } from '../../models/models';
 import { provideHttpClient } from '@angular/common/http';
 
-describe('SpecialtyService', () => {
-  let service: SpecialtyService;
+describe('SpecialityService', () => {
+  let service: SpecialityService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SpecialtyService, provideHttpClient(), provideHttpClientTesting()]
+      providers: [SpecialityService, provideHttpClient(), provideHttpClientTesting()]
     });
 
-    service = TestBed.inject(SpecialtyService);
+    service = TestBed.inject(SpecialityService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -37,7 +37,7 @@ describe('SpecialtyService', () => {
       expect(specialties[0].name).toBe('Cardiology');
     });
 
-    const req = httpMock.expectOne(`/api/specialty`);
+    const req = httpMock.expectOne(`/api/specialties`);
     expect(req.request.method).toBe('GET');
     req.flush(mockSpecialties);
   });

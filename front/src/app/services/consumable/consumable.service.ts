@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ConsumableService {
-  private readonly baseUrlType = `/api/consumable-type`;
+  private readonly baseUrlType = `/api/consumable-types`;
 
   constructor(private readonly http: HttpClient) { }
 

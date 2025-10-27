@@ -6,8 +6,8 @@ import { Specialty } from '../../models/models';
 @Injectable({
   providedIn: 'root'
 })
-export class SpecialtyService {
-  private readonly baseUrl = `/api/specialty`;
+export class SpecialityService {
+  private readonly baseUrl = `/api/specialties`;
 
   constructor(private readonly http: HttpClient) { }
 

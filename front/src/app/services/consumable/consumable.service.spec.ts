@@ -37,7 +37,7 @@ describe('ConsumableService', () => {
       expect(consumables[0].name).toBe('Gloves');
     });
 
-    const req = httpMock.expectOne(`/api/consumable-type`);
+    const req = httpMock.expectOne(`/api/consumable-types`);
     expect(req.request.method).toBe('GET');
     req.flush(mockConsumables); // Simule la réponse du serveur
   });

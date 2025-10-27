@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class EquipmentService {
-  private readonly baseUrl = `/api/equipment-type`;
+  private readonly baseUrl = `/api/equipment-types`;
 
   constructor(private readonly http: HttpClient) { }
 

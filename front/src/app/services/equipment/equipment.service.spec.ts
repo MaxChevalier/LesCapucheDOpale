@@ -37,7 +37,7 @@ describe('EquipmentService', () => {
       expect(equipment[0].name).toBe('ECG');
     });
 
-    const req = httpMock.expectOne(`/api/equipment-type`);
+    const req = httpMock.expectOne(`/api/equipment-types`);
     expect(req.request.method).toBe('GET');
     req.flush(mockEquipment); // Simule la réponse du serveur
   });

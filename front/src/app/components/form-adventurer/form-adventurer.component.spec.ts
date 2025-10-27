@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { FormAdventurerComponent } from './form-adventurer.component';
-import { SpecialtyService } from '../../services/specialty/specialty.service';
+import { SpecialityService } from '../../services/speciality/speciality.service';
 import { EquipmentService } from '../../services/equipment/equipment.service';
 import { ConsumableService } from '../../services/consumable/consumable.service';
 
@@ -10,12 +10,12 @@ describe('FormAdventurerComponent', () => {
   let fixture: ComponentFixture<FormAdventurerComponent>;
 
   // mock des services
-  let specialtyServiceSpy: jasmine.SpyObj<SpecialtyService>;
+  let specialtyServiceSpy: jasmine.SpyObj<SpecialityService>;
   let equipmentServiceSpy: jasmine.SpyObj<EquipmentService>;
   let consumableServiceSpy: jasmine.SpyObj<ConsumableService>;
 
   beforeEach(async () => {
-    specialtyServiceSpy = jasmine.createSpyObj('SpecialtyService', ['getSpecialties']);
+    specialtyServiceSpy = jasmine.createSpyObj('SpecialityService', ['getSpecialties']);
     equipmentServiceSpy = jasmine.createSpyObj('EquipmentService', ['getEquipment']);
     consumableServiceSpy = jasmine.createSpyObj('ConsumableService', ['getConsumables']);
 
@@ -26,7 +26,7 @@ describe('FormAdventurerComponent', () => {
     await TestBed.configureTestingModule({
       imports: [FormAdventurerComponent],
       providers: [
-        { provide: SpecialtyService, useValue: specialtyServiceSpy },
+        { provide: SpecialityService, useValue: specialtyServiceSpy },
         { provide: EquipmentService, useValue: equipmentServiceSpy },
         { provide: ConsumableService, useValue: consumableServiceSpy },
       ],

@@ -3,7 +3,7 @@ import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angula
 import { AdventurerFormData, ConsumableType, EquipmentType, Specialty } from '../../models/models';
 
 import { forkJoin } from 'rxjs';
-import { SpecialtyService } from '../../services/specialty/specialty.service';
+import { SpecialityService } from '../../services/speciality/speciality.service';
 import { EquipmentService } from '../../services/equipment/equipment.service';
 import { ConsumableService } from '../../services/consumable/consumable.service';
 
@@ -33,7 +33,7 @@ export class FormAdventurerComponent implements OnInit {
   protected hasSubmitted = false;
 
   constructor(
-    private readonly specialtyService: SpecialtyService,
+    private readonly specialtyService: SpecialityService,
     private readonly equipmentService: EquipmentService,
     private readonly consumableService: ConsumableService
   ) { }

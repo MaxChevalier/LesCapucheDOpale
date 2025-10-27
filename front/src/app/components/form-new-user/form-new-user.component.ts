@@ -60,7 +60,6 @@ export class FormNewUserComponent {
         }
       });
 
-    console.log(this.formSignUp.value);
     }
   }
 

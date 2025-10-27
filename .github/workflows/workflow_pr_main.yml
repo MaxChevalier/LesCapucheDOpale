@@ -20,7 +20,7 @@ jobs:
               run: npm i
               working-directory: ./front
 
-            - name: Front - Install
+            - name: Front - Install Ci
               run: npm ci
               working-directory: ./front
 

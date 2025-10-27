@@ -12,6 +12,7 @@ import { FormAdventurerComponent } from '../../components/form-adventurer/form-a
 })
 export class UpdateAdventurer implements OnInit {
   adventurer: AdventurerFormData | null = null;
+  id: number = 0;
 
   constructor(
     private readonly adventurerService: AdventurerService,
@@ -19,9 +20,9 @@ export class UpdateAdventurer implements OnInit {
   ) { }
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.adventurerService.getAdventurerById(id).subscribe(adventurer => {
+    this.adventurerService.getAdventurerById(this.id).subscribe(adventurer => {
       this.adventurer = {
         name: adventurer.name,
         speciality: adventurer.speciality.id,
@@ -33,7 +34,7 @@ export class UpdateAdventurer implements OnInit {
   }
 
   protected onFormSubmitted(data: AdventurerFormData): void {
-    this.adventurerService.updateAdventurer(data).subscribe({
+    this.adventurerService.updateAdventurer(this.id, data).subscribe({
       next: (adventurer) => {
         console.log('Adventurer updated successfully:', adventurer);
       },

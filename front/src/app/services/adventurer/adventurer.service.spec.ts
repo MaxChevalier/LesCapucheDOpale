@@ -117,7 +117,7 @@ describe('AdventurerService', () => {
       experience: 250
     };
 
-    service.updateAdventurer(updateData).subscribe((adventurer) => {
+    service.updateAdventurer(1, updateData).subscribe((adventurer) => {
       expect(adventurer).toEqual(mockResponse);
       expect(adventurer.name).toBe('Gimli the Brave');
     });

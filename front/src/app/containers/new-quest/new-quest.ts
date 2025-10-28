@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormQuest } from '../../components/form-quest/form-quest';
-import { QuestService } from '../../services/request/quest.service';
+import { QuestService } from '../../services/quest/quest.service';
 import { Router } from '@angular/router';
 
 @Component({

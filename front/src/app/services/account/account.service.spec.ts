@@ -44,8 +44,8 @@ describe('AccountService', () => {
 
     // On s’attend à une requête POST vers /api/users
     const req = httpMock.expectOne('/api/users');
-    expect(req.quest.method).toBe('POST');
-    expect(req.quest.body).toEqual(mockUser);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(mockUser);
 
     // On simule une réponse du backend
     req.flush(mockResponse);

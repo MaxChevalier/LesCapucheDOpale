@@ -32,8 +32,8 @@ export class FormLogin {
     };
     this.AuthService.login(user).subscribe({
       next: (response) => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('token', response.access_token);
+        console.log('Login successful', localStorage.getItem('token'));
         this.router.navigate(['/']);
       },
       error: (error) => {

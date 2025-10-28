@@ -64,7 +64,6 @@ describe('SpecialitiesController', () => {
 
     const result = await controller.create(dto);
 
-    // assert against the mock to avoid unbound-method linting
     expect(mockSpecialitiesService.create).toHaveBeenCalledWith(dto);
     expect(result).toEqual({ id: 1, ...dto });
   });

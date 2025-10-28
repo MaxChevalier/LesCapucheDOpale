@@ -21,7 +21,6 @@ describe('QuestStockEquipmentController', () => {
         { provide: QuestStockEquipmentService, useValue: mockService },
       ],
     })
-      // override guards to avoid needing JwtService in the test context
       .overrideGuard(JwtAuthGuard)
       .useValue({ canActivate: jest.fn(() => true) })
       .overrideGuard(RolesGuard)

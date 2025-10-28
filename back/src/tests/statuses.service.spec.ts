@@ -7,7 +7,6 @@ import { UpdateStatusDto } from '../dto/update-status.dto';
 describe('StatusesService', () => {
   let service: StatusesService;
 
-  // Narrow types for the mocked status delegate
   type StatusDelegateMock = {
     create: jest.Mock;
     findMany: jest.Mock;
@@ -15,7 +14,6 @@ describe('StatusesService', () => {
     delete: jest.Mock;
   };
 
-  // Build the mock delegate and give it an explicit type
   const mockStatusDelegate: StatusDelegateMock = {
     create: jest.fn(),
     findMany: jest.fn(),
@@ -23,7 +21,6 @@ describe('StatusesService', () => {
     delete: jest.fn(),
   };
 
-  // Cast to PrismaService for the constructor, but avoid `any`
   const mockPrisma = {
     status: mockStatusDelegate,
   } as unknown as PrismaService;

@@ -8,7 +8,6 @@ import { ExecutionContext } from '@nestjs/common';
 describe('UsersController', () => {
   let controller: UsersController;
 
-  // jest.fn() mocks
   const mockUsersService = {
     create: jest.fn(),
     findAll: jest.fn(),
@@ -17,14 +16,11 @@ describe('UsersController', () => {
     delete: jest.fn(),
   };
 
-  // typed request so we don't use `any`
   interface RequestWithUser {
     user: { id: number; email: string; roleId: number };
-    // other fields are allowed but not required
     [key: string]: unknown;
   }
 
-  // add `this: void` to satisfy @typescript-eslint/unbound-method
   const mockJwtAuthGuard = {
     canActivate(this: void, context: ExecutionContext) {
       const req = context.switchToHttp().getRequest<RequestWithUser>();
@@ -33,7 +29,6 @@ describe('UsersController', () => {
     },
   };
 
-  // also `this: void` here
   const mockRolesGuard = {
     canActivate(this: void) {
       return true;
@@ -67,7 +62,6 @@ describe('UsersController', () => {
 
     const result = await controller.create(dto);
 
-    // use the mock function for assertions to avoid unbound-method linting
     expect(mockUsersService.create).toHaveBeenCalledWith(dto);
     expect(result).toEqual({ id: 1, ...dto });
   });

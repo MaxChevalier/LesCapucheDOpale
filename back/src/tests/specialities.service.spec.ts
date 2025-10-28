@@ -15,7 +15,6 @@ class PrismaClientKnownRequestErrorMock extends Error {
 describe('SpecialitiesService', () => {
   let service: SpecialitiesService;
 
-  // Narrow type for the speciality delegate
   type SpecialityDelegateMock = {
     findFirst: jest.Mock;
     create: jest.Mock;

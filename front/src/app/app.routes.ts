@@ -5,6 +5,7 @@ import { UpdateAdventurer } from './containers/update-adventurer/update-adventur
 import { NewUserComponent } from '../app/containers/new-user/new-user.component';
 import { HomeComponent } from '../app/containers/home/home'
 import { NewQuest } from './containers/new-quest/new-quest';
+import { ListQuest } from './containers/list-quest/list-quest';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
     { path: 'user/new', component: NewUserComponent },
 
     // Quest routes
-    { path: 'quest/new', component: NewQuest }
+    { path: 'quest/new', component: NewQuest },
+    { path: 'quests', component: ListQuest },
 ];

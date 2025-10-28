@@ -20,4 +20,8 @@ export class AccountService {
     return this.http.post<any>(this.urlLogin, user);
   }
 
+  isLogin(): boolean {
+    return localStorage.getItem('token') !== null && localStorage.getItem('token') !== undefined && localStorage.getItem('token') !== '';
+  }
+
 }

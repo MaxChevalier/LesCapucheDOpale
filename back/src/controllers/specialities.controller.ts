@@ -29,6 +29,6 @@ export class SpecialitiesController {
 
     @Delete(':id')
     remove(@Param('id') id: number) {
-        return this.specialitiesService.delete(id);
+        return this.specialitiesService.remove(id);
     }
 }

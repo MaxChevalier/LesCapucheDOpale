@@ -38,7 +38,7 @@ describe('SpecialityService', () => {
     });
 
     const req = httpMock.expectOne(`/api/specialities`);
-    expect(req.request.method).toBe('GET');
+    expect(req.quest.method).toBe('GET');
     req.flush(mockSpecialities);
   });
 });

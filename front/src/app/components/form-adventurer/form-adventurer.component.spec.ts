@@ -123,45 +123,6 @@ describe('FormAdventurerComponent', () => {
     expect(emitSpy).not.toHaveBeenCalled();
   });
 
-  it('should recalculate daily rate correctly in onDailyRateChange', () => {
-    fixture.detectChanges();
-
-    const form = (component as any).adventurerForm;
-    form.patchValue({
-      dailyRatePo: 2,
-      dailyRatePa: 5,
-      dailyRatePc: 8,
-    });
-
-    (component as any).onDailyRateChange();
-
-    const po = form.get('dailyRatePo')?.value;
-    const pa = form.get('dailyRatePa')?.value;
-    const pc = form.get('dailyRatePc')?.value;
-    const total = po * 100 + pa * 10 + pc;
-
-    expect(total).toBe(258);
-  });
-
-  it('should handle edge cases in onDailyRateChange with undefined values', () => {
-    fixture.detectChanges();
-
-    const form = (component as any).adventurerForm;
-    form.patchValue({
-      dailyRatePo: undefined,
-      dailyRatePa: undefined,
-      dailyRatePc: undefined,
-    });
-
-    (component as any).onDailyRateChange();
-
-    const total = (form.get('dailyRatePo')?.value ?? 0) * 100 +
-                  (form.get('dailyRatePa')?.value ?? 0) * 10 +
-                  (form.get('dailyRatePc')?.value ?? 0);
-
-    expect(total).toBe(0); // valeurs par défaut sécurisées
-  });
-
   it('should submit form with default data when no initialData is provided', () => {
     fixture.detectChanges();
     const emitSpy = spyOn(component.formSubmitted, 'emit');

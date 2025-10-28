@@ -28,7 +28,7 @@ describe('AccountService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should send a POST request when calling signUp', () => {
+  it('should send a POST quest when calling signUp', () => {
     const mockUser = {
       name: 'John',
       email: 'john@example.com',
@@ -44,8 +44,8 @@ describe('AccountService', () => {
 
     // On s’attend à une requête POST vers /api/users
     const req = httpMock.expectOne('/api/users');
-    expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(mockUser);
+    expect(req.quest.method).toBe('POST');
+    expect(req.quest.body).toEqual(mockUser);
 
     // On simule une réponse du backend
     req.flush(mockResponse);
@@ -59,13 +59,13 @@ describe('AccountService', () => {
       roleId: 2,
     };
 
-    const mockError = { status: 400, statusText: 'Bad Request' };
+    const mockError = { status: 400, statusText: 'Bad Quest' };
 
     service.signUp(mockUser).subscribe({
       next: () => fail('Expected an error, but got a success response'),
       error: (error) => {
         expect(error.status).toBe(400);
-        expect(error.statusText).toBe('Bad Request');
+        expect(error.statusText).toBe('Bad Quest');
       },
     });
 

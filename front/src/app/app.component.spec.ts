@@ -18,6 +18,11 @@ describe('AppComponent', () => {
         component = fixture.componentInstance;
     
         fixture.detectChanges();
+
+    fixture = TestBed.createComponent(AppComponent);
+        component = fixture.componentInstance;
+    
+        fixture.detectChanges();
   });
 
   it('should create the app', () => {

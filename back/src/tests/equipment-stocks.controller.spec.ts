@@ -29,7 +29,9 @@ describe('EquipmentStocksController', () => {
       .useValue({ canActivate: jest.fn(() => true) })
       .compile();
 
-    controller = module.get<EquipmentStocksController>(EquipmentStocksController);
+    controller = module.get<EquipmentStocksController>(
+      EquipmentStocksController,
+    );
   });
 
   it('should call service.findAll', () => {

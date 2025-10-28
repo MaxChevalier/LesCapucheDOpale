@@ -11,7 +11,10 @@ export class AuthService {
   ) {}
 
   async login(email: string, password: string) {
-    const user = await this.usersService.validateUserByEmailPassword(email, password);
+    const user = await this.usersService.validateUserByEmailPassword(
+      email,
+      password,
+    );
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -23,7 +26,8 @@ export class AuthService {
     };
 
     let token: string;
-    if (user.roleId === 1) { // Admin
+    if (user.roleId === 1) {
+      // Admin
       token = await this.jwtService.signAsync(payload, {
         secret: process.env.JWT_SECRET_ADMIN,
         expiresIn: '4h',

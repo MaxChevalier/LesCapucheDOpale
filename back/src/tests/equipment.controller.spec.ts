@@ -51,8 +51,16 @@ describe('EquipmentController', () => {
       maxDurability: 30,
       equipmentTypeId: 1,
     };
-    mockService.create.mockReturnValue({ id: 1, ...dto, currentDurability: dto.maxDurability });
-    expect(controller.create(dto)).toEqual({ id: 1, ...dto, currentDurability: dto.maxDurability });
+    mockService.create.mockReturnValue({
+      id: 1,
+      ...dto,
+      currentDurability: dto.maxDurability,
+    });
+    expect(controller.create(dto)).toEqual({
+      id: 1,
+      ...dto,
+      currentDurability: dto.maxDurability,
+    });
     expect(mockService.create).toHaveBeenCalledWith(dto);
   });
 

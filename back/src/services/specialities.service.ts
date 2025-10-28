@@ -13,15 +13,6 @@ export class SpecialitiesService {
         return this.prisma.speciality.create({ data: dto });
     }
 
-    async update(id: number, dto: UpdateSpecialityDto) {
-        try {
-            return await this.prisma.speciality.update({ where: { id }, data: dto });
-        } catch (e: any) {
-            if (e.code === 'P2025') throw new NotFoundException('Speciality not found');
-            throw e;
-        }
-    }
-
     async findAll() {
         return this.prisma.speciality.findMany();
     }
@@ -30,6 +21,15 @@ export class SpecialitiesService {
         const speciality = await this.prisma.speciality.findUnique({ where: { id } });
         if (!speciality) throw new NotFoundException('Speciality not found');
         return speciality;
+    }
+
+    async update(id: number, dto: UpdateSpecialityDto) {
+        try {
+            return await this.prisma.speciality.update({ where: { id }, data: dto });
+        } catch (e: any) {
+            if (e.code === 'P2025') throw new NotFoundException('Speciality not found');
+            throw e;
+        }
     }
 
     async remove(id: number) {

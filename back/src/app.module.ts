@@ -8,6 +8,11 @@ import { ConsumablesModule } from './modules/consumables.module';
 import { EquipmentTypesModule } from "./modules/equipment-types.module";
 import { ConsumableTypesModule } from "./modules/consumable-types.module";
 import { PrismaModule } from './prisma/prisma.service';
+import { QuestsModule} from "./modules/quests.module";
+import { EquipmentModule } from './modules/equipment.module';
+import { EquipmentStocksModule } from './modules/equipment-stocks.module';
+import { QuestStockEquipmentModule } from './modules/quest-stock-equipment.module';
+import { StatusesModule } from './modules/statuses.module';
 import { AuthModule } from './modules/auth.module';
 
 @Module({
@@ -15,11 +20,17 @@ import { AuthModule } from './modules/auth.module';
       PrismaModule,
       AuthModule,
       UsersModule,
+      QuestsModule,
       AdventurersModule,
       SpecialitiesModule,
       ConsumablesModule,
       EquipmentTypesModule,
-      ConsumableTypesModule
+      ConsumableTypesModule,
+      EquipmentModule,
+      EquipmentStocksModule,
+      QuestStockEquipmentModule,
+      StatusesModule,
+      AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

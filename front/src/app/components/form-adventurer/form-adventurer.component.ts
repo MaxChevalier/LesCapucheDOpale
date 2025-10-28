@@ -6,11 +6,11 @@ import { forkJoin } from 'rxjs';
 import { SpecialityService } from '../../services/speciality/speciality.service';
 import { EquipmentService } from '../../services/equipment/equipment.service';
 import { ConsumableService } from '../../services/consumable/consumable.service';
-import { FormMonney } from '../form-monney/form-monney';
+import { FormMoney } from '../form-money/form-money';
 
 @Component({
     selector: 'app-form-adventurer',
-    imports: [ReactiveFormsModule, FormMonney],
+    imports: [ReactiveFormsModule, FormMoney],
     templateUrl: './form-adventurer.component.html',
     styleUrl: './form-adventurer.component.scss'
 })

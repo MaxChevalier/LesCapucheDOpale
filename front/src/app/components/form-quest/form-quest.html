@@ -12,7 +12,7 @@
     <input id="estimatedDuration" formControlName="estimatedDuration" type="number" min="1"/>
     <label for="estimatedDuration">Journées</label>
 
-    <app-form-monney label="Prime : " [money]="getMoney()" (moneyChange)="setMoney($event)"></app-form-monney>
+    <app-form-money label="Prime : " [money]="getMoney()" (moneyChange)="setMoney($event)"></app-form-money>
 
-    <button type="submit">Soumettre la Requette</button>
+    <button type="submit">Soumettre la Requête</button>
 </form>

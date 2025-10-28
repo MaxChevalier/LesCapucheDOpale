@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormMonney } from '../form-monney/form-monney';
+import { FormMoney } from '../form-money/form-money';
 import { QuestForm } from '../../models/quest';
 
 @Component({
   selector: 'app-form-quest',
   standalone: true,
-  imports: [FormMonney, ReactiveFormsModule],
+  imports: [FormMoney, ReactiveFormsModule],
   templateUrl: './form-quest.html',
   styleUrls: ['./form-quest.scss']
 })

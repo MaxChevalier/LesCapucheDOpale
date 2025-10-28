@@ -2,12 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-form-monney',
+  selector: 'app-form-money',
   imports: [ReactiveFormsModule],
-  templateUrl: './form-monney.html',
-  styleUrl: './form-monney.scss'
+  templateUrl: './form-money.html',
+  styleUrl: './form-money.scss'
 })
-export class FormMonney {
+export class FormMoney {
   @Input() label!: string;
 
   @Input() money!: number;

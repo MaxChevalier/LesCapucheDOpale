@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormMoney } from '../form-money/form-money';
@@ -21,7 +20,6 @@ export class FormQuest implements OnChanges {
     finalDate: new FormControl('', [Validators.required]),
     estimatedDuration: new FormControl(1, [Validators.required, Validators.min(1)]),
     reward: new FormControl(0, [Validators.required, Validators.min(0)]),
-    recommendedXP: new FormControl(0, [Validators.min(0)])
   });
 
   ngOnChanges(): void {
@@ -31,8 +29,7 @@ export class FormQuest implements OnChanges {
         description: this.initialData.description,
         finalDate: this.initialData.finalDate.split('T')[0],
         estimatedDuration: this.initialData.estimatedDuration,
-        reward: this.initialData.reward,
-        recommendedXP: this.initialData.recommendedXP
+        reward: this.initialData.reward
       });
     }
   }
@@ -51,9 +48,5 @@ export class FormQuest implements OnChanges {
     } else {
       this.form.markAllAsTouched();
     }
-  }
-
-  isAssistant(): boolean {
-    return localStorage.getItem('role') === '1';
   }
 }

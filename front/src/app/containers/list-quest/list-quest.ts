@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Quest } from '../../models/models';
 import { QuestService } from '../../services/quest/quest.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ItemQuest } from '../../components/item-quest/item-quest';
 
 @Component({
   selector: 'app-list-quest',
-  imports: [ItemQuest],
+  imports: [ItemQuest, RouterLink],
   templateUrl: './list-quest.html',
   styleUrl: './list-quest.scss'
 })

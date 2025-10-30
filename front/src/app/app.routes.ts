@@ -20,7 +20,6 @@ export const routes: Routes = [
 
     // User routes
     { path: 'user/new', component: NewUserComponent, canActivate: [authGuard] },
-    { path: 'user/new', component: NewUserComponent, canActivate: [authGuard] },
     { path: 'login', component: Login },
 
     // Quest routes

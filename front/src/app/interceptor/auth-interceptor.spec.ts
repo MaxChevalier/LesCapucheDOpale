@@ -37,7 +37,6 @@ describe('authInterceptor', () => {
       authInterceptor(req, next).subscribe(() => {
         const calledReq = next.calls.mostRecent().args[0] as HttpRequest<any>;
 
-        // Header existe, mais avec Bearer null (car getItem retourne null)
         expect(calledReq.headers.get('Authorization')).toBe('Bearer null');
         done();
       });

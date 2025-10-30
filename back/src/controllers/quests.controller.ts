@@ -438,7 +438,7 @@ export class QuestsController {
   @Roles(1, 2)
   @ApiParam({ name: 'id', example: 42, description: 'Quest ID' })
   @ApiOkResponse({
-    description: 'Quête abandonnée (doit être démarrée)',
+    description: 'Quête abandonnée (peut être abandonnée uniquement si elle n\'est pas validée ou commencée, typiquement en statut \'en attente\')',
     schema: {
       type: 'object',
       additionalProperties: true,

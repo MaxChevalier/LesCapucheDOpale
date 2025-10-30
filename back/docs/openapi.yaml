@@ -783,7 +783,9 @@ paths:
             type: number
       responses:
         '200':
-          description: Quête abandonnée (doit être démarrée)
+          description: >-
+            Quête abandonnée (peut être abandonnée uniquement si elle n'est pas
+            validée ou commencée, typiquement en statut 'en attente')
           content:
             application/json:
               schema:

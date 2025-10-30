@@ -35,7 +35,7 @@ export class QuestsService {
       select: { status: { select: { name: true } } },
     });
     if (!q) throw new NotFoundException('Quest not found');
-    return q.status?.name?.toLowerCase() === this.STATUS_STARTED;
+    return q.status?.name?.toLowerCase() === this.STATUS_STARTED.toLowerCase();
   }
 
   async findAll() {
@@ -355,9 +355,7 @@ export class QuestsService {
   }
 
   async validateQuest(questId: number, xp: number) {
-    if (xp === undefined || xp === null || Number.isNaN(Number(xp))) {
-      throw new BadRequestException('xp (number) is required to validate');
-    }
+   
     const statusId = await this.getOrCreateStatusId(this.STATUS_VALIDATED);
     try {
       return await this.prisma.quest.update({
@@ -414,7 +412,7 @@ export class QuestsService {
     if (!quest) throw new NotFoundException('Quest not found');
 
     if (
-      quest.status?.name?.toLowerCase() !== this.STATUS_VALIDATED
+      quest.status?.name?.toLowerCase() !== this.STATUS_VALIDATED.toLowerCase()
     ) {
       throw new BadRequestException(
         'Quest must be validated before it can be started',
@@ -447,7 +445,6 @@ export class QuestsService {
     }
 
     const refusedId = await this.getOrCreateStatusId(this.STATUS_REFUSED);
-    try {
       return await this.prisma.quest.update({
         where: { id: questId },
         data: { status: { connect: { id: refusedId } } },
@@ -458,12 +455,6 @@ export class QuestsService {
           user: true,
         },
       });
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
-        throw new NotFoundException('Quest not found');
-      }
-      throw e;
-    }
   }
 
   async abandonQuest(questId: number) {

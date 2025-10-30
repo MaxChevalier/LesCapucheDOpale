@@ -1,10 +1,28 @@
-import {Body,Controller,Delete,Get,Param,ParseIntPipe,Post,Query,UseGuards,} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { QuestStockEquipmentService } from '../services/quest-stock-equipment.service';
 import { CreateQuestStockEquipmentDto } from '../dto/create-quest-stock-equipment.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../guards/roles.decorator';
-import {ApiBearerAuth,ApiBody,ApiCreatedResponse,ApiOkResponse,ApiParam,ApiQuery,ApiTags,} from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Quest Stock Equipment')
 @ApiBearerAuth()
@@ -32,8 +50,16 @@ export class QuestStockEquipmentController {
           questId: { type: 'number', example: 12 },
           equipmentStockId: { type: 'number', example: 3 },
           quantity: { type: 'number', example: 2 },
-          createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-          updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+          createdAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:00:00.000Z',
+          },
+          updatedAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:34:56.000Z',
+          },
         },
       },
     },
@@ -68,8 +94,16 @@ export class QuestStockEquipmentController {
         questId: { type: 'number', example: 12 },
         equipmentStockId: { type: 'number', example: 3 },
         quantity: { type: 'number', example: 2 },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
       },
     },
   })

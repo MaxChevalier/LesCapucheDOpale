@@ -1,11 +1,28 @@
-import {Body,Controller,Delete,Get,Param,ParseIntPipe,Patch,Post,UseGuards,} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { EquipmentService } from '../services/equipment.service';
 import { CreateEquipmentDto } from '../dto/create-equipment.dto';
 import { UpdateEquipmentDto } from '../dto/update-equipment.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../guards/roles.decorator';
-import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Equipment')
 @ApiBearerAuth()
@@ -26,9 +43,20 @@ export class EquipmentController {
           id: { type: 'number', example: 10 },
           name: { type: 'string', example: 'Longsword' },
           equipmentTypeId: { type: 'number', example: 7 },
-          description: { type: 'string', example: 'A versatile steel longsword.' },
-          createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-          updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+          description: {
+            type: 'string',
+            example: 'A versatile steel longsword.',
+          },
+          createdAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:00:00.000Z',
+          },
+          updatedAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:34:56.000Z',
+          },
         },
       },
     },
@@ -49,9 +77,20 @@ export class EquipmentController {
         id: { type: 'number', example: 10 },
         name: { type: 'string', example: 'Longsword' },
         equipmentTypeId: { type: 'number', example: 7 },
-        description: { type: 'string', example: 'A versatile steel longsword.' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+        description: {
+          type: 'string',
+          example: 'A versatile steel longsword.',
+        },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:34:56.000Z',
+        },
       },
     },
   })
@@ -70,7 +109,10 @@ export class EquipmentController {
       properties: {
         name: { type: 'string', example: 'Longsword' },
         equipmentTypeId: { type: 'number', example: 7 },
-        description: { type: 'string', example: 'A versatile steel longsword.' },
+        description: {
+          type: 'string',
+          example: 'A versatile steel longsword.',
+        },
       },
       required: ['name', 'equipmentTypeId'],
       additionalProperties: false,
@@ -84,9 +126,20 @@ export class EquipmentController {
         id: { type: 'number', example: 10 },
         name: { type: 'string', example: 'Longsword' },
         equipmentTypeId: { type: 'number', example: 7 },
-        description: { type: 'string', example: 'A versatile steel longsword.' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
+        description: {
+          type: 'string',
+          example: 'A versatile steel longsword.',
+        },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
       },
     },
   })
@@ -105,7 +158,10 @@ export class EquipmentController {
       properties: {
         name: { type: 'string', example: 'Enchanted Longsword' },
         equipmentTypeId: { type: 'number', example: 8 },
-        description: { type: 'string', example: 'Longsword imbued with minor magic.' },
+        description: {
+          type: 'string',
+          example: 'Longsword imbued with minor magic.',
+        },
       },
       additionalProperties: false,
     },
@@ -118,9 +174,20 @@ export class EquipmentController {
         id: { type: 'number', example: 10 },
         name: { type: 'string', example: 'Enchanted Longsword' },
         equipmentTypeId: { type: 'number', example: 8 },
-        description: { type: 'string', example: 'Longsword imbued with minor magic.' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:45:00.000Z' },
+        description: {
+          type: 'string',
+          example: 'Longsword imbued with minor magic.',
+        },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:45:00.000Z',
+        },
       },
     },
   })

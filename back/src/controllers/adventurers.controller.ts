@@ -1,11 +1,25 @@
-import {Body,Controller,Param,ParseIntPipe,Get,Patch,Post,UseGuards,} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  ParseIntPipe,
+  Get,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AdventurersService } from '../services/adventurers.service';
 import { CreateAdventurerDto } from '../dto/create-adventurer.dto';
 import { UpdateAdventurerDto } from '../dto/update-adventurer.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../guards/roles.decorator';
-import { ApiTags, ApiBearerAuth, ApiBody, ApiOkResponse, ApiCreatedResponse, ApiParam } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiParam,
+} from '@nestjs/swagger';
 
 @Controller('adventurers')
 export class AdventurersController {
@@ -26,8 +40,16 @@ export class AdventurersController {
           level: { type: 'number', example: 12 },
           specialityId: { type: 'number', example: 3 },
           statusId: { type: 'number', example: 1 },
-          createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-          updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+          createdAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:00:00.000Z',
+          },
+          updatedAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:34:56.000Z',
+          },
         },
       },
     },
@@ -50,8 +72,16 @@ export class AdventurersController {
         level: { type: 'number', example: 12 },
         specialityId: { type: 'number', example: 3 },
         statusId: { type: 'number', example: 1 },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:34:56.000Z',
+        },
       },
     },
   })
@@ -86,8 +116,16 @@ export class AdventurersController {
         level: { type: 'number', example: 1 },
         specialityId: { type: 'number', example: 3 },
         statusId: { type: 'number', example: 1 },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
       },
     },
   })
@@ -122,8 +160,16 @@ export class AdventurersController {
         level: { type: 'number', example: 13 },
         specialityId: { type: 'number', example: 2 },
         statusId: { type: 'number', example: 2 },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:45:00.000Z' },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:45:00.000Z',
+        },
       },
     },
   })

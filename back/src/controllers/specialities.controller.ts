@@ -1,11 +1,27 @@
-import {Controller,Get,Post,Body,Patch,Param,Delete, UseGuards} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { SpecialitiesService } from '../services/specialities.service';
 import { CreateSpecialityDto } from '../dto/create-speciality.dto';
 import { UpdateSpecialityDto } from '../dto/update-speciality.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../guards/roles.decorator';
-import { ApiTags, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiParam,
+} from '@nestjs/swagger';
 
 @ApiTags('Specialities')
 @ApiBearerAuth()
@@ -37,8 +53,16 @@ export class SpecialitiesController {
         id: { type: 'number', example: 5 },
         name: { type: 'string', example: 'Mage' },
         description: { type: 'string', example: 'Uses arcane powers.' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
       },
     },
   })
@@ -58,9 +82,20 @@ export class SpecialitiesController {
         properties: {
           id: { type: 'number', example: 1 },
           name: { type: 'string', example: 'Warrior' },
-          description: { type: 'string', example: 'Frontline melee combatant.' },
-          createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-          updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+          description: {
+            type: 'string',
+            example: 'Frontline melee combatant.',
+          },
+          createdAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:00:00.000Z',
+          },
+          updatedAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:34:56.000Z',
+          },
         },
       },
     },
@@ -81,8 +116,16 @@ export class SpecialitiesController {
         id: { type: 'number', example: 5 },
         name: { type: 'string', example: 'Mage' },
         description: { type: 'string', example: 'Uses arcane powers.' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:34:56.000Z',
+        },
       },
     },
   })
@@ -113,8 +156,16 @@ export class SpecialitiesController {
         id: { type: 'number', example: 5 },
         name: { type: 'string', example: 'Battlemage' },
         description: { type: 'string', example: 'Combines melee and magic.' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:45:00.000Z' },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:45:00.000Z',
+        },
       },
     },
   })

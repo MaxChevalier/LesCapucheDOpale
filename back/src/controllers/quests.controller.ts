@@ -1,4 +1,14 @@
-import {Body,Controller,Get,Param,ParseIntPipe,Patch,Post,Req,UseGuards,} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { QuestsService } from '../services/quests.service';
 import { CreateQuestDto } from '../dto/create-quest.dto';
 import { UpdateQuestDto } from '../dto/update-quest.dto';
@@ -8,7 +18,14 @@ import { Roles } from '../guards/roles.decorator';
 import { UpdateStatusDto } from '../dto/update-quest-status.dto';
 import { IdsDto } from '../dto/quest_id.dto';
 import { UserDto } from 'src/dto/user.dto';
-import {ApiBearerAuth,ApiBody,ApiCreatedResponse,ApiOkResponse,ApiParam,ApiTags,} from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
 export interface AuthenticatedRequest extends Request {
   user: UserDto & { sub: number };

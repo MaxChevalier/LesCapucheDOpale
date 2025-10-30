@@ -1,11 +1,27 @@
-import {Controller,Get,Post,Body,Patch,Param,Delete,UseGuards,} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ConsumableTypesService } from '../services/consumable-types.service';
 import { CreateConsumableTypeDto } from '../dto/create-consumable-type.dto';
 import { UpdateConsumableTypeDto } from '../dto/update-consumable-type.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../guards/roles.decorator';
-import {ApiTags,ApiBody,ApiOkResponse,ApiCreatedResponse,ApiParam,ApiBearerAuth,} from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBody,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('Consumable Types')
 @Controller('consumable-types')
@@ -25,7 +41,10 @@ export class ConsumableTypesController {
       type: 'object',
       properties: {
         name: { type: 'string', example: 'Health Potion' },
-        description: { type: 'string', example: 'Restores a small amount of HP.' },
+        description: {
+          type: 'string',
+          example: 'Restores a small amount of HP.',
+        },
       },
       required: ['name'],
       additionalProperties: false,
@@ -38,9 +57,20 @@ export class ConsumableTypesController {
       properties: {
         id: { type: 'number', example: 5 },
         name: { type: 'string', example: 'Health Potion' },
-        description: { type: 'string', example: 'Restores a small amount of HP.' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
+        description: {
+          type: 'string',
+          example: 'Restores a small amount of HP.',
+        },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
       },
     },
   })
@@ -58,9 +88,20 @@ export class ConsumableTypesController {
         properties: {
           id: { type: 'number', example: 1 },
           name: { type: 'string', example: 'Health Potion' },
-          description: { type: 'string', example: 'Restores a small amount of HP.' },
-          createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-          updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+          description: {
+            type: 'string',
+            example: 'Restores a small amount of HP.',
+          },
+          createdAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:00:00.000Z',
+          },
+          updatedAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:34:56.000Z',
+          },
         },
       },
     },
@@ -78,9 +119,20 @@ export class ConsumableTypesController {
       properties: {
         id: { type: 'number', example: 5 },
         name: { type: 'string', example: 'Health Potion' },
-        description: { type: 'string', example: 'Restores a small amount of HP.' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+        description: {
+          type: 'string',
+          example: 'Restores a small amount of HP.',
+        },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:34:56.000Z',
+        },
       },
     },
   })
@@ -99,7 +151,10 @@ export class ConsumableTypesController {
       type: 'object',
       properties: {
         name: { type: 'string', example: 'Greater Health Potion' },
-        description: { type: 'string', example: 'Restores a greater amount of HP.' },
+        description: {
+          type: 'string',
+          example: 'Restores a greater amount of HP.',
+        },
       },
       additionalProperties: false,
     },
@@ -111,9 +166,20 @@ export class ConsumableTypesController {
       properties: {
         id: { type: 'number', example: 5 },
         name: { type: 'string', example: 'Greater Health Potion' },
-        description: { type: 'string', example: 'Restores a greater amount of HP.' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:45:00.000Z' },
+        description: {
+          type: 'string',
+          example: 'Restores a greater amount of HP.',
+        },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:45:00.000Z',
+        },
       },
     },
   })

@@ -1,11 +1,28 @@
-import {Body,Controller,Delete,Get,Param,ParseIntPipe,Patch,Post,UseGuards} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { StatusesService } from '../services/statuses.service';
 import { CreateStatusDto } from '../dto/create-status.dto';
 import { UpdateStatusDto } from '../dto/update-status.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../guards/roles.decorator';
-import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Statuses')
 @ApiBearerAuth()
@@ -22,8 +39,18 @@ export class StatusesController {
       type: 'array',
       items: { type: 'object', additionalProperties: true },
       example: [
-        { id: 1, name: 'Pending', createdAt: '2025-10-30T12:00:00.000Z', updatedAt: '2025-10-30T12:34:56.000Z' },
-        { id: 2, name: 'In Progress', createdAt: '2025-10-30T12:05:00.000Z', updatedAt: '2025-10-30T12:35:00.000Z' },
+        {
+          id: 1,
+          name: 'Pending',
+          createdAt: '2025-10-30T12:00:00.000Z',
+          updatedAt: '2025-10-30T12:34:56.000Z',
+        },
+        {
+          id: 2,
+          name: 'In Progress',
+          createdAt: '2025-10-30T12:05:00.000Z',
+          updatedAt: '2025-10-30T12:35:00.000Z',
+        },
       ],
     },
   })

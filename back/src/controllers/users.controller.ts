@@ -1,21 +1,11 @@
-import {
-  Controller,
-  Post,
-  Get,
-  Patch,
-  Delete,
-  Body,
-  Param,
-  UseGuards,
-  ParseIntPipe,
-} from '@nestjs/common';
+import {Controller,Post,Get,Patch,Delete,Body,Param,UseGuards,ParseIntPipe,} from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../guards/roles.decorator';
-import {ApiBody, ApiCreatedResponse, ApiOkResponse, ApiParam } from '@nestjs/swagger';
+import {ApiBody,ApiCreatedResponse,ApiOkResponse,ApiParam,} from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
@@ -28,7 +18,11 @@ export class UsersController {
     schema: {
       type: 'object',
       properties: {
-        email: { type: 'string', format: 'email', example: 'john.doe@example.com' },
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'john.doe@example.com',
+        },
         password: { type: 'string', example: 'Secret123!' },
         displayName: { type: 'string', example: 'John Doe' },
       },
@@ -44,8 +38,16 @@ export class UsersController {
         id: { type: 'number', example: 1 },
         email: { type: 'string', example: 'john.doe@example.com' },
         displayName: { type: 'string', example: 'John Doe' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
       },
     },
   })
@@ -66,8 +68,16 @@ export class UsersController {
           id: { type: 'number', example: 1 },
           email: { type: 'string', example: 'john.doe@example.com' },
           displayName: { type: 'string', example: 'John Doe' },
-          createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-          updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+          createdAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:00:00.000Z',
+          },
+          updatedAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:34:56.000Z',
+          },
         },
       },
     },
@@ -88,8 +98,16 @@ export class UsersController {
         id: { type: 'number', example: 1 },
         email: { type: 'string', example: 'john.doe@example.com' },
         displayName: { type: 'string', example: 'John Doe' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:34:56.000Z' },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:34:56.000Z',
+        },
       },
     },
   })
@@ -106,7 +124,11 @@ export class UsersController {
     schema: {
       type: 'object',
       properties: {
-        email: { type: 'string', format: 'email', example: 'johnny.doe@example.com' },
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'johnny.doe@example.com',
+        },
         password: { type: 'string', example: 'NewSecret123!' },
         displayName: { type: 'string', example: 'Johnny Doe' },
       },
@@ -121,8 +143,16 @@ export class UsersController {
         id: { type: 'number', example: 1 },
         email: { type: 'string', example: 'johnny.doe@example.com' },
         displayName: { type: 'string', example: 'Johnny Doe' },
-        createdAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:00:00.000Z' },
-        updatedAt: { type: 'string', format: 'date-time', example: '2025-10-30T12:45:00.000Z' },
+        createdAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:00:00.000Z',
+        },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-10-30T12:45:00.000Z',
+        },
       },
     },
   })

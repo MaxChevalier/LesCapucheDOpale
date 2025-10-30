@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AccountService } from '../../services/account/account.service'
 @Component({
   selector: 'app-menu',
   imports: [
@@ -10,5 +11,7 @@ import { RouterLink } from '@angular/router';
 })
 export class MenuComponent {
   open = false;
-
+  constructor(protected accountService: AccountService) {
+  
+    }
 }

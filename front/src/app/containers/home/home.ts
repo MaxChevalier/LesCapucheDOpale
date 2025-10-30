@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { AccountService } from '../../services/account/account.service'
 @Component({
   selector: 'app-home',
   imports: [],
@@ -7,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './home.scss',
 })
 export class HomeComponent {
-
+ constructor(protected accountService: AccountService) {
+  
+    }
 }

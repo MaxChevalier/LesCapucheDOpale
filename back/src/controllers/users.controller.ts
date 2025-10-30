@@ -22,8 +22,6 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(1, 2)
   @ApiBody({
     description: 'New user payload',
     required: true,

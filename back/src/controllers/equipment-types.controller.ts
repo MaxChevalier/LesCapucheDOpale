@@ -1,10 +1,10 @@
-import {Controller,Get,Post,Body,Patch,Param,Delete, UseGuards} from '@nestjs/common';
+import {Controller,Get,Post,Body,Patch,Param,Delete,UseGuards,} from '@nestjs/common';
 import { EquipmentTypesService } from '../services/equipment-types.service';
 import { CreateEquipmentTypeDto } from '../dto/create-equipment-type.dto';
 import { UpdateEquipmentTypeDto } from '../dto/update-equipment-type.dto';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { Roles } from 'src/guards/roles.decorator';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { RolesGuard } from '../guards/roles.guard';
+import { Roles } from '../guards/roles.decorator';
 
 @Controller('equipment-types')
 export class EquipmentTypesController {

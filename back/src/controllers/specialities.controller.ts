@@ -2,9 +2,9 @@ import {Controller,Get,Post,Body,Patch,Param,Delete, UseGuards} from '@nestjs/co
 import { SpecialitiesService } from '../services/specialities.service';
 import { CreateSpecialityDto } from '../dto/create-speciality.dto';
 import { UpdateSpecialityDto } from '../dto/update-speciality.dto';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { Roles } from 'src/guards/roles.decorator';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { RolesGuard } from '../guards/roles.guard';
+import { Roles } from '../guards/roles.decorator';
 
 @Controller('specialities')
 export class SpecialitiesController {

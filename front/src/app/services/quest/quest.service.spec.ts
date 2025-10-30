@@ -85,7 +85,7 @@ describe('QuestService', () => {
     service.updateQuest(id, updatedQuest).subscribe();
 
     const req = httpMock.expectOne(`/api/quests/${id}`);
-    expect(req.request.method).toBe('PUT');
+    expect(req.request.method).toBe('PATCH');
     expect(req.request.body).toEqual(updatedQuest);
     req.flush({ id, ...updatedQuest });
   });

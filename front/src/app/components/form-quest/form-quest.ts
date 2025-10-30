@@ -23,7 +23,6 @@ export class FormQuest implements OnChanges {
   });
 
   ngOnChanges(): void {
-    console.log(this.initialData);
     if (this.initialData) {
       this.form.patchValue({
         name: this.initialData.name,

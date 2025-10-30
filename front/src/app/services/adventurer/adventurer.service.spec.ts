@@ -123,7 +123,7 @@ describe('AdventurerService', () => {
     });
 
     const req = httpMock.expectOne(`/api/adventurers/1`);
-    expect(req.request.method).toBe('PUT');
+    expect(req.request.method).toBe('PATCH');
     expect(req.request.body).toEqual(updateData);
     req.flush(mockResponse);
   });

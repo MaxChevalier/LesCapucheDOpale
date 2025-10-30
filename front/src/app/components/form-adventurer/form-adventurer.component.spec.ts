@@ -62,6 +62,9 @@ describe('FormAdventurerComponent', () => {
     };
 
     fixture.detectChanges();
+    (component as any).ngOnChanges({
+      initialData: { currentValue: component.initialData, previousValue: null, firstChange: true, isFirstChange: () => true }
+    });
 
     const form = (component as any).adventurerForm.value;
     expect(form.name).toBe('Aragorn');

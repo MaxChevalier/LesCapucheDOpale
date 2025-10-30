@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import {Body,Controller,Delete,Get,Param,ParseIntPipe,Patch,Post,UseGuards,} from '@nestjs/common';
 import { EquipmentService } from '../services/equipment.service';
 import { CreateEquipmentDto } from '../dto/create-equipment.dto';
 import { UpdateEquipmentDto } from '../dto/update-equipment.dto';
@@ -21,11 +11,15 @@ export class EquipmentController {
   constructor(private readonly service: EquipmentService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(1, 2)
   findAll() {
     return this.service.findAll();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(1, 2)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.service.findOne(id);
   }

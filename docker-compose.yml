@@ -1,6 +1,37 @@
-serices:
-  front:
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - db-network
+
+  api:
+    build: ./back
+    container_name: nest_api
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_SECRET_ADMIN: ${JWT_SECRET_ADMIN}
+    depends_on:
+      - db
+    networks:
+      - opal-network
+      - db-network
+
+  web:
     build: ./front
+    restart: always
     ports:
       - "4200:4200"
     networks:
@@ -8,3 +39,7 @@ serices:
 
 networks:
   opal-network:
+  db-network:
+
+volumes:
+  postgres_data:

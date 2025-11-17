@@ -1,0 +1,10 @@
+serices:
+  front:
+    build: ./front
+    ports:
+      - "4200:4200"
+    networks:
+      - opal-network
+
+networks:
+  opal-network:

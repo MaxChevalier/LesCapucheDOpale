@@ -1,9 +1,6 @@
 name: CI MAIN
 
 on:
-  workflow_dispatch:
-  push:
-    branches: ["feat(front);docker"]
   pull_request:
     branches: ["main", "master"]
     types: [opened, synchronize]

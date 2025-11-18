@@ -1,7 +1,6 @@
 services:
   db:
     image: postgres:15
-    container_name: postgres_db
     restart: always
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
@@ -16,7 +15,6 @@ services:
 
   api:
     build: ./back
-    container_name: nest_api
     ports:
       - "3000:3000"
     environment:

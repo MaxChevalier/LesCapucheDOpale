@@ -7,7 +7,19 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { CreateQuestDto } from '../dto/create-quest.dto';
 import { UpdateQuestDto } from '../dto/update-quest.dto';
-import { FindQuestsQueryDto } from '../dto/find-quests-query.dto';
+
+export type FindQuestsOptions = {
+  rewardMin?: number;
+  rewardMax?: number;
+  statusId?: number;
+  finalDateBefore?: string;
+  finalDateAfter?: string;
+  userId?: number;
+  avgXpMin?: number;
+  avgXpMax?: number;
+  sortBy?: 'reward' | 'finalDate' | 'avgExperience' | 'createdAt';
+  order?: 'asc' | 'desc';
+};
 
 @Injectable()
 export class QuestsService {
@@ -132,12 +144,16 @@ export class QuestsService {
     return quest;
   }
 
-  async updateStatus(questId: number, opts: { statusId: number }) {
+  async updateStatus(
+    questId: number,
+    opts: { statusId: number },
+  ) {
     const { statusId } = opts || {};
     if (!statusId) {
       throw new BadRequestException('Provide statusId');
     }
 
+    const targetStatusId = statusId;
     const targetStatusId = statusId;
 
     try {

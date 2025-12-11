@@ -302,14 +302,7 @@ paths:
           schema:
             example: '2025-12-31'
             type: string
-        - name: finalDateAfter
-          required: false
-          in: query
-          description: Date finale après (ISO 8601)
-          schema:
-            example: '2025-01-01'
-            type: string
-        - name: userId
+        - name: statusId
           required: false
           in: query
           description: Filtrer par identifiant d'utilisateur créateur

@@ -34,6 +34,20 @@ export interface AuthenticatedRequest extends Request {
   user: UserDto & { sub: number };
 }
 
+// Interface pour typer les Query Params entrant (toujours des strings ou undefined)
+interface FindQuestsQueryDto {
+  rewardMin?: string;
+  rewardMax?: string;
+  statusId?: string;
+  finalDateBefore?: string;
+  finalDateAfter?: string;
+  userId?: string;
+  avgXpMin?: string;
+  avgXpMax?: string;
+  sortBy?: 'reward' | 'finalDate' | 'avgExperience' | 'createdAt';
+  order?: 'asc' | 'desc';
+}
+
 @ApiTags('Quests')
 @ApiBearerAuth()
 @Controller('quests')
@@ -43,40 +57,113 @@ export class QuestsController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
+  @ApiQuery({
+    name: 'rewardMin',
+    required: false,
+    description: 'Prime minimale (incluse)',
+    example: 100,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'rewardMax',
+    required: false,
+    description: 'Prime maximale (incluse)',
+    example: 1000,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'statusId',
+    required: false,
+    description: 'Filtrer par identifiant de statut',
+    example: 2,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'finalDateBefore',
+    required: false,
+    description: "Date d'échéance avant (ISO 8601)",
+    example: '2025-12-31',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'finalDateAfter',
+    required: false,
+    description: "Date d'échéance après (ISO 8601)",
+    example: '2025-01-01',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'userId',
+    required: false,
+    description: 'Filtrer par commanditaire (ID utilisateur)',
+    example: 5,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'avgXpMin',
+    required: false,
+    description: "Niveau d'expérience moyen minimal des aventuriers",
+    example: 10,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'avgXpMax',
+    required: false,
+    description: "Niveau d'expérience moyen maximal des aventuriers",
+    example: 100,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'sortBy',
+    required: false,
+    description: 'Champ de tri',
+    enum: ['reward', 'finalDate', 'avgExperience', 'createdAt'],
+    example: 'reward',
+  })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    description: 'Ordre de tri',
+    enum: ['asc', 'desc'],
+    example: 'desc',
+  })
   @ApiOkResponse({
     description: 'List of quests (avec filtres et tri)',
     schema: {
       type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          id: { type: 'number', example: 1 },
-          name: { type: 'string', example: 'Rescue the Merchant' },
-          description: { type: 'string', example: 'Escort mission' },
-          finalDate: {
-            type: 'string',
-            format: 'date-time',
-            example: '2025-12-31T23:59:59.000Z',
-          },
-          reward: { type: 'number', example: 500 },
-          estimatedDuration: { type: 'number', example: 5 },
-          statusId: { type: 'number', example: 1 },
-          createdAt: {
-            type: 'string',
-            format: 'date-time',
-            example: '2025-10-30T12:00:00.000Z',
-          },
-          updatedAt: {
-            type: 'string',
-            format: 'date-time',
-            example: '2025-10-30T12:34:56.000Z',
-          },
+      items: { type: 'object', additionalProperties: true },
+      example: [
+        {
+          id: 1,
+          title: 'Rescue the Merchant',
+          statusId: 1,
+          createdAt: '2025-10-30T12:00:00.000Z',
+          updatedAt: '2025-10-30T12:34:56.000Z',
         },
-      },
+      ],
     },
   })
-  findAll(@Query() query: FindQuestsQueryDto) {
-    return this.questsService.findAll(query);
+  findAll(@Query() q: FindQuestsQueryDto) {
+    const validSortFields = [
+      'reward',
+      'finalDate',
+      'avgExperience',
+      'createdAt',
+    ] as const;
+
+    return this.questsService.findAll({
+      rewardMin: q.rewardMin ? Number(q.rewardMin) : undefined,
+      rewardMax: q.rewardMax ? Number(q.rewardMax) : undefined,
+      statusId: q.statusId ? Number(q.statusId) : undefined,
+      finalDateBefore: q.finalDateBefore,
+      finalDateAfter: q.finalDateAfter,
+      userId: q.userId ? Number(q.userId) : undefined,
+      avgXpMin: q.avgXpMin ? Number(q.avgXpMin) : undefined,
+      avgXpMax: q.avgXpMax ? Number(q.avgXpMax) : undefined,
+      sortBy:
+        q.sortBy && validSortFields.includes(q.sortBy) ? q.sortBy : undefined,
+      order: q.order === 'asc' || q.order === 'desc' ? q.order : undefined,
+    });
   }
 
   @Get(':id')

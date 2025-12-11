@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:15
+    image: postgres:15-alpine
     restart: always
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
@@ -12,6 +12,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - db-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
   api:
     build: ./back
@@ -20,10 +26,12 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_SECRET_ADMIN: ${JWT_SECRET_ADMIN}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - opal-network
       - db-network
+    command: ["sh","-c","npx prisma generate && npm run start:prod"]
 
   web:
     build: ./front

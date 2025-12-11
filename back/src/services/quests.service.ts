@@ -12,7 +12,6 @@ export type FindQuestsOptions = {
   rewardMin?: number;
   rewardMax?: number;
   statusId?: number;
-  statusName?: string;
   finalDateBefore?: string;
   finalDateAfter?: string;
   userId?: number;
@@ -47,7 +46,6 @@ export class QuestsService {
       rewardMin,
       rewardMax,
       statusId,
-      statusName,
       finalDateBefore,
       finalDateAfter,
       userId,
@@ -68,7 +66,6 @@ export class QuestsService {
           }
         : {}),
       ...(typeof statusId === 'number' ? { statusId } : {}),
-      ...(statusName ? { status: { name: { contains: statusName } } } : {}),
       ...(finalDateBefore || finalDateAfter
         ? {
             finalDate: {
@@ -151,23 +148,14 @@ export class QuestsService {
 
   async updateStatus(
     questId: number,
-    opts: { statusId?: number; statusName?: string },
+    opts: { statusId: number },
   ) {
-    const { statusId, statusName } = opts || {};
-    if (!statusId && !statusName) {
-      throw new BadRequestException('Provide statusId or statusName');
+    const { statusId } = opts || {};
+    if (!statusId) {
+      throw new BadRequestException('Provide statusId');
     }
 
-    let targetStatusId = statusId ?? null;
-
-    if (!targetStatusId && statusName) {
-      const status = await this.prisma.status.findFirst({
-        where: { name: statusName },
-      });
-      if (!status)
-        throw new NotFoundException(`Status not found: ${statusName}`);
-      targetStatusId = status.id;
-    }
+    const targetStatusId = statusId;
 
     try {
       return await this.prisma.quest.update({

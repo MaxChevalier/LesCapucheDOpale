@@ -39,7 +39,6 @@ interface FindQuestsQueryDto {
   rewardMin?: string;
   rewardMax?: string;
   statusId?: string;
-  statusName?: string;
   finalDateBefore?: string;
   finalDateAfter?: string;
   userId?: string;
@@ -78,13 +77,6 @@ export class QuestsController {
     description: 'Filtrer par identifiant de statut',
     example: 2,
     type: Number,
-  })
-  @ApiQuery({
-    name: 'statusName',
-    required: false,
-    description: 'Filtrer par nom de statut (ex: validée, commencée)',
-    example: 'validée',
-    type: String,
   })
   @ApiQuery({
     name: 'finalDateBefore',
@@ -163,7 +155,6 @@ export class QuestsController {
       rewardMin: q.rewardMin ? Number(q.rewardMin) : undefined,
       rewardMax: q.rewardMax ? Number(q.rewardMax) : undefined,
       statusId: q.statusId ? Number(q.statusId) : undefined,
-      statusName: q.statusName,
       finalDateBefore: q.finalDateBefore,
       finalDateAfter: q.finalDateAfter,
       userId: q.userId ? Number(q.userId) : undefined,

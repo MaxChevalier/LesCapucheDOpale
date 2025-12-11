@@ -60,7 +60,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error('❌ Erreur lors du seed:', e);
+    console.error('❌ Erreur lors du seeding:', e);
     process.exit(1);
   })
   .finally(async () => {

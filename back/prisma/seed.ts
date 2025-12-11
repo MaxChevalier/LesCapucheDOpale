@@ -3,12 +3,25 @@ import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-// Configuration
-const SEED_PASSWORD = process.env.SEED_PASSWORD || 'password123';
-const SEED_ASSISTANT_EMAIL = process.env.SEED_ASSISTANT_EMAIL || 'jean.dupont@guild.com';
-const SEED_ASSISTANT_NAME = process.env.SEED_ASSISTANT_NAME || 'Jean Dupont';
-const SEED_CLIENT_EMAIL = process.env.SEED_CLIENT_EMAIL || 'marie.martin@guild.com';
-const SEED_CLIENT_NAME = process.env.SEED_CLIENT_NAME || 'Marie Martin';
+// Fonction pour vérifier les variables d'environnement requises
+function getRequiredEnvVar(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(
+      `❌ Variable d'environnement manquante: ${name}\n` +
+      `Veuillez configurer toutes les variables dans votre fichier .env\n` +
+      `Consultez le .env.example pour la liste complète des variables requises.`
+    );
+  }
+  return value;
+}
+
+// Configuration - Variables obligatoires
+const SEED_PASSWORD = getRequiredEnvVar('SEED_PASSWORD');
+const SEED_ASSISTANT_EMAIL = getRequiredEnvVar('SEED_ASSISTANT_EMAIL');
+const SEED_ASSISTANT_NAME = getRequiredEnvVar('SEED_ASSISTANT_NAME');
+const SEED_CLIENT_EMAIL = getRequiredEnvVar('SEED_CLIENT_EMAIL');
+const SEED_CLIENT_NAME = getRequiredEnvVar('SEED_CLIENT_NAME');
 
 // Constantes pour les rôles
 const ROLES = {

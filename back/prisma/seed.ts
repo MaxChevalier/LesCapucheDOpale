@@ -46,6 +46,8 @@ async function main() {
     prisma.status.create({ data: { name: STATUSES.STATUS_STARTED } }),
     prisma.status.create({ data: { name: STATUSES.STATUS_REFUSED } }),
     prisma.status.create({ data: { name: STATUSES.STATUS_CANCELLED } }),
+    prisma.status.create({ data: { name: STATUSES.STATUS_SUCCEEDED } }),
+    prisma.status.create({ data: { name: STATUSES.STATUS_FAILED } }),
   ]);
 
   console.log('✅ Statuts créés');

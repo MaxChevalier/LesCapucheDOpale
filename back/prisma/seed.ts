@@ -20,7 +20,7 @@ const STATUSES = {
 };
 
 async function main() {
-  console.log('🌱 Début du seed de la base de données...');
+  console.log('🌱 Début du seeding de la base de données...');
 
   // Nettoyer la base de données
   console.log('🧹 Nettoyage de la base de données...');
@@ -52,7 +52,7 @@ async function main() {
 
   console.log('✅ Statuts créés');
 
-  console.log('\n✨ Seed terminé avec succès !');
+  console.log('\n✨ Seeding terminé avec succès !');
   console.log('\n📊 Résumé:');
   console.log(`- ${await prisma.role.count()} rôles`);
   console.log(`- ${await prisma.status.count()} statuts`);

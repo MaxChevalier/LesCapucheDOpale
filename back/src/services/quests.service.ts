@@ -12,7 +12,7 @@ import { UpdateQuestDto } from '../dto/update-quest.dto';
 export class QuestsService {
   constructor(private prisma: PrismaService) {}
 
-  private readonly STATUS_WAITING = 'attendre pour la validation';
+  private readonly STATUS_WAITING = 'En attente de validation';
   private readonly STATUS_VALIDATED = 'validée';
   private readonly STATUS_STARTED = 'commencée';
   private readonly STATUS_REFUSED = 'refusée';

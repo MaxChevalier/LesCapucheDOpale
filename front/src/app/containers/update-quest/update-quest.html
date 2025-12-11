@@ -10,11 +10,8 @@
       id="recommendedXP" 
       formControlName="recommendedXP" 
       type="number" />
-
-    @if (quest.statusId === 1) {
-      <button type="button" (click)="onValidate()">Valider la Requête</button>
-      <button type="button" (click)="onRefuse()">Refuser la Requête</button>
-    }
+    <button type="button" (click)="onValidate()">Valider la Requête</button>
+    <button type="button" (click)="onRefuse()">Refuser la Requête</button>
   </form>
 }
 @else if (isClient()) {

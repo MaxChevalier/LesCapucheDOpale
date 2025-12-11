@@ -104,6 +104,6 @@ export class AssignQuest implements OnInit {
   get successRate(): number {
     const totalSuccess = Object.values(this.successRateForAdventurer).reduce((sum, rate) => sum + rate, 0);
     const totalAdventurers = Object.keys(this.successRateForAdventurer).length;
-    return totalAdventurers > 0 ? Math.round((totalSuccess / totalAdventurers * 80) * 100) / 100 : 0;
+    return totalAdventurers > 0 ? Math.round((Math.min(1, totalSuccess / Math.max(1,totalAdventurers*0.8)) * 80) * 100) / 100 : 0;
   }
 }

@@ -2388,6 +2388,58 @@ paths:
         - bearer: []
       tags:
         - Statuses
+  /roles:
+    get:
+      operationId: RolesController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: List of all roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: Admin
+      security:
+        - bearer: []
+      tags:
+        - Roles
+  /roles/{id}:
+    get:
+      operationId: RolesController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Role ID
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Role found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: Admin
+      security:
+        - bearer: []
+      tags:
+        - Roles
   /:
     get:
       operationId: AppController_getHello

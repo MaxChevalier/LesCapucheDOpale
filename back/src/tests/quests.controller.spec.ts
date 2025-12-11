@@ -25,7 +25,6 @@ describe('QuestsController', () => {
     attachEquipmentStocks: jest.fn(),
     detachEquipmentStocks: jest.fn(),
     setEquipmentStocks: jest.fn(),
-    // Méthodes manquantes ajoutées au mock :
     validateQuest: jest.fn(),
     invalidateQuest: jest.fn(),
     startQuest: jest.fn(),
@@ -51,7 +50,6 @@ describe('QuestsController', () => {
 
   describe('findAll (Filtering & Sorting)', () => {
     it('should call service.findAll with all parameters parsed correctly', async () => {
-      // Simulation des paramètres venant de l'URL (toujours des strings)
       const query = {
         rewardMin: '100',
         rewardMax: '500',
@@ -62,8 +60,8 @@ describe('QuestsController', () => {
         userId: '5',
         avgXpMin: '10',
         avgXpMax: '50',
-        sortBy: 'reward',
-        order: 'desc',
+        sortBy: 'reward' as const,
+        order: 'desc' as const,
       };
 
       mockService.findAll.mockResolvedValue([]);
@@ -71,15 +69,15 @@ describe('QuestsController', () => {
       await controller.findAll(query);
 
       expect(service.findAll).toHaveBeenCalledWith({
-        rewardMin: 100, // Vérifie le Number()
-        rewardMax: 500, // Vérifie le Number()
-        statusId: 2,    // Vérifie le Number()
+        rewardMin: 100,
+        rewardMax: 500,
+        statusId: 2,
         statusName: 'validee',
         finalDateBefore: '2025-12-31',
         finalDateAfter: '2025-01-01',
-        userId: 5,      // Vérifie le Number()
-        avgXpMin: 10,   // Vérifie le Number()
-        avgXpMax: 50,   // Vérifie le Number()
+        userId: 5,
+        avgXpMin: 10,
+        avgXpMax: 50,
         sortBy: 'reward',
         order: 'desc',
       });
@@ -207,8 +205,6 @@ describe('QuestsController', () => {
     });
   });
 
-  // --- NOUVEAUX TESTS (Couvrent la fin du fichier) ---
-
   describe('Workflow Actions', () => {
     const questId = 42;
 
@@ -244,7 +240,7 @@ describe('QuestsController', () => {
     });
 
     it('should refuse a quest', async () => {
-      const expected = { id: questId, statusId: 4 }; // Suppose 4 = refusée
+      const expected = { id: questId, statusId: 4 };
       mockService.refuseQuest.mockResolvedValue(expected);
 
       const result = await controller.refuse(questId);
@@ -254,7 +250,7 @@ describe('QuestsController', () => {
     });
 
     it('should abandon a quest', async () => {
-      const expected = { id: questId, statusId: 5 }; // Suppose 5 = abandonnée
+      const expected = { id: questId, statusId: 5 };
       mockService.abandonQuest.mockResolvedValue(expected);
 
       const result = await controller.abandon(questId);

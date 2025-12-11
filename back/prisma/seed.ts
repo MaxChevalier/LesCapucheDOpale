@@ -14,7 +14,9 @@ const STATUSES = {
     STATUS_VALIDATED: 'Validée',
     STATUS_STARTED: 'Commencée',
     STATUS_REFUSED: 'Refusée',
-    STATUS_CANCELLED: 'Abandonnée'
+    STATUS_CANCELLED: 'Abandonnée',
+    STATUS_SUCCEEDED: 'Terminée',
+    STATUS_FAILED: 'Échouée',
 };
 
 async function main() {

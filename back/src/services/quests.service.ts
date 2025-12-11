@@ -13,10 +13,11 @@ export class QuestsService {
   constructor(private prisma: PrismaService) {}
 
   private readonly STATUS_WAITING = 'En attente de validation';
-  private readonly STATUS_VALIDATED = 'validée';
-  private readonly STATUS_STARTED = 'commencée';
-  private readonly STATUS_REFUSED = 'refusée';
-  private readonly STATUS_ABANDONED = 'abandonnée';
+  private readonly STATUS_VALIDATED = 'Validée';
+  private readonly STATUS_STARTED = 'Commencée';
+  private readonly STATUS_REFUSED = 'Refusée';
+  private readonly STATUS_ABANDONED = 'Abandonnée';
+
 
   private async getOrCreateStatusId(name: string): Promise<number> {
     const found = await this.prisma.status.findFirst({ where: { name } });

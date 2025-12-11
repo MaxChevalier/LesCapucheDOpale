@@ -82,4 +82,74 @@ describe('AdventurersController', () => {
     expect(service.update).toHaveBeenCalledWith(1, { name: 'Updated' });
     expect(result).toEqual(updated);
   });
+
+  describe('findAll', () => {
+    it('should call service.findAll with empty options when no query params provided', async () => {
+      // Cas où q est vide -> couvre le "undefined" des ternaires
+      const query = {};
+      mockAdventurersService.findAll.mockResolvedValue([]);
+
+      await controller.findAll(query);
+
+      expect(service.findAll).toHaveBeenCalledWith({
+        name: undefined,
+        specialityId: undefined,
+        experienceMin: undefined,
+        experienceMax: undefined,
+        dailyRateOrder: undefined, // Couvre le dernier "else" du ternaire
+      });
+    });
+
+    it('should call service.findAll with parsed options and ASC order', async () => {
+      // Cas avec 'asc' -> couvre la branche "dailyRateOrder === 'asc'"
+      const query = {
+        name: 'Aria',
+        specialityId: '3', // String venant de l'URL
+        xpMin: '10',       // String venant de l'URL
+        xpMax: '50',       // String venant de l'URL
+        dailyRateOrder: 'asc',
+      };
+      mockAdventurersService.findAll.mockResolvedValue([]);
+
+      await controller.findAll(query);
+
+      expect(service.findAll).toHaveBeenCalledWith({
+        name: 'Aria',
+        specialityId: 3, // Vérifie le Number()
+        experienceMin: 10, // Vérifie le Number()
+        experienceMax: 50, // Vérifie le Number()
+        dailyRateOrder: 'asc',
+      });
+    });
+
+    it('should call service.findAll with DESC order', async () => {
+      // Cas avec 'desc' -> couvre la branche "dailyRateOrder === 'desc'"
+      const query = { dailyRateOrder: 'desc' };
+      mockAdventurersService.findAll.mockResolvedValue([]);
+
+      await controller.findAll(query);
+
+      expect(service.findAll).toHaveBeenCalledWith({
+        name: undefined,
+        specialityId: undefined,
+        experienceMin: undefined,
+        experienceMax: undefined,
+        dailyRateOrder: 'desc',
+      });
+    });
+  });
+
+  describe('findOne', () => {
+    it('should call service.findOne with correct ID', async () => {
+      // Couvre la ligne 137
+      const id = 1;
+      const mockAdventurer = { id, name: 'Test' };
+      mockAdventurersService.findOne.mockResolvedValue(mockAdventurer);
+
+      const result = await controller.findOne(id);
+
+      expect(service.findOne).toHaveBeenCalledWith(id);
+      expect(result).toEqual(mockAdventurer);
+    });
+  });
 });

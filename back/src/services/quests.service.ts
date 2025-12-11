@@ -100,7 +100,7 @@ export class QuestsService {
       orderBy = { id: 'desc' };
     }
 
-    let quests = await this.prisma.quest.findMany({
+    const quests = await this.prisma.quest.findMany({
       where,
       include: {
         status: true,
@@ -111,7 +111,10 @@ export class QuestsService {
       orderBy,
     });
 
-    // Compute avgExperience and filter/sort in JS if needed
+    if (avgXpMin == null && avgXpMax == null && sortBy !== 'avgExperience') {
+      return quests;
+    }
+
     let result = quests.map((quest) => {
       const adventurers = quest.adventurers ?? [];
       const avgExperience =

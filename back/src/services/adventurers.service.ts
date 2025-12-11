@@ -30,9 +30,10 @@ export class AdventurersService {
           }
         : {}),
     };
+    const whereClause = Object.keys(where).length ? where : undefined;
 
     return this.prisma.adventurer.findMany({
-      where,
+        where: whereClause,
       orderBy: dailyRateOrder ? { dailyRate: dailyRateOrder } : undefined,
       include: {
         speciality: true,

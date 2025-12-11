@@ -34,10 +34,6 @@ async function main() {
     data: { name: 'client' },
   });
 
-  const questGiverRole = await prisma.role.create({
-    data: { name: 'Quest Giver' },
-  });
-
   console.log('✅ Rôles créés');
 
   // Créer les utilisateurs
@@ -46,8 +42,8 @@ async function main() {
 
   const assistantUser = await prisma.user.create({
     data: {
-      name: 'Assistant User',
-      email: 'assistant@guild.com',
+      name: 'Jean Dupont',
+      email: 'jean.dupont@guild.com',
       password: hashedPassword,
       roleId: assistantRole.id,
     },
@@ -55,19 +51,10 @@ async function main() {
 
   const clientUser = await prisma.user.create({
     data: {
-      name: 'Jean Dupont',
-      email: 'jean.dupont@guild.com',
-      password: hashedPassword,
-      roleId: clientRole.id,
-    },
-  });
-
-  const questGiver = await prisma.user.create({
-    data: {
       name: 'Marie Martin',
       email: 'marie.martin@guild.com',
       password: hashedPassword,
-      roleId: questGiverRole.id,
+      roleId: clientRole.id,
     },
   });
 
@@ -404,7 +391,7 @@ async function main() {
       statusId: statusInProgress.id,
       estimatedDuration: 3,
       recommendedXP: 500,
-      UserId: questGiver.id,
+      UserId: clientUser.id,
       adventurers: {
         connect: [{ id: adventurerAragorn.id }, { id: adventurerLegolas.id }],
       },
@@ -420,7 +407,7 @@ async function main() {
       statusId: statusPending.id,
       estimatedDuration: 7,
       recommendedXP: 800,
-      UserId: clientUser.id,
+      UserId: assistantUser.id,
       adventurers: {
         connect: [{ id: adventurerGandalf.id }],
       },
@@ -436,7 +423,7 @@ async function main() {
       statusId: statusCompleted.id,
       estimatedDuration: 2,
       recommendedXP: 200,
-      UserId: questGiver.id,
+      UserId: clientUser.id,
       adventurers: {
         connect: [{ id: adventurerFrodon.id }, { id: adventurerElrond.id }],
       },

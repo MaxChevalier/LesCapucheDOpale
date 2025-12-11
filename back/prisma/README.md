@@ -42,9 +42,8 @@ Le script crée les données suivantes :
 
 ### 👥 Utilisateurs
 
-- **Admin** : admin@guild.com / password123
-- **User** : jean.dupont@guild.com / password123
-- **Quest Giver** : marie.martin@guild.com / password123
+- **Assistant** : jean.dupont@guild.com / password123
+- **Client** : marie.martin@guild.com / password123
 
 ### 🦸 Aventuriers
 
@@ -117,4 +116,4 @@ Le script `prisma/seed.ts` :
 
 - Les mots de passe sont hashés avec bcrypt
 - Le script affiche un résumé détaillé à la fin
-- Utilisez le compte admin pour accéder à toutes les fonctionnalités
+- Deux rôles disponibles : Assistant et Client (le donneur de quêtes)

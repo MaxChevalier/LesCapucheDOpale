@@ -124,7 +124,8 @@ export class QuestsController {
   @ApiQuery({
     name: 'sortBy',
     required: false,
-    description: 'Champ de tri',
+    description:
+      'Champ de tri. Par défaut, les résultats sont triés par ID (décroissant) si ce paramètre est absent ou invalide.',
     enum: ['reward', 'finalDate', 'avgExperience', 'createdAt'],
     example: 'reward',
   })

@@ -75,7 +75,7 @@ describe('QuestsController', () => {
     const mock = [{ id: 1, name: 'Q1' }];
     mockService.findAll!.mockReturnValue(mock);
 
-    expect(controller.findAll()).toBe(mock);
+    expect(controller.findAll({})).toBe(mock);
     expect(mockService.findAll).toHaveBeenCalled();
   });
 

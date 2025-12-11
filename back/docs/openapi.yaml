@@ -243,10 +243,93 @@ paths:
   /quests:
     get:
       operationId: QuestsController_findAll
-      parameters: []
+      parameters:
+        - name: order
+          required: false
+          in: query
+          description: Ordre de tri
+          schema:
+            enum:
+              - asc
+              - desc
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          description: Champ de tri
+          schema:
+            enum:
+              - reward
+              - finalDate
+              - avgExperience
+              - createdAt
+            type: string
+        - name: avgXpMax
+          required: false
+          in: query
+          description: Niveau d'expérience moyen maximal des aventuriers
+          schema:
+            example: 100
+            type: number
+        - name: avgXpMin
+          required: false
+          in: query
+          description: Niveau d'expérience moyen minimal des aventuriers
+          schema:
+            example: 10
+            type: number
+        - name: userId
+          required: false
+          in: query
+          description: Filtrer par commanditaire (ID utilisateur)
+          schema:
+            example: 5
+            type: number
+        - name: finalDateAfter
+          required: false
+          in: query
+          description: Date d'échéance après (ISO 8601)
+          schema:
+            example: '2025-01-01'
+            type: string
+        - name: finalDateBefore
+          required: false
+          in: query
+          description: Date d'échéance avant (ISO 8601)
+          schema:
+            example: '2025-12-31'
+            type: string
+        - name: statusName
+          required: false
+          in: query
+          description: 'Filtrer par nom de statut (ex: validée, commencée)'
+          schema:
+            example: validée
+            type: string
+        - name: statusId
+          required: false
+          in: query
+          description: Filtrer par identifiant de statut
+          schema:
+            example: 2
+            type: number
+        - name: rewardMax
+          required: false
+          in: query
+          description: Prime maximale (incluse)
+          schema:
+            example: 1000
+            type: number
+        - name: rewardMin
+          required: false
+          in: query
+          description: Prime minimale (incluse)
+          schema:
+            example: 100
+            type: number
       responses:
         '200':
-          description: List of quests
+          description: List of quests (avec filtres et tri)
           content:
             application/json:
               schema:
@@ -803,10 +886,47 @@ paths:
   /adventurers:
     get:
       operationId: AdventurersController_findAll
-      parameters: []
+      parameters:
+        - name: dailyRateOrder
+          required: false
+          in: query
+          description: Tri par taux journalier
+          schema:
+            enum:
+              - asc
+              - desc
+            type: string
+        - name: xpMax
+          required: false
+          in: query
+          description: Expérience maximale (incluse)
+          schema:
+            example: 50
+            type: number
+        - name: xpMin
+          required: false
+          in: query
+          description: Expérience minimale (incluse)
+          schema:
+            example: 10
+            type: number
+        - name: specialityId
+          required: false
+          in: query
+          description: Filtrer par identifiant de spécialité
+          schema:
+            example: 3
+            type: number
+        - name: name
+          required: false
+          in: query
+          description: Filtrer par nom (contains, insensible à la casse)
+          schema:
+            example: aria
+            type: string
       responses:
         '200':
-          description: List of adventurers
+          description: List of adventurers (avec filtres et tri)
           content:
             application/json:
               schema:

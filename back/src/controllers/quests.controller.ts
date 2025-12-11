@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -25,6 +26,7 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -40,8 +42,85 @@ export class QuestsController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
+  @ApiQuery({
+    name: 'rewardMin',
+    required: false,
+    description: 'Prime minimale (incluse)',
+    example: 100,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'rewardMax',
+    required: false,
+    description: 'Prime maximale (incluse)',
+    example: 1000,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'statusId',
+    required: false,
+    description: 'Filtrer par identifiant de statut',
+    example: 2,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'statusName',
+    required: false,
+    description: 'Filtrer par nom de statut (ex: validée, commencée)',
+    example: 'validée',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'finalDateBefore',
+    required: false,
+    description: "Date d'échéance avant (ISO 8601)",
+    example: '2025-12-31',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'finalDateAfter',
+    required: false,
+    description: "Date d'échéance après (ISO 8601)",
+    example: '2025-01-01',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'userId',
+    required: false,
+    description: 'Filtrer par commanditaire (ID utilisateur)',
+    example: 5,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'avgXpMin',
+    required: false,
+    description: "Niveau d'expérience moyen minimal des aventuriers",
+    example: 10,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'avgXpMax',
+    required: false,
+    description: "Niveau d'expérience moyen maximal des aventuriers",
+    example: 100,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'sortBy',
+    required: false,
+    description: 'Champ de tri',
+    enum: ['reward', 'finalDate', 'avgExperience', 'createdAt'],
+    example: 'reward',
+  })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    description: 'Ordre de tri',
+    enum: ['asc', 'desc'],
+    example: 'desc',
+  })
   @ApiOkResponse({
-    description: 'List of quests',
+    description: 'List of quests (avec filtres et tri)',
     schema: {
       type: 'array',
       items: { type: 'object', additionalProperties: true },
@@ -56,8 +135,20 @@ export class QuestsController {
       ],
     },
   })
-  findAll() {
-    return this.questsService.findAll();
+  findAll(@Query() q: any) {
+    return this.questsService.findAll({
+      rewardMin: q.rewardMin ? Number(q.rewardMin) : undefined,
+      rewardMax: q.rewardMax ? Number(q.rewardMax) : undefined,
+      statusId: q.statusId ? Number(q.statusId) : undefined,
+      statusName: q.statusName,
+      finalDateBefore: q.finalDateBefore,
+      finalDateAfter: q.finalDateAfter,
+      userId: q.userId ? Number(q.userId) : undefined,
+      avgXpMin: q.avgXpMin ? Number(q.avgXpMin) : undefined,
+      avgXpMax: q.avgXpMax ? Number(q.avgXpMax) : undefined,
+      sortBy: ['reward', 'finalDate', 'avgExperience', 'createdAt'].includes(q.sortBy) ? q.sortBy : undefined,
+      order: q.order === 'asc' || q.order === 'desc' ? q.order : undefined,
+    });
   }
 
   @Get(':id')

@@ -1,4 +1,4 @@
-# Opal Project - Frontend
+# OpalProject - Frontend
 
 Application Angular pour la gestion des aventuriers et des quêtes du projet Les Capuche d'Opale.
 
@@ -90,15 +90,18 @@ Le rapport de couverture de code est généré automatiquement lors de l'exécut
 
 Après avoir exécuté les tests, ouvrez le fichier suivant dans votre navigateur :
 
-```bash
-xdg-open coverage/index.html
-```
-
-ou sur macOS/Windows :
-
-```bash
-open coverage/index.html
-```
+- **Linux** :
+    ```bash
+    xdg-open coverage/index.html
+    ```
+- **Windows** :
+    ```bash
+    start coverage/index.html
+    ```
+- **macOS** :
+    ```bash
+    open coverage/index.html
+    ```
 
 ### Structure du rapport
 

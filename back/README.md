@@ -141,15 +141,18 @@ Cette commande exécute les tests et génère un rapport de couverture de code.
 
 Le rapport de coverage est généré dans le dossier `coverage/` :
 
-```bash
-xdg-open coverage/index.html
-```
-
-ou sur macOS/Windows :
-
-```bash
-open coverage/index.html
-```
+- **Linux** :
+    ```bash
+    xdg-open coverage/index.html
+    ```
+- **Windows** :
+    ```bash
+    start coverage/index.html
+    ```
+- **macOS** :
+    ```bash
+    open coverage/index.html
+    ```
 
 ### Configuration du coverage
 

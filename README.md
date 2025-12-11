@@ -1,4 +1,4 @@
-# Les Capuche d'Opale - Système de Gestion de Guilde
+# Les Capuches d'Opale - Système de Gestion de Guilde
 
 Application web full-stack pour la gestion d'une guilde d'aventuriers médiévale-fantastique.
 
@@ -130,7 +130,7 @@ Le frontend sera accessible à `http://localhost:4200`
 
 **Entités principales :**
 
--   **User** : Utilisateurs du système (rôles : MEMBER, COORDINATOR, ADMIN)
+-   **User** : Utilisateurs du système (rôles : assistant, client)
 -   **Adventurer** : Profils des aventuriers (nom, description, image)
 -   **Speciality** : Spécialités des aventuriers (archer, mage, forgeron, etc.)
 -   **Status** : Statuts des aventuriers (novice, intermédiaire, vétéran, retraité)

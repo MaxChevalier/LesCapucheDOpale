@@ -1,7 +1,8 @@
-import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateConsumableDto } from '../dto/create-consumable.dto';
 import { UpdateConsumableDto } from '../dto/update-consumable.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ConsumablesService {
@@ -36,8 +37,13 @@ export class ConsumablesService {
                 data: dto,
                 include: { consumableType: true },
             });
-        } catch (e: any) {
-            if (e.code === 'P2025') throw new NotFoundException('Consumable not found');
+        } catch (e: unknown) {
+            if (
+                (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') ||
+                (typeof e === 'object' && e !== null && 'code' in e && (e as { code?: string }).code === 'P2025')
+            ) {
+                throw new NotFoundException('Consumable not found');
+            }
             throw e;
         }
     }
@@ -45,8 +51,20 @@ export class ConsumablesService {
     async remove(id: number) {
         try {
             return await this.prisma.consumable.delete({ where: { id } });
-        } catch (e: any) {
-            if (e.code === 'P2025') throw new NotFoundException('Consumable not found');
+        } catch (e: unknown) {
+            if (
+                (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') ||
+                (typeof e === 'object' && e !== null && 'code' in e && (e as { code?: string }).code === 'P2025')
+            ) {
+                throw new NotFoundException('Consumable not found');
+            }
+            if (
+                (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2003') ||
+                (typeof e === 'object' && e !== null && 'code' in e && (e as { code?: string }).code === 'P2003')
+            ) {
+                // FK violée : le consommable est référencé (à supprimer ou cascade)
+                throw new BadRequestException('Consumable is referenced and cannot be deleted');
+            }
             throw e;
         }
     }
@@ -69,7 +87,7 @@ export class ConsumablesService {
 
             return tx.consumable.update({
                 where: { id },
-                data: { quantity: { decrement: qty }},
+                data: { quantity: { decrement: qty } },
                 include: { consumableType: true },
             });
         });

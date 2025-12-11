@@ -1,4 +1,4 @@
-import { IsOptional, IsPositive, IsString } from 'class-validator';
+import {IsInt, IsOptional, IsPositive, IsString} from 'class-validator';
 
 export class UpdateConsumableDto {
     @IsOptional()
@@ -10,8 +10,11 @@ export class UpdateConsumableDto {
     consumableTypeId?: number;
 
     @IsOptional()
+    @IsInt()
+    @IsPositive()
     quantity?: number;
 
     @IsOptional()
+    @IsInt()
     cost?: number;
 }

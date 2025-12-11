@@ -15,6 +15,7 @@ describe('ConsumablesController', () => {
         findOne: jest.fn(),
         update: jest.fn(),
         remove: jest.fn(),
+        purchase: jest.fn(),
     };
 
     const mockJwtAuthGuard = {
@@ -32,12 +33,10 @@ describe('ConsumablesController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [ConsumablesController],
-            providers: [
-                { provide: ConsumablesService, useValue: mockConsumablesService },
-            ],
+            providers: [{ provide: ConsumablesService, useValue: mockConsumablesService }],
         })
             .overrideGuard(JwtAuthGuard)
-            .useValue(mockRolesGuard)
+            .useValue(mockJwtAuthGuard)
             .overrideGuard(RolesGuard)
             .useValue(mockRolesGuard)
             .compile();
@@ -92,5 +91,14 @@ describe('ConsumablesController', () => {
 
         expect(service.remove).toHaveBeenCalledWith(1);
         expect(result).toEqual({ id: 1 });
+    });
+
+    it('should call service.purchase()', async () => {
+        mockConsumablesService.purchase.mockResolvedValue({ id: 1, purchasedQuantity: 3 });
+
+        const result = await controller.purchase('1', { quantity: 3 } as any);
+
+        expect(service.purchase).toHaveBeenCalledWith(1, 3);
+        expect(result).toEqual({ id: 1, purchasedQuantity: 3 });
     });
 });

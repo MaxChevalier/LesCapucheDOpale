@@ -1141,9 +1141,6 @@ paths:
                 name:
                   type: string
                   example: Mage
-                description:
-                  type: string
-                  example: Uses arcane powers.
               required:
                 - name
               additionalProperties: false
@@ -1161,17 +1158,6 @@ paths:
                   name:
                     type: string
                     example: Mage
-                  description:
-                    type: string
-                    example: Uses arcane powers.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
       security:
         - bearer: []
       tags:
@@ -1195,17 +1181,6 @@ paths:
                     name:
                       type: string
                       example: Warrior
-                    description:
-                      type: string
-                      example: Frontline melee combatant.
-                    createdAt:
-                      type: string
-                      format: date-time
-                      example: '2025-10-30T12:00:00.000Z'
-                    updatedAt:
-                      type: string
-                      format: date-time
-                      example: '2025-10-30T12:34:56.000Z'
       security:
         - bearer: []
       tags:
@@ -1235,17 +1210,6 @@ paths:
                   name:
                     type: string
                     example: Mage
-                  description:
-                    type: string
-                    example: Uses arcane powers.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:34:56.000Z'
       security:
         - bearer: []
       tags:
@@ -1271,9 +1235,6 @@ paths:
                 name:
                   type: string
                   example: Battlemage
-                description:
-                  type: string
-                  example: Combines melee and magic.
               additionalProperties: false
       responses:
         '200':
@@ -1289,17 +1250,6 @@ paths:
                   name:
                     type: string
                     example: Battlemage
-                  description:
-                    type: string
-                    example: Combines melee and magic.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:45:00.000Z'
       security:
         - bearer: []
       tags:
@@ -1347,9 +1297,6 @@ paths:
                 name:
                   type: string
                   example: Weapon
-                description:
-                  type: string
-                  example: Offensive equipment like swords or bows.
               required:
                 - name
               additionalProperties: false
@@ -1367,17 +1314,6 @@ paths:
                   name:
                     type: string
                     example: Weapon
-                  description:
-                    type: string
-                    example: Offensive equipment like swords or bows.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
       security:
         - bearer: []
       tags:
@@ -1401,17 +1337,6 @@ paths:
                     name:
                       type: string
                       example: Armor
-                    description:
-                      type: string
-                      example: Defensive equipment such as shields or helmets.
-                    createdAt:
-                      type: string
-                      format: date-time
-                      example: '2025-10-30T12:00:00.000Z'
-                    updatedAt:
-                      type: string
-                      format: date-time
-                      example: '2025-10-30T12:34:56.000Z'
       security:
         - bearer: []
       tags:
@@ -1441,17 +1366,6 @@ paths:
                   name:
                     type: string
                     example: Weapon
-                  description:
-                    type: string
-                    example: Offensive equipment like swords or bows.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:34:56.000Z'
       security:
         - bearer: []
       tags:
@@ -1477,9 +1391,6 @@ paths:
                 name:
                   type: string
                   example: Ranged Weapon
-                description:
-                  type: string
-                  example: Bows, crossbows, and similar weapons.
               additionalProperties: false
       responses:
         '200':
@@ -1495,17 +1406,6 @@ paths:
                   name:
                     type: string
                     example: Ranged Weapon
-                  description:
-                    type: string
-                    example: Bows, crossbows, and similar weapons.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:45:00.000Z'
       security:
         - bearer: []
       tags:
@@ -1642,9 +1542,6 @@ paths:
                 name:
                   type: string
                   example: Health Potion
-                description:
-                  type: string
-                  example: Restores a small amount of HP.
               required:
                 - name
               additionalProperties: false
@@ -1662,17 +1559,6 @@ paths:
                   name:
                     type: string
                     example: Health Potion
-                  description:
-                    type: string
-                    example: Restores a small amount of HP.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
       security:
         - bearer: []
       tags:
@@ -1696,17 +1582,6 @@ paths:
                     name:
                       type: string
                       example: Health Potion
-                    description:
-                      type: string
-                      example: Restores a small amount of HP.
-                    createdAt:
-                      type: string
-                      format: date-time
-                      example: '2025-10-30T12:00:00.000Z'
-                    updatedAt:
-                      type: string
-                      format: date-time
-                      example: '2025-10-30T12:34:56.000Z'
       tags:
         - Consumable Types
   /consumable-types/{id}:
@@ -1734,17 +1609,6 @@ paths:
                   name:
                     type: string
                     example: Health Potion
-                  description:
-                    type: string
-                    example: Restores a small amount of HP.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:34:56.000Z'
       tags:
         - Consumable Types
     patch:
@@ -1768,9 +1632,6 @@ paths:
                 name:
                   type: string
                   example: Greater Health Potion
-                description:
-                  type: string
-                  example: Restores a greater amount of HP.
               additionalProperties: false
       responses:
         '200':
@@ -1786,17 +1647,6 @@ paths:
                   name:
                     type: string
                     example: Greater Health Potion
-                  description:
-                    type: string
-                    example: Restores a greater amount of HP.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:45:00.000Z'
       security:
         - bearer: []
       tags:
@@ -1852,17 +1702,15 @@ paths:
                     equipmentTypeId:
                       type: number
                       example: 7
-                    description:
-                      type: string
-                      example: A versatile steel longsword.
-                    createdAt:
-                      type: string
-                      format: date-time
-                      example: '2025-10-30T12:00:00.000Z'
-                    updatedAt:
-                      type: string
-                      format: date-time
-                      example: '2025-10-30T12:34:56.000Z'
+                    cost:
+                      type: number
+                      example: 100
+                    maxDurability:
+                      type: number
+                      example: 50
+                    currentDurability:
+                      type: number
+                      example: 50
       security:
         - bearer: []
       tags:
@@ -1884,12 +1732,17 @@ paths:
                 equipmentTypeId:
                   type: number
                   example: 7
-                description:
-                  type: string
-                  example: A versatile steel longsword.
+                cost:
+                  type: number
+                  example: 100
+                maxDurability:
+                  type: number
+                  example: 50
               required:
                 - name
                 - equipmentTypeId
+                - cost
+                - maxDurability
               additionalProperties: false
       responses:
         '201':
@@ -1908,17 +1761,15 @@ paths:
                   equipmentTypeId:
                     type: number
                     example: 7
-                  description:
-                    type: string
-                    example: A versatile steel longsword.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
+                  cost:
+                    type: number
+                    example: 100
+                  maxDurability:
+                    type: number
+                    example: 50
+                  currentDurability:
+                    type: number
+                    example: 50
       security:
         - bearer: []
       tags:
@@ -1951,17 +1802,15 @@ paths:
                   equipmentTypeId:
                     type: number
                     example: 7
-                  description:
-                    type: string
-                    example: A versatile steel longsword.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:34:56.000Z'
+                  cost:
+                    type: number
+                    example: 100
+                  maxDurability:
+                    type: number
+                    example: 50
+                  currentDurability:
+                    type: number
+                    example: 50
       security:
         - bearer: []
       tags:
@@ -1990,9 +1839,15 @@ paths:
                 equipmentTypeId:
                   type: number
                   example: 8
-                description:
-                  type: string
-                  example: Longsword imbued with minor magic.
+                cost:
+                  type: number
+                  example: 150
+                maxDurability:
+                  type: number
+                  example: 60
+                currentDurability:
+                  type: number
+                  example: 45
               additionalProperties: false
       responses:
         '200':
@@ -2011,17 +1866,15 @@ paths:
                   equipmentTypeId:
                     type: number
                     example: 8
-                  description:
-                    type: string
-                    example: Longsword imbued with minor magic.
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-10-30T12:45:00.000Z'
+                  cost:
+                    type: number
+                    example: 150
+                  maxDurability:
+                    type: number
+                    example: 60
+                  currentDurability:
+                    type: number
+                    example: 45
       security:
         - bearer: []
       tags:
@@ -2420,16 +2273,13 @@ paths:
                 type: array
                 items:
                   type: object
-                  additionalProperties: true
-                example:
-                  - id: 1
-                    name: Pending
-                    createdAt: '2025-10-30T12:00:00.000Z'
-                    updatedAt: '2025-10-30T12:34:56.000Z'
-                  - id: 2
-                    name: In Progress
-                    createdAt: '2025-10-30T12:05:00.000Z'
-                    updatedAt: '2025-10-30T12:35:00.000Z'
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: Pending
       security:
         - bearer: []
       tags:
@@ -2444,9 +2294,13 @@ paths:
           application/json:
             schema:
               type: object
-              additionalProperties: true
-              example:
-                name: In Progress
+              properties:
+                name:
+                  type: string
+                  example: In Progress
+              required:
+                - name
+              additionalProperties: false
       responses:
         '201':
           description: Status created
@@ -2454,12 +2308,13 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
-                example:
-                  id: 3
-                  name: In Progress
-                  createdAt: '2025-10-30T12:00:00.000Z'
-                  updatedAt: '2025-10-30T12:00:00.000Z'
+                properties:
+                  id:
+                    type: number
+                    example: 3
+                  name:
+                    type: string
+                    example: In Progress
       security:
         - bearer: []
       tags:
@@ -2482,9 +2337,11 @@ paths:
           application/json:
             schema:
               type: object
-              additionalProperties: true
-              example:
-                name: Completed
+              properties:
+                name:
+                  type: string
+                  example: Completed
+              additionalProperties: false
       responses:
         '200':
           description: Updated status
@@ -2492,12 +2349,13 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
-                example:
-                  id: 3
-                  name: Completed
-                  createdAt: '2025-10-30T12:00:00.000Z'
-                  updatedAt: '2025-10-30T12:45:00.000Z'
+                properties:
+                  id:
+                    type: number
+                    example: 3
+                  name:
+                    type: string
+                    example: Completed
       security:
         - bearer: []
       tags:

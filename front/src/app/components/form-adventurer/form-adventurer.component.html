@@ -2,10 +2,9 @@
   <div class="form-group">
     <label for="name">Nom:</label>
     <input id="name" formControlName="name" />
-    @if ((adventurerForm.get('name')?.touched || hasSubmitted) && adventurerForm.get('name')?.invalid) {
-    <p class="error">
-      Le nom doit contenir au moins 3 caractères.
-    </p>
+    @if ((adventurerForm.get('name')?.touched || hasSubmitted) &&
+    adventurerForm.get('name')?.invalid) {
+    <p class="error">Le nom doit contenir au moins 3 caractères.</p>
     }
   </div>
 
@@ -16,26 +15,27 @@
       <option [value]="spe.id">{{ spe.name }}</option>
       }
     </select>
-    @if ((adventurerForm.get('specialityId')?.touched || hasSubmitted) && adventurerForm.get('specialityId')?.invalid) {
-    <p class="error">
-      La spécialité est requise.
-    </p>
+    @if ((adventurerForm.get('specialityId')?.touched || hasSubmitted) &&
+    adventurerForm.get('specialityId')?.invalid) {
+    <p class="error">La spécialité est requise.</p>
     }
   </div>
 
   <div class="form-group">
     <label for="equipmentTypes">Type d'équipement:</label>
-    <select id="equipmentTypes" formControlName="equipmentTypeIds" multiple>
-      @for (type of equipmentTypes; track type) {
-      <option [value]="type.id">{{ type.name }}</option>
-      }
-    </select>
-    @if ((adventurerForm.get('equipmentTypeIds')?.touched || hasSubmitted) && adventurerForm.get('equipmentTypeIds')?.invalid)
-    {
-    <p class="error">
-      Le type d'équipement est requis.
-    </p>
-    }
+    <mat-form-field class="custom-form-field">
+      <mat-select 
+        placeholder="Sélectionner les types d'équipement"
+        formControlName="equipmentTypeIds"
+        multiple
+        class="test2"
+        panelClass="test"
+      >
+          @for (type of equipmentTypes; track type) {
+          <mat-option [value]="type.id">{{ type.name }}</mat-option>
+          }
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="form-group">
@@ -47,12 +47,14 @@
     </select>
     @if ((adventurerForm.get('consumableTypeIds')?.touched || hasSubmitted) &&
     adventurerForm.get('consumableTypeIds')?.invalid) {
-    <p class="error">
-      Le type de consommable est requis.
-    </p>
+    <p class="error">Le type de consommable est requis.</p>
     }
   </div>
-  <app-form-money label="Taux journalier : " [money]="getMoney()" (moneyChange)="setMoney($event)"></app-form-money>
+  <app-form-money
+    label="Taux journalier : "
+    [money]="getMoney()"
+    (moneyChange)="setMoney($event)"
+  ></app-form-money>
 
   <button type="submit">Créer un aventurier</button>
 </form>

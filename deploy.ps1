@@ -24,6 +24,5 @@ Write-Host "-----------------------------------------" -ForegroundColor DarkGray
 Write-Host "  PROJET LANCE AVEC SUCCES" -ForegroundColor Cyan
 Write-Host "-----------------------------------------" -ForegroundColor DarkGray
 
-Write-Host "Backend :  http://localhost:3000"
-Write-Host "Frontend : http://localhost:4200"
+Write-Host "Open on : http://localhost:80"
 Write-Host "-----------------------------------------"

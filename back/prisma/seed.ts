@@ -3,6 +3,51 @@ import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
+// Configuration
+const SEED_PASSWORD = process.env.SEED_PASSWORD || 'password123';
+const SEED_ASSISTANT_EMAIL = process.env.SEED_ASSISTANT_EMAIL || 'jean.dupont@guild.com';
+const SEED_ASSISTANT_NAME = process.env.SEED_ASSISTANT_NAME || 'Jean Dupont';
+const SEED_CLIENT_EMAIL = process.env.SEED_CLIENT_EMAIL || 'marie.martin@guild.com';
+const SEED_CLIENT_NAME = process.env.SEED_CLIENT_NAME || 'Marie Martin';
+
+// Constantes pour les rôles
+const ROLES = {
+  ASSISTANT: 'assistant',
+  CLIENT: 'client',
+};
+
+// Constantes pour les statuts
+const STATUSES = {
+  PENDING: 'En attente',
+  IN_PROGRESS: 'En cours',
+  COMPLETED: 'Terminée',
+  CANCELLED: 'Annulée',
+};
+
+// Constantes pour les spécialités
+const SPECIALITIES = {
+  WARRIOR: 'Guerrier',
+  MAGE: 'Mage',
+  ROGUE: 'Voleur',
+  HEALER: 'Soigneur',
+  RANGER: 'Rôdeur',
+};
+
+// Constantes pour les types d'équipement
+const EQUIPMENT_TYPES = {
+  WEAPON: 'Arme',
+  ARMOR: 'Armure',
+  SHIELD: 'Bouclier',
+  ACCESSORY: 'Accessoire',
+};
+
+// Constantes pour les types de consommables
+const CONSUMABLE_TYPES = {
+  POTION: 'Potion',
+  FOOD: 'Nourriture',
+  SCROLL: 'Parchemin',
+};
+
 async function main() {
   console.log('🌱 Début du seed de la base de données...');
 
@@ -27,23 +72,23 @@ async function main() {
   // Créer les rôles
   console.log('👥 Création des rôles...');
   const assistantRole = await prisma.role.create({
-    data: { name: 'assistant' },
+    data: { name: ROLES.ASSISTANT },
   });
 
   const clientRole = await prisma.role.create({
-    data: { name: 'client' },
+    data: { name: ROLES.CLIENT },
   });
 
   console.log('✅ Rôles créés');
 
   // Créer les utilisateurs
   console.log('👤 Création des utilisateurs...');
-  const hashedPassword = await bcrypt.hash('password123', 10);
+  const hashedPassword = await bcrypt.hash(SEED_PASSWORD, 10);
 
   const assistantUser = await prisma.user.create({
     data: {
-      name: 'Jean Dupont',
-      email: 'jean.dupont@guild.com',
+      name: SEED_ASSISTANT_NAME,
+      email: SEED_ASSISTANT_EMAIL,
       password: hashedPassword,
       roleId: assistantRole.id,
     },
@@ -51,8 +96,8 @@ async function main() {
 
   const clientUser = await prisma.user.create({
     data: {
-      name: 'Marie Martin',
-      email: 'marie.martin@guild.com',
+      name: SEED_CLIENT_NAME,
+      email: SEED_CLIENT_EMAIL,
       password: hashedPassword,
       roleId: clientRole.id,
     },
@@ -63,19 +108,19 @@ async function main() {
   // Créer les statuts de quêtes
   console.log('📋 Création des statuts...');
   const statusPending = await prisma.status.create({
-    data: { name: 'En attente' },
+    data: { name: STATUSES.PENDING },
   });
 
   const statusInProgress = await prisma.status.create({
-    data: { name: 'En cours' },
+    data: { name: STATUSES.IN_PROGRESS },
   });
 
   const statusCompleted = await prisma.status.create({
-    data: { name: 'Terminée' },
+    data: { name: STATUSES.COMPLETED },
   });
 
-  await prisma.status.create({
-    data: { name: 'Annulée' },
+  const statusCancelled = await prisma.status.create({
+    data: { name: STATUSES.CANCELLED },
   });
 
   console.log('✅ Statuts créés');
@@ -83,23 +128,23 @@ async function main() {
   // Créer les spécialités
   console.log('🎯 Création des spécialités...');
   const specialityWarrior = await prisma.speciality.create({
-    data: { name: 'Guerrier' },
+    data: { name: SPECIALITIES.WARRIOR },
   });
 
   const specialityMage = await prisma.speciality.create({
-    data: { name: 'Mage' },
+    data: { name: SPECIALITIES.MAGE },
   });
 
   const specialityRogue = await prisma.speciality.create({
-    data: { name: 'Voleur' },
+    data: { name: SPECIALITIES.ROGUE },
   });
 
   const specialityHealer = await prisma.speciality.create({
-    data: { name: 'Soigneur' },
+    data: { name: SPECIALITIES.HEALER },
   });
 
   const specialityRanger = await prisma.speciality.create({
-    data: { name: 'Rôdeur' },
+    data: { name: SPECIALITIES.RANGER },
   });
 
   console.log('✅ Spécialités créées');
@@ -107,19 +152,19 @@ async function main() {
   // Créer les types d'équipement
   console.log('⚔️ Création des types d\'équipement...');
   const equipTypeWeapon = await prisma.equipmentType.create({
-    data: { name: 'Arme' },
+    data: { name: EQUIPMENT_TYPES.WEAPON },
   });
 
   const equipTypeArmor = await prisma.equipmentType.create({
-    data: { name: 'Armure' },
+    data: { name: EQUIPMENT_TYPES.ARMOR },
   });
 
   const equipTypeShield = await prisma.equipmentType.create({
-    data: { name: 'Bouclier' },
+    data: { name: EQUIPMENT_TYPES.SHIELD },
   });
 
   const equipTypeAccessory = await prisma.equipmentType.create({
-    data: { name: 'Accessoire' },
+    data: { name: EQUIPMENT_TYPES.ACCESSORY },
   });
 
   console.log('✅ Types d\'équipement créés');
@@ -127,15 +172,15 @@ async function main() {
   // Créer les types de consommables
   console.log('🧪 Création des types de consommables...');
   const consumableTypePotion = await prisma.consumableType.create({
-    data: { name: 'Potion' },
+    data: { name: CONSUMABLE_TYPES.POTION },
   });
 
   const consumableTypeFood = await prisma.consumableType.create({
-    data: { name: 'Nourriture' },
+    data: { name: CONSUMABLE_TYPES.FOOD },
   });
 
   const consumableTypeScroll = await prisma.consumableType.create({
-    data: { name: 'Parchemin' },
+    data: { name: CONSUMABLE_TYPES.SCROLL },
   });
 
   console.log('✅ Types de consommables créés');
@@ -497,6 +542,9 @@ async function main() {
   console.log(`- ${await prisma.consumable.count()} consommables`);
   console.log(`- ${await prisma.quest.count()} quêtes`);
   console.log(`- ${await prisma.transaction.count()} transactions`);
+  console.log('\n🔑 Comptes créés:');
+  console.log(`   Assistant: ${SEED_ASSISTANT_EMAIL}`);
+  console.log(`   Client: ${SEED_CLIENT_EMAIL}`);
 }
 
 main()

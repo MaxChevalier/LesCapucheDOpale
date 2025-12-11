@@ -71,13 +71,10 @@ async function main() {
 
   // Créer les rôles
   console.log('👥 Création des rôles...');
-  const assistantRole = await prisma.role.create({
-    data: { name: ROLES.ASSISTANT },
-  });
-
-  const clientRole = await prisma.role.create({
-    data: { name: ROLES.CLIENT },
-  });
+  const [assistantRole, clientRole] = await Promise.all([
+    prisma.role.create({ data: { name: ROLES.ASSISTANT } }),
+    prisma.role.create({ data: { name: ROLES.CLIENT } }),
+  ]);
 
   console.log('✅ Rôles créés');
 
@@ -107,81 +104,45 @@ async function main() {
 
   // Créer les statuts de quêtes
   console.log('📋 Création des statuts...');
-  const statusPending = await prisma.status.create({
-    data: { name: STATUSES.PENDING },
-  });
-
-  const statusInProgress = await prisma.status.create({
-    data: { name: STATUSES.IN_PROGRESS },
-  });
-
-  const statusCompleted = await prisma.status.create({
-    data: { name: STATUSES.COMPLETED },
-  });
-
-  const statusCancelled = await prisma.status.create({
-    data: { name: STATUSES.CANCELLED },
-  });
+  const [statusPending, statusInProgress, statusCompleted, statusCancelled] = await Promise.all([
+    prisma.status.create({ data: { name: STATUSES.PENDING } }),
+    prisma.status.create({ data: { name: STATUSES.IN_PROGRESS } }),
+    prisma.status.create({ data: { name: STATUSES.COMPLETED } }),
+    prisma.status.create({ data: { name: STATUSES.CANCELLED } }),
+  ]);
 
   console.log('✅ Statuts créés');
 
   // Créer les spécialités
   console.log('🎯 Création des spécialités...');
-  const specialityWarrior = await prisma.speciality.create({
-    data: { name: SPECIALITIES.WARRIOR },
-  });
-
-  const specialityMage = await prisma.speciality.create({
-    data: { name: SPECIALITIES.MAGE },
-  });
-
-  const specialityRogue = await prisma.speciality.create({
-    data: { name: SPECIALITIES.ROGUE },
-  });
-
-  const specialityHealer = await prisma.speciality.create({
-    data: { name: SPECIALITIES.HEALER },
-  });
-
-  const specialityRanger = await prisma.speciality.create({
-    data: { name: SPECIALITIES.RANGER },
-  });
+  const [specialityWarrior, specialityMage, specialityRogue, specialityHealer, specialityRanger] = await Promise.all([
+    prisma.speciality.create({ data: { name: SPECIALITIES.WARRIOR } }),
+    prisma.speciality.create({ data: { name: SPECIALITIES.MAGE } }),
+    prisma.speciality.create({ data: { name: SPECIALITIES.ROGUE } }),
+    prisma.speciality.create({ data: { name: SPECIALITIES.HEALER } }),
+    prisma.speciality.create({ data: { name: SPECIALITIES.RANGER } }),
+  ]);
 
   console.log('✅ Spécialités créées');
 
   // Créer les types d'équipement
   console.log('⚔️ Création des types d\'équipement...');
-  const equipTypeWeapon = await prisma.equipmentType.create({
-    data: { name: EQUIPMENT_TYPES.WEAPON },
-  });
-
-  const equipTypeArmor = await prisma.equipmentType.create({
-    data: { name: EQUIPMENT_TYPES.ARMOR },
-  });
-
-  const equipTypeShield = await prisma.equipmentType.create({
-    data: { name: EQUIPMENT_TYPES.SHIELD },
-  });
-
-  const equipTypeAccessory = await prisma.equipmentType.create({
-    data: { name: EQUIPMENT_TYPES.ACCESSORY },
-  });
+  const [equipTypeWeapon, equipTypeArmor, equipTypeShield, equipTypeAccessory] = await Promise.all([
+    prisma.equipmentType.create({ data: { name: EQUIPMENT_TYPES.WEAPON } }),
+    prisma.equipmentType.create({ data: { name: EQUIPMENT_TYPES.ARMOR } }),
+    prisma.equipmentType.create({ data: { name: EQUIPMENT_TYPES.SHIELD } }),
+    prisma.equipmentType.create({ data: { name: EQUIPMENT_TYPES.ACCESSORY } }),
+  ]);
 
   console.log('✅ Types d\'équipement créés');
 
   // Créer les types de consommables
   console.log('🧪 Création des types de consommables...');
-  const consumableTypePotion = await prisma.consumableType.create({
-    data: { name: CONSUMABLE_TYPES.POTION },
-  });
-
-  const consumableTypeFood = await prisma.consumableType.create({
-    data: { name: CONSUMABLE_TYPES.FOOD },
-  });
-
-  const consumableTypeScroll = await prisma.consumableType.create({
-    data: { name: CONSUMABLE_TYPES.SCROLL },
-  });
+  const [consumableTypePotion, consumableTypeFood, consumableTypeScroll] = await Promise.all([
+    prisma.consumableType.create({ data: { name: CONSUMABLE_TYPES.POTION } }),
+    prisma.consumableType.create({ data: { name: CONSUMABLE_TYPES.FOOD } }),
+    prisma.consumableType.create({ data: { name: CONSUMABLE_TYPES.SCROLL } }),
+  ]);
 
   console.log('✅ Types de consommables créés');
 
@@ -306,13 +267,23 @@ async function main() {
     },
   });
 
-  await prisma.equipment.create({
+  const equipmentShield = await prisma.equipment.create({
     data: {
       name: 'Bouclier du courage',
       equipmentTypeId: equipTypeShield.id,
       cost: 60,
       maxDurability: 120,
       currentDurability: 120,
+    },
+  });
+
+  const equipmentRing = await prisma.equipment.create({
+    data: {
+      name: 'Anneau de sagesse',
+      equipmentTypeId: equipTypeAccessory.id,
+      cost: 200,
+      maxDurability: 999,
+      currentDurability: 999,
     },
   });
 
@@ -341,63 +312,81 @@ async function main() {
     },
   });
 
+  const stockArmor1 = await prisma.equipmentStock.create({
+    data: {
+      equipmentId: equipmentArmor.id,
+      durability: 150,
+    },
+  });
+
+  const stockShield1 = await prisma.equipmentStock.create({
+    data: {
+      equipmentId: equipmentShield.id,
+      durability: 120,
+    },
+  });
+
+  const stockRing1 = await prisma.equipmentStock.create({
+    data: {
+      equipmentId: equipmentRing.id,
+      durability: 999,
+    },
+  });
+
   console.log('✅ Stocks d\'équipement créés');
 
   // Créer les consommables
   console.log('🍺 Création des consommables...');
-  await prisma.consumable.create({
-    data: {
-      name: 'Potion de santé',
-      consumableTypeId: consumableTypePotion.id,
-      quantity: 50,
-      cost: 10,
-    },
-  });
-
-  await prisma.consumable.create({
-    data: {
-      name: 'Potion de mana',
-      consumableTypeId: consumableTypePotion.id,
-      quantity: 30,
-      cost: 15,
-    },
-  });
-
-  await prisma.consumable.create({
-    data: {
-      name: 'Pain elfique',
-      consumableTypeId: consumableTypeFood.id,
-      quantity: 100,
-      cost: 5,
-    },
-  });
-
-  await prisma.consumable.create({
-    data: {
-      name: 'Viande séchée',
-      consumableTypeId: consumableTypeFood.id,
-      quantity: 80,
-      cost: 3,
-    },
-  });
-
-  await prisma.consumable.create({
-    data: {
-      name: 'Parchemin de téléportation',
-      consumableTypeId: consumableTypeScroll.id,
-      quantity: 10,
-      cost: 50,
-    },
-  });
-
-  await prisma.consumable.create({
-    data: {
-      name: 'Parchemin de guérison',
-      consumableTypeId: consumableTypeScroll.id,
-      quantity: 20,
-      cost: 25,
-    },
-  });
+  await Promise.all([
+    prisma.consumable.create({
+      data: {
+        name: 'Potion de santé',
+        consumableTypeId: consumableTypePotion.id,
+        quantity: 50,
+        cost: 10,
+      },
+    }),
+    prisma.consumable.create({
+      data: {
+        name: 'Potion de mana',
+        consumableTypeId: consumableTypePotion.id,
+        quantity: 30,
+        cost: 15,
+      },
+    }),
+    prisma.consumable.create({
+      data: {
+        name: 'Pain elfique',
+        consumableTypeId: consumableTypeFood.id,
+        quantity: 100,
+        cost: 5,
+      },
+    }),
+    prisma.consumable.create({
+      data: {
+        name: 'Viande séchée',
+        consumableTypeId: consumableTypeFood.id,
+        quantity: 80,
+        cost: 3,
+      },
+    }),
+    prisma.consumable.create({
+      data: {
+        name: 'Parchemin de téléportation',
+        consumableTypeId: consumableTypeScroll.id,
+        quantity: 10,
+        cost: 50,
+      },
+    }),
+    prisma.consumable.create({
+      data: {
+        name: 'Parchemin de guérison',
+        consumableTypeId: consumableTypeScroll.id,
+        quantity: 20,
+        cost: 25,
+      },
+    }),
+  ]);
 
   console.log('✅ Consommables créés');
 
@@ -435,7 +424,7 @@ async function main() {
     },
   });
 
-  await prisma.quest.create({
+  const quest3 = await prisma.quest.create({
     data: {
       name: 'Escorte de caravane',
       description: 'Protéger une caravane marchande jusqu\'à la ville voisine',
@@ -451,7 +440,7 @@ async function main() {
     },
   });
 
-  await prisma.quest.create({
+  const quest4 = await prisma.quest.create({
     data: {
       name: 'Enquête sur la disparition',
       description: 'Des villageois ont disparu mystérieusement, enquêtez',
@@ -467,64 +456,101 @@ async function main() {
     },
   });
 
+  const quest5 = await prisma.quest.create({
+    data: {
+      name: 'Chasse au dragon',
+      description: 'Mission annulée en raison de conditions météorologiques extrêmes',
+      finalDate: new Date('2025-12-05'),
+      reward: 2000,
+      statusId: statusCancelled.id,
+      estimatedDuration: 10,
+      recommendedXP: 1500,
+      UserId: clientUser.id,
+      adventurers: {
+        connect: [{ id: adventurerGandalf.id }, { id: adventurerAragorn.id }],
+      },
+    },
+  });
+
   console.log('✅ Quêtes créées');
 
   // Associer des équipements aux quêtes
   console.log('🔗 Association des équipements aux quêtes...');
-  await prisma.questStockEquipment.create({
-    data: {
-      questId: quest1.id,
-      equipmentStockId: stockSword1.id,
-      equipmentId: equipmentSword.id,
-    },
-  });
-
-  await prisma.questStockEquipment.create({
-    data: {
-      questId: quest1.id,
-      equipmentStockId: stockBow1.id,
-      equipmentId: equipmentBow.id,
-    },
-  });
-
-  await prisma.questStockEquipment.create({
-    data: {
-      questId: quest2.id,
-      equipmentStockId: stockStaff1.id,
-      equipmentId: equipmentStaff.id,
-    },
-  });
+  await Promise.all([
+    prisma.questStockEquipment.create({
+      data: {
+        questId: quest1.id,
+        equipmentStockId: stockSword1.id,
+        equipmentId: equipmentSword.id,
+      },
+    }),
+    prisma.questStockEquipment.create({
+      data: {
+        questId: quest1.id,
+        equipmentStockId: stockBow1.id,
+        equipmentId: equipmentBow.id,
+      },
+    }),
+    prisma.questStockEquipment.create({
+      data: {
+        questId: quest2.id,
+        equipmentStockId: stockStaff1.id,
+        equipmentId: equipmentStaff.id,
+      },
+    }),
+    prisma.questStockEquipment.create({
+      data: {
+        questId: quest3.id,
+        equipmentStockId: stockArmor1.id,
+        equipmentId: equipmentArmor.id,
+      },
+    }),
+    prisma.questStockEquipment.create({
+      data: {
+        questId: quest4.id,
+        equipmentStockId: stockShield1.id,
+        equipmentId: equipmentShield.id,
+      },
+    }),
+    prisma.questStockEquipment.create({
+      data: {
+        questId: quest5.id,
+        equipmentStockId: stockRing1.id,
+        equipmentId: equipmentRing.id,
+      },
+    }),
+  ]);
 
   console.log('✅ Équipements associés aux quêtes');
 
   // Créer quelques transactions
   console.log('💰 Création des transactions...');
-  await prisma.transaction.create({
-    data: {
-      amount: 300,
-      description: 'Paiement quête: Escorte de caravane',
-      date: new Date('2025-12-10'),
-      total: 300,
-    },
-  });
-
-  await prisma.transaction.create({
-    data: {
-      amount: -150,
-      description: 'Achat d\'équipement: Épées longues',
-      date: new Date('2025-12-09'),
-      total: 150,
-    },
-  });
-
-  await prisma.transaction.create({
-    data: {
-      amount: -75,
-      description: 'Achat de consommables',
-      date: new Date('2025-12-08'),
-      total: 75,
-    },
-  });
+  await Promise.all([
+    prisma.transaction.create({
+      data: {
+        amount: 300,
+        description: 'Paiement quête: Escorte de caravane',
+        date: new Date('2025-12-10'),
+        total: 300,
+      },
+    }),
+    prisma.transaction.create({
+      data: {
+        amount: -150,
+        description: 'Achat d\'équipement: Épées longues',
+        date: new Date('2025-12-09'),
+        total: 150,
+      },
+    }),
+    prisma.transaction.create({
+      data: {
+        amount: -75,
+        description: 'Achat de consommables',
+        date: new Date('2025-12-08'),
+        total: 75,
+      },
+    }),
+  ]);
 
   console.log('✅ Transactions créées');
 

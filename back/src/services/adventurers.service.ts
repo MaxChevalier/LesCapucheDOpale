@@ -10,18 +10,13 @@ export class AdventurersService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(options: FindAdventurersOptions = {}) {
-    const {
-      name,
-      specialityId,
-      experienceMin,
-      experienceMax,
-      dailyRateOrder,
-    } = options;
+    const { name, specialityId, experienceMin, experienceMax, dailyRateOrder } =
+      options;
 
     const where: Prisma.AdventurerWhereInput = {
       ...(name ? { name: { contains: name } } : {}),
       ...(typeof specialityId === 'number' ? { specialityId } : {}),
-      ...((experienceMin != null || experienceMax != null)
+      ...(experienceMin != null || experienceMax != null
         ? {
             experience: {
               ...(experienceMin != null ? { gte: experienceMin } : {}),
@@ -33,7 +28,7 @@ export class AdventurersService {
     const whereClause = Object.keys(where).length ? where : undefined;
 
     return this.prisma.adventurer.findMany({
-        where: whereClause,
+      where: whereClause,
       orderBy: dailyRateOrder ? { dailyRate: dailyRateOrder } : undefined,
       include: {
         speciality: true,

@@ -69,7 +69,7 @@ export class QuestsService {
 
     // Build Prisma where clause
     const where: Prisma.QuestWhereInput = {
-      ...((rewardMin != null || rewardMax != null)
+      ...(rewardMin != null || rewardMax != null
         ? {
             reward: {
               ...(rewardMin != null ? { gte: rewardMin } : {}),
@@ -79,7 +79,7 @@ export class QuestsService {
         : {}),
       ...(typeof statusId === 'number' ? { statusId } : {}),
       ...(statusName ? { status: { name: { contains: statusName } } } : {}),
-      ...((finalDateBefore || finalDateAfter)
+      ...(finalDateBefore || finalDateAfter
         ? {
             finalDate: {
               ...(finalDateAfter ? { gte: new Date(finalDateAfter) } : {}),
@@ -119,7 +119,8 @@ export class QuestsService {
       const adventurers = quest.adventurers ?? [];
       const avgExperience =
         adventurers.length > 0
-          ? adventurers.reduce((sum, a) => sum + (a.experience ?? 0), 0) / adventurers.length
+          ? adventurers.reduce((sum, a) => sum + (a.experience ?? 0), 0) /
+            adventurers.length
           : 0;
       return { ...quest, avgExperience };
     });
@@ -135,7 +136,9 @@ export class QuestsService {
     // Sort by avgExperience if requested
     if (sortBy === 'avgExperience') {
       result.sort((a, b) =>
-        order === 'asc' ? a.avgExperience - b.avgExperience : b.avgExperience - a.avgExperience,
+        order === 'asc'
+          ? a.avgExperience - b.avgExperience
+          : b.avgExperience - a.avgExperience,
       );
     }
 
@@ -247,7 +250,9 @@ export class QuestsService {
       );
     }
 
-    const pendingStatusId = isStarted ? undefined : await this.getPendingStatusId();
+    const pendingStatusId = isStarted
+      ? undefined
+      : await this.getPendingStatusId();
 
     if (dto.adventurerIds?.length) {
       await this.findAdventurersExist(dto.adventurerIds);
@@ -447,7 +452,6 @@ export class QuestsService {
   }
 
   async validateQuest(questId: number, xp: number) {
-   
     const statusId = await this.getOrCreateStatusId(this.STATUS_VALIDATED);
     try {
       return await this.prisma.quest.update({
@@ -533,20 +537,22 @@ export class QuestsService {
 
     const current = quest.status?.name?.toLowerCase();
     if (current === this.STATUS_VALIDATED || current === this.STATUS_STARTED) {
-      throw new BadRequestException('Quest cannot be refused when accepted or started');
+      throw new BadRequestException(
+        'Quest cannot be refused when accepted or started',
+      );
     }
 
     const refusedId = await this.getOrCreateStatusId(this.STATUS_REFUSED);
-      return await this.prisma.quest.update({
-        where: { id: questId },
-        data: { status: { connect: { id: refusedId } } },
-        include: {
-          status: true,
-          adventurers: true,
-          questStockEquipments: true,
-          user: true,
-        },
-      });
+    return await this.prisma.quest.update({
+      where: { id: questId },
+      data: { status: { connect: { id: refusedId } } },
+      include: {
+        status: true,
+        adventurers: true,
+        questStockEquipments: true,
+        user: true,
+      },
+    });
   }
 
   async abandonQuest(questId: number) {
@@ -558,7 +564,9 @@ export class QuestsService {
 
     const current = quest.status?.name?.toLowerCase();
     if (current === this.STATUS_VALIDATED || current === this.STATUS_STARTED) {
-      throw new BadRequestException('Quest cannot be abandoned when accepted or started');
+      throw new BadRequestException(
+        'Quest cannot be abandoned when accepted or started',
+      );
     }
 
     const abandonedId = await this.getOrCreateStatusId(this.STATUS_ABANDONED);

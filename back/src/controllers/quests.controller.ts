@@ -33,6 +33,22 @@ import {
 export interface AuthenticatedRequest extends Request {
   user: UserDto & { sub: number };
 }
+
+// Interface pour typer les Query Params entrant (toujours des strings ou undefined)
+interface FindQuestsQueryDto {
+  rewardMin?: string;
+  rewardMax?: string;
+  statusId?: string;
+  statusName?: string;
+  finalDateBefore?: string;
+  finalDateAfter?: string;
+  userId?: string;
+  avgXpMin?: string;
+  avgXpMax?: string;
+  sortBy?: 'reward' | 'finalDate' | 'avgExperience' | 'createdAt';
+  order?: 'asc' | 'desc';
+}
+
 @ApiTags('Quests')
 @ApiBearerAuth()
 @Controller('quests')
@@ -135,7 +151,14 @@ export class QuestsController {
       ],
     },
   })
-  findAll(@Query() q: any) {
+  findAll(@Query() q: FindQuestsQueryDto) {
+    const validSortFields = [
+      'reward',
+      'finalDate',
+      'avgExperience',
+      'createdAt',
+    ] as const;
+
     return this.questsService.findAll({
       rewardMin: q.rewardMin ? Number(q.rewardMin) : undefined,
       rewardMax: q.rewardMax ? Number(q.rewardMax) : undefined,
@@ -146,7 +169,8 @@ export class QuestsController {
       userId: q.userId ? Number(q.userId) : undefined,
       avgXpMin: q.avgXpMin ? Number(q.avgXpMin) : undefined,
       avgXpMax: q.avgXpMax ? Number(q.avgXpMax) : undefined,
-      sortBy: ['reward', 'finalDate', 'avgExperience', 'createdAt'].includes(q.sortBy) ? q.sortBy : undefined,
+      sortBy:
+        q.sortBy && validSortFields.includes(q.sortBy) ? q.sortBy : undefined,
       order: q.order === 'asc' || q.order === 'desc' ? q.order : undefined,
     });
   }
@@ -488,8 +512,7 @@ export class QuestsController {
   @Roles(1, 2)
   @ApiParam({ name: 'id', example: 42, description: 'Quest ID' })
   @ApiOkResponse({
-    description:
-      'Quête démarrée (désélection impossible après démarrage)',
+    description: 'Quête démarrée (désélection impossible après démarrage)',
     schema: {
       type: 'object',
       additionalProperties: true,
@@ -529,7 +552,8 @@ export class QuestsController {
   @Roles(1, 2)
   @ApiParam({ name: 'id', example: 42, description: 'Quest ID' })
   @ApiOkResponse({
-    description: 'Quête abandonnée (peut être abandonnée uniquement si elle n\'est pas validée ou commencée, typiquement en statut \'en attente\')',
+    description:
+      "Quête abandonnée (peut être abandonnée uniquement si elle n'est pas validée ou commencée, typiquement en statut 'en attente')",
     schema: {
       type: 'object',
       additionalProperties: true,

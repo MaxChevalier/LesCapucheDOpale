@@ -5,7 +5,7 @@ import { UsersModule } from './modules/users.module';
 import { AdventurersModule } from './modules/adventurers.module';
 import { SpecialitiesModule } from './modules/specialities.module';
 import { EquipmentTypesModule } from './modules/equipment-types.module';
-import { ConsumablesModule } from "./modules/consumables.module";
+import { ConsumablesModule } from './modules/consumables.module';
 import { ConsumableTypesModule } from './modules/consumable-types.module';
 import { PrismaModule } from './prisma/prisma.service';
 import { QuestsModule } from './modules/quests.module';

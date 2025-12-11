@@ -23,6 +23,16 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 
+// Interface pour typer les paramètres de requête (Query Params)
+// Les query params arrivent généralement sous forme de string via HTTP
+interface AdventurerQueryDto {
+  name?: string;
+  specialityId?: string;
+  xpMin?: string;
+  xpMax?: string;
+  dailyRateOrder?: 'asc' | 'desc';
+}
+
 @Controller('adventurers')
 export class AdventurersController {
   constructor(private readonly adventurersService: AdventurersService) {}
@@ -91,7 +101,7 @@ export class AdventurersController {
       },
     },
   })
-  findAll(@Query() q: any) {
+  findAll(@Query() q: AdventurerQueryDto) {
     return this.adventurersService.findAll({
       name: q.name,
       specialityId: q.specialityId ? Number(q.specialityId) : undefined,
@@ -101,8 +111,8 @@ export class AdventurersController {
         q.dailyRateOrder === 'desc'
           ? 'desc'
           : q.dailyRateOrder === 'asc'
-          ? 'asc'
-          : undefined,
+            ? 'asc'
+            : undefined,
     });
   }
 

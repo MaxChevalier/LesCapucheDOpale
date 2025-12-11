@@ -7,7 +7,7 @@ import {
   Body,
   Param,
   UseGuards,
-  ParseIntPipe,
+  ParseIntPipe, Req,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -25,6 +25,14 @@ import {
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ description: 'Get current user profile' })
+  getProfile(@Req() req) {
+    const id = req.user.sub || req.user.id;
+    return this.usersService.findOne(Number(id));
+  }
 
   @Post()
   @ApiBody({

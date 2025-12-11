@@ -35,6 +35,15 @@ paths:
                     example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxx.yyy
       tags:
         - Auth
+  /users/profile:
+    get:
+      operationId: UsersController_getProfile
+      parameters: []
+      responses:
+        '200':
+          description: Get current user profile
+      tags:
+        - Users
   /users:
     post:
       operationId: UsersController_create

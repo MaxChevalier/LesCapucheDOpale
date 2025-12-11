@@ -1,1 +1,83 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: light;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+}
 /* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+$color1: #65e3e0;
+$color2: #007c91;
+$color3: #0e528a;
+$color4: #e4dfda;
+$color5: #6a45ba;
+
+.commun-btn {
+  color: $color4;
+  font-size: 25px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50px;
+  background: #0e528a;
+  box-shadow: inset -13px -13px 26px #082d4c,
+  inset 13px 13px 26px #1477c8, 0px 6px 6px 0px #00000040;
+  transition: all 0.2s ease-in-out;
+}
+
+.commun-btn:hover {
+  transition: all 0.2s ease-in-out;
+  background: #0e528a;
+  box-shadow: inset 13px 13px 26px #082d4c, inset -13px -13px 26px #1477c8;
+}
+
+.commun-input {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  min-width: 300px;
+  max-width: auto;
+  font-size: 25px;
+  background: #0e528a;
+  box-shadow: inset -9px 9px 18px #093356, inset 9px -9px 18px #1371be;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -24,4 +24,7 @@ export class AccountService {
     return localStorage.getItem('token') !== null && localStorage.getItem('token') !== undefined && localStorage.getItem('token') !== '';
   }
 
+  getUserProfile(): Observable<any> {
+    return this.http.get<any>(`${this.urlUser}/profile`);
+  }
 }

@@ -10,17 +10,17 @@ async function main() {
   console.log('🧹 Nettoyage de la base de données...');
   await prisma.questStockEquipment.deleteMany({});
   await prisma.equipmentStock.deleteMany({});
-  await prisma.equipment.deleteMany({});
-  await prisma.consumable.deleteMany({});
+  await prisma.transaction.deleteMany({});
   await prisma.quest.deleteMany({});
   await prisma.adventurer.deleteMany({});
   await prisma.user.deleteMany({});
+  await prisma.equipment.deleteMany({});
+  await prisma.consumable.deleteMany({});
   await prisma.equipmentType.deleteMany({});
   await prisma.consumableType.deleteMany({});
   await prisma.speciality.deleteMany({});
   await prisma.status.deleteMany({});
   await prisma.role.deleteMany({});
-  await prisma.transaction.deleteMany({});
 
   console.log('✅ Base de données nettoyée');
 
@@ -74,7 +74,7 @@ async function main() {
     data: { name: 'Terminée' },
   });
 
-  const statusCancelled = await prisma.status.create({
+  await prisma.status.create({
     data: { name: 'Annulée' },
   });
 
@@ -261,23 +261,13 @@ async function main() {
     },
   });
 
-  const equipmentShield = await prisma.equipment.create({
+  await prisma.equipment.create({
     data: {
       name: 'Bouclier du courage',
       equipmentTypeId: equipTypeShield.id,
       cost: 60,
       maxDurability: 120,
       currentDurability: 120,
-    },
-  });
-
-  const equipmentRing = await prisma.equipment.create({
-    data: {
-      name: 'Anneau de sagesse',
-      equipmentTypeId: equipTypeAccessory.id,
-      cost: 200,
-      maxDurability: 999,
-      currentDurability: 999,
     },
   });
 
@@ -292,13 +282,6 @@ async function main() {
     },
   });
 
-  const stockSword2 = await prisma.equipmentStock.create({
-    data: {
-      equipmentId: equipmentSword.id,
-      durability: 85,
-    },
-  });
-
   const stockBow1 = await prisma.equipmentStock.create({
     data: {
       equipmentId: equipmentBow.id,
@@ -310,13 +293,6 @@ async function main() {
     data: {
       equipmentId: equipmentStaff.id,
       durability: 90,
-    },
-  });
-
-  const stockArmor1 = await prisma.equipmentStock.create({
-    data: {
-      equipmentId: equipmentArmor.id,
-      durability: 150,
     },
   });
 
@@ -414,7 +390,7 @@ async function main() {
     },
   });
 
-  const quest3 = await prisma.quest.create({
+  await prisma.quest.create({
     data: {
       name: 'Escorte de caravane',
       description: 'Protéger une caravane marchande jusqu\'à la ville voisine',
@@ -430,7 +406,7 @@ async function main() {
     },
   });
 
-  const quest4 = await prisma.quest.create({
+  await prisma.quest.create({
     data: {
       name: 'Enquête sur la disparition',
       description: 'Des villageois ont disparu mystérieusement, enquêtez',

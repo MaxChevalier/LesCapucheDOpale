@@ -890,11 +890,23 @@ paths:
           schema:
             example: 42
             type: number
+      requestBody:
+        required: true
+        description: Terminer la quête et définir la durée de repos des aventuriers
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                restDurationDays:
+                  type: number
+                  description: Durée de repos en jours
+                  example: 3
+              required:
+                - restDurationDays
       responses:
         '200':
-          description: >-
-            Quête terminée, durée de repos calculée automatiquement par
-            aventurier (formule SAM)
+          description: Quête terminée, aventuriers mis au repos
           content:
             application/json:
               schema:
@@ -903,11 +915,7 @@ paths:
                 example:
                   id: 42
                   statusId: 3
-                  adventurers:
-                    - id: 1
-                      name: Aria
-                      experience: 50
-                      availableUntil: '2025-12-15'
+                  updatedAt: '2025-10-30T13:30:00.000Z'
       security:
         - bearer: []
       tags:
@@ -931,6 +939,14 @@ paths:
             schema:
               type: object
               properties: {}
+      requestBody:
+        required: false
+        description: Aucun body requis
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
       responses:
         '200':
           description: Quête refusée
@@ -941,6 +957,7 @@ paths:
                 additionalProperties: true
                 example:
                   id: 42
+                  statusId: 4
                   statusId: 4
                   updatedAt: '2025-10-30T13:30:00.000Z'
       security:
@@ -966,6 +983,14 @@ paths:
             schema:
               type: object
               properties: {}
+      requestBody:
+        required: false
+        description: Aucun body requis
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
       responses:
         '200':
           description: >-
@@ -978,6 +1003,7 @@ paths:
                 additionalProperties: true
                 example:
                   id: 42
+                  statusId: 5
                   statusId: 5
                   updatedAt: '2025-10-30T13:35:00.000Z'
       security:
@@ -1810,15 +1836,25 @@ paths:
           required: true
           in: path
           description: Consumable ID
+          description: Consumable ID
           schema:
             example: 1
-            type: number
+            type: string
       requestBody:
         required: true
+        description: Quantité à acheter
         description: Quantité à acheter
         content:
           application/json:
             schema:
+              type: object
+              properties:
+                quantity:
+                  type: number
+                  example: 3
+                  description: Nombre de consommables à acheter
+              required:
+                - quantity
               type: object
               properties:
                 quantity:
@@ -1834,22 +1870,12 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  id:
-                    type: number
-                    example: 1
-                  name:
-                    type: string
-                    example: Potion de soin
-                  quantity:
-                    type: number
-                    example: 13
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-12-12T10:00:00.000Z'
-      security:
-        - bearer: []
+                additionalProperties: true
+                example:
+                  id: 1
+                  name: Potion de soin
+                  stock: 7
+                  updatedAt: '2025-12-12T10:00:00.000Z'
       tags:
         - Consumables
   /consumable-types:

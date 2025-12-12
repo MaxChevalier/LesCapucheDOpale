@@ -20,32 +20,19 @@ import { UpdateStatusDto } from '../dto/update-quest-status.dto';
 import { IdsDto } from '../dto/quest_id.dto';
 import { UserDto } from 'src/dto/user.dto';
 import { ValidateQuestDto } from '../dto/validate-quest.dto';
+import { FinishQuestDto } from '../dto/finish-quest.dto';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { FindQuestsQueryDto } from '../dto/find-quests-query.dto';
 
 export interface AuthenticatedRequest extends Request {
   user: UserDto & { sub: number };
-}
-
-// Interface pour typer les Query Params entrant (toujours des strings ou undefined)
-interface FindQuestsQueryDto {
-  rewardMin?: string;
-  rewardMax?: string;
-  statusId?: string;
-  finalDateBefore?: string;
-  finalDateAfter?: string;
-  userId?: string;
-  avgXpMin?: string;
-  avgXpMax?: string;
-  sortBy?: 'reward' | 'finalDate' | 'avgExperience' | 'createdAt';
-  order?: 'asc' | 'desc';
 }
 
 @ApiTags('Quests')
@@ -57,76 +44,6 @@ export class QuestsController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
-  @ApiQuery({
-    name: 'rewardMin',
-    required: false,
-    description: 'Prime minimale (incluse)',
-    example: 100,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'rewardMax',
-    required: false,
-    description: 'Prime maximale (incluse)',
-    example: 1000,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'statusId',
-    required: false,
-    description: 'Filtrer par identifiant de statut',
-    example: 2,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'finalDateBefore',
-    required: false,
-    description: "Date d'échéance avant (ISO 8601)",
-    example: '2025-12-31',
-    type: String,
-  })
-  @ApiQuery({
-    name: 'finalDateAfter',
-    required: false,
-    description: "Date d'échéance après (ISO 8601)",
-    example: '2025-01-01',
-    type: String,
-  })
-  @ApiQuery({
-    name: 'userId',
-    required: false,
-    description: 'Filtrer par commanditaire (ID utilisateur)',
-    example: 5,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'avgXpMin',
-    required: false,
-    description: "Niveau d'expérience moyen minimal des aventuriers",
-    example: 10,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'avgXpMax',
-    required: false,
-    description: "Niveau d'expérience moyen maximal des aventuriers",
-    example: 100,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'sortBy',
-    required: false,
-    description: 'Champ de tri',
-    enum: ['reward', 'finalDate', 'avgExperience', 'createdAt'],
-    example: 'reward',
-  })
-  @ApiQuery({
-    name: 'order',
-    required: false,
-    description: 'Ordre de tri',
-    enum: ['asc', 'desc'],
-    example: 'desc',
-  })
   @ApiOkResponse({
     description: 'List of quests (avec filtres et tri)',
     schema: {
@@ -143,27 +60,8 @@ export class QuestsController {
       ],
     },
   })
-  findAll(@Query() q: FindQuestsQueryDto) {
-    const validSortFields = [
-      'reward',
-      'finalDate',
-      'avgExperience',
-      'createdAt',
-    ] as const;
-
-    return this.questsService.findAll({
-      rewardMin: q.rewardMin ? Number(q.rewardMin) : undefined,
-      rewardMax: q.rewardMax ? Number(q.rewardMax) : undefined,
-      statusId: q.statusId ? Number(q.statusId) : undefined,
-      finalDateBefore: q.finalDateBefore,
-      finalDateAfter: q.finalDateAfter,
-      userId: q.userId ? Number(q.userId) : undefined,
-      avgXpMin: q.avgXpMin ? Number(q.avgXpMin) : undefined,
-      avgXpMax: q.avgXpMax ? Number(q.avgXpMax) : undefined,
-      sortBy:
-        q.sortBy && validSortFields.includes(q.sortBy) ? q.sortBy : undefined,
-      order: q.order === 'asc' || q.order === 'desc' ? q.order : undefined,
-    });
+  findAll(@Query() query: FindQuestsQueryDto) {
+    return this.questsService.findAll(query);
   }
 
   @Get(':id')
@@ -518,10 +416,54 @@ export class QuestsController {
     return this.questsService.startQuest(id);
   }
 
+  @Patch(':id/finish')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(1, 2)
+  @ApiParam({ name: 'id', example: 42, description: 'Quest ID' })
+  @ApiBody({
+    description:
+      'Terminer la quête et définir la durée de repos des aventuriers',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        restDurationDays: {
+          type: 'number',
+          description: 'Durée de repos en jours',
+          example: 3,
+        },
+      },
+      required: ['restDurationDays'],
+    },
+  })
+  @ApiOkResponse({
+    description: 'Quête terminée, aventuriers mis au repos',
+    schema: {
+      type: 'object',
+      additionalProperties: true,
+      example: {
+        id: 42,
+        statusId: 3,
+        updatedAt: '2025-10-30T13:30:00.000Z',
+      },
+    },
+  })
+  finish(@Param('id', ParseIntPipe) id: number, @Body() dto: FinishQuestDto) {
+    return this.questsService.finishQuest(id, dto.restDurationDays);
+  }
+
   @Patch(':id/refuse')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
   @ApiParam({ name: 'id', example: 42, description: 'Quest ID' })
+  @ApiBody({
+    description: 'Aucun body requis',
+    required: false,
+    schema: {
+      type: 'object',
+      properties: {},
+    },
+  })
   @ApiOkResponse({
     description: 'Quête refusée',
     schema: {
@@ -529,7 +471,7 @@ export class QuestsController {
       additionalProperties: true,
       example: {
         id: 42,
-        status: { name: 'refusée' },
+        statusId: 4,
         updatedAt: '2025-10-30T13:30:00.000Z',
       },
     },
@@ -542,6 +484,14 @@ export class QuestsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
   @ApiParam({ name: 'id', example: 42, description: 'Quest ID' })
+  @ApiBody({
+    description: 'Aucun body requis',
+    required: false,
+    schema: {
+      type: 'object',
+      properties: {},
+    },
+  })
   @ApiOkResponse({
     description:
       "Quête abandonnée (peut être abandonnée uniquement si elle n'est pas validée ou commencée, typiquement en statut 'en attente')",
@@ -550,7 +500,7 @@ export class QuestsController {
       additionalProperties: true,
       example: {
         id: 42,
-        status: { name: 'abandonnée' },
+        statusId: 5,
         updatedAt: '2025-10-30T13:35:00.000Z',
       },
     },

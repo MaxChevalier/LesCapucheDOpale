@@ -20,18 +20,8 @@ import {
   ApiOkResponse,
   ApiCreatedResponse,
   ApiParam,
-  ApiQuery,
 } from '@nestjs/swagger';
-
-// Interface pour typer les paramètres de requête (Query Params)
-// Les query params arrivent généralement sous forme de string via HTTP
-interface AdventurerQueryDto {
-  name?: string;
-  specialityId?: string;
-  xpMin?: string;
-  xpMax?: string;
-  dailyRateOrder?: 'asc' | 'desc';
-}
+import { FindAdventurersQueryDto } from '../dto/find-adventurers-query.dto';
 
 @Controller('adventurers')
 export class AdventurersController {
@@ -40,41 +30,6 @@ export class AdventurersController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
-  @ApiQuery({
-    name: 'name',
-    required: false,
-    description: 'Filtrer par nom (contains, insensible à la casse)',
-    example: 'aria',
-    type: String,
-  })
-  @ApiQuery({
-    name: 'specialityId',
-    required: false,
-    description: 'Filtrer par identifiant de spécialité',
-    example: 3,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'xpMin',
-    required: false,
-    description: 'Expérience minimale (incluse)',
-    example: 10,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'xpMax',
-    required: false,
-    description: 'Expérience maximale (incluse)',
-    example: 50,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'dailyRateOrder',
-    required: false,
-    description: 'Tri par taux journalier',
-    enum: ['asc', 'desc'],
-    example: 'asc',
-  })
   @ApiOkResponse({
     description: 'List of adventurers (avec filtres et tri)',
     schema: {
@@ -101,19 +56,8 @@ export class AdventurersController {
       },
     },
   })
-  findAll(@Query() q: AdventurerQueryDto) {
-    return this.adventurersService.findAll({
-      name: q.name,
-      specialityId: q.specialityId ? Number(q.specialityId) : undefined,
-      experienceMin: q.xpMin ? Number(q.xpMin) : undefined,
-      experienceMax: q.xpMax ? Number(q.xpMax) : undefined,
-      dailyRateOrder:
-        q.dailyRateOrder === 'desc'
-          ? 'desc'
-          : q.dailyRateOrder === 'asc'
-            ? 'asc'
-            : undefined,
-    });
+  findAll(@Query() query: FindAdventurersQueryDto) {
+    return this.adventurersService.findAll(query);
   }
 
   @Get(':id')
@@ -238,11 +182,3 @@ export class AdventurersController {
     return this.adventurersService.update(id, updateAdventurerDto);
   }
 }
-
-export type FindAdventurersOptions = {
-  name?: string;
-  specialityId?: number;
-  experienceMin?: number;
-  experienceMax?: number;
-  dailyRateOrder?: 'asc' | 'desc';
-};

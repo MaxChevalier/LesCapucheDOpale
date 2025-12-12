@@ -626,10 +626,38 @@ export class QuestsService {
     });
   }
 
-  async finishQuest(questId: number, restDurationDays: number) {
+  /**
+   * Calcule la durée de repos d'un aventurier selon la formule du SAM:
+   * Dr = 0.5 × (Exp_r / Exp_rec) × Dq
+   * Arrondi au jour supérieur
+   *
+   * @param recommendedXP - Expérience recommandée de la quête (Exp_r)
+   * @param adventurerXP - Expérience de l'aventurier (Exp_rec)
+   * @param questDuration - Durée estimée de la quête en jours (Dq)
+   * @returns Durée de repos en jours (Dr)
+   */
+  private calculateRestDuration(
+    recommendedXP: number,
+    adventurerXP: number,
+    questDuration: number,
+  ): number {
+    // Éviter la division par zéro
+    if (adventurerXP <= 0) {
+      return questDuration; // Si pas d'expérience, repos = durée de la quête
+    }
+    const restDays = 0.5 * (recommendedXP / adventurerXP) * questDuration;
+    return Math.ceil(restDays); // Arrondi au jour supérieur
+  }
+
+  async finishQuest(questId: number) {
     const quest = await this.prisma.quest.findUnique({
       where: { id: questId },
-      select: { statusId: true, adventurers: { select: { id: true } } },
+      select: {
+        statusId: true,
+        estimatedDuration: true,
+        recommendedXP: true,
+        adventurers: { select: { id: true, experience: true } },
+      },
     });
     if (!quest) throw new NotFoundException('Quest not found');
 
@@ -639,15 +667,19 @@ export class QuestsService {
       );
     }
 
-    // Calculer la date de fin de repos (date actuelle + durée de repos en jours)
-    const availableUntil = new Date();
-    availableUntil.setDate(availableUntil.getDate() + restDurationDays);
+    // Calculer et appliquer la durée de repos pour chaque aventurier individuellement
+    const now = new Date();
+    for (const adventurer of quest.adventurers) {
+      const restDays = this.calculateRestDuration(
+        quest.recommendedXP,
+        adventurer.experience,
+        quest.estimatedDuration,
+      );
+      const availableUntil = new Date(now);
+      availableUntil.setDate(availableUntil.getDate() + restDays);
 
-    // Mettre à jour les aventuriers avec la nouvelle date d'indisponibilité (repos)
-    const adventurerIds = quest.adventurers.map((a) => a.id);
-    if (adventurerIds.length) {
-      await this.prisma.adventurer.updateMany({
-        where: { id: { in: adventurerIds } },
+      await this.prisma.adventurer.update({
+        where: { id: adventurer.id },
         data: { availableUntil },
       });
     }

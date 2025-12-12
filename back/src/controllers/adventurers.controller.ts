@@ -16,13 +16,17 @@ import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../guards/roles.decorator';
 import {
+  ApiBearerAuth,
   ApiBody,
-  ApiOkResponse,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
 import { FindAdventurersQueryDto } from '../dto/find-adventurers-query.dto';
 
+@ApiTags('Adventurers')
+@ApiBearerAuth()
 @Controller('adventurers')
 export class AdventurersController {
   constructor(private readonly adventurersService: AdventurersService) {}
@@ -39,18 +43,14 @@ export class AdventurersController {
         properties: {
           id: { type: 'number', example: 1 },
           name: { type: 'string', example: 'Aria Stormblade' },
-          level: { type: 'number', example: 12 },
           specialityId: { type: 'number', example: 3 },
-          statusId: { type: 'number', example: 1 },
-          createdAt: {
+          dailyRate: { type: 'number', example: 150 },
+          experience: { type: 'number', example: 120 },
+          availableUntil: {
             type: 'string',
             format: 'date-time',
-            example: '2025-10-30T12:00:00.000Z',
-          },
-          updatedAt: {
-            type: 'string',
-            format: 'date-time',
-            example: '2025-10-30T12:34:56.000Z',
+            nullable: true,
+            example: '2025-12-31T23:59:59.000Z',
           },
         },
       },
@@ -71,18 +71,14 @@ export class AdventurersController {
       properties: {
         id: { type: 'number', example: 1 },
         name: { type: 'string', example: 'Aria Stormblade' },
-        level: { type: 'number', example: 12 },
         specialityId: { type: 'number', example: 3 },
-        statusId: { type: 'number', example: 1 },
-        createdAt: {
+        dailyRate: { type: 'number', example: 150 },
+        experience: { type: 'number', example: 120 },
+        availableUntil: {
           type: 'string',
           format: 'date-time',
-          example: '2025-10-30T12:00:00.000Z',
-        },
-        updatedAt: {
-          type: 'string',
-          format: 'date-time',
-          example: '2025-10-30T12:34:56.000Z',
+          nullable: true,
+          example: '2025-12-31T23:59:59.000Z',
         },
       },
     },
@@ -102,10 +98,19 @@ export class AdventurersController {
       properties: {
         name: { type: 'string', example: 'Aria Stormblade' },
         specialityId: { type: 'number', example: 3 },
-        level: { type: 'number', example: 1 },
-        statusId: { type: 'number', example: 1 },
+        dailyRate: { type: 'number', example: 100 },
+        equipmentTypeIds: {
+          type: 'array',
+          items: { type: 'number' },
+          example: [1, 2],
+        },
+        consumableTypeIds: {
+          type: 'array',
+          items: { type: 'number' },
+          example: [1],
+        },
       },
-      required: ['name', 'specialityId'],
+      required: ['name', 'specialityId', 'dailyRate'],
     },
   })
   @ApiCreatedResponse({
@@ -115,18 +120,14 @@ export class AdventurersController {
       properties: {
         id: { type: 'number', example: 42 },
         name: { type: 'string', example: 'Aria Stormblade' },
-        level: { type: 'number', example: 1 },
         specialityId: { type: 'number', example: 3 },
-        statusId: { type: 'number', example: 1 },
-        createdAt: {
+        dailyRate: { type: 'number', example: 100 },
+        experience: { type: 'number', example: 0 },
+        availableUntil: {
           type: 'string',
           format: 'date-time',
-          example: '2025-10-30T12:00:00.000Z',
-        },
-        updatedAt: {
-          type: 'string',
-          format: 'date-time',
-          example: '2025-10-30T12:00:00.000Z',
+          nullable: true,
+          example: null,
         },
       },
     },
@@ -145,9 +146,18 @@ export class AdventurersController {
       type: 'object',
       properties: {
         name: { type: 'string', example: 'Aria Nightwind' },
+        dailyRate: { type: 'number', example: 180 },
         specialityId: { type: 'number', example: 2 },
-        level: { type: 'number', example: 13 },
-        statusId: { type: 'number', example: 2 },
+        equipmentTypeIds: {
+          type: 'array',
+          items: { type: 'number' },
+          example: [1, 3],
+        },
+        consumableTypeIds: {
+          type: 'array',
+          items: { type: 'number' },
+          example: [2],
+        },
       },
       additionalProperties: false,
     },
@@ -159,18 +169,14 @@ export class AdventurersController {
       properties: {
         id: { type: 'number', example: 42 },
         name: { type: 'string', example: 'Aria Nightwind' },
-        level: { type: 'number', example: 13 },
         specialityId: { type: 'number', example: 2 },
-        statusId: { type: 'number', example: 2 },
-        createdAt: {
+        dailyRate: { type: 'number', example: 180 },
+        experience: { type: 'number', example: 120 },
+        availableUntil: {
           type: 'string',
           format: 'date-time',
-          example: '2025-10-30T12:00:00.000Z',
-        },
-        updatedAt: {
-          type: 'string',
-          format: 'date-time',
-          example: '2025-10-30T12:45:00.000Z',
+          nullable: true,
+          example: '2025-12-31T23:59:59.000Z',
         },
       },
     },

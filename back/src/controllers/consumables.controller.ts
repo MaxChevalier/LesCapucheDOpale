@@ -13,9 +13,20 @@ import { ConsumablesService } from '../services/consumables.service';
 import { CreateConsumableDto } from '../dto/create-consumable.dto';
 import { UpdateConsumableDto } from '../dto/update-consumable.dto';
 import { PurchaseConsumableDto } from '../dto/purchase-consumable.dto';
-import { ApiTags, ApiParam, ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { RolesGuard } from '../guards/roles.guard';
+import { Roles } from '../guards/roles.decorator';
 
 @ApiTags('Consumables')
+@ApiBearerAuth()
 @Controller('consumables')
 export class ConsumablesController {
   constructor(private readonly consumablesService: ConsumablesService) {}
@@ -195,6 +206,8 @@ export class ConsumablesController {
   }
 
   @Post(':id/purchase')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(1, 2)
   @ApiParam({ name: 'id', example: 1, description: 'Consumable ID' })
   @ApiBody({
     description: 'Quantité à acheter',
@@ -215,16 +228,22 @@ export class ConsumablesController {
     description: 'Achat effectué avec succès',
     schema: {
       type: 'object',
-      additionalProperties: true,
-      example: {
-        id: 1,
-        name: 'Potion de soin',
-        stock: 7,
-        updatedAt: '2025-12-12T10:00:00.000Z',
+      properties: {
+        id: { type: 'number', example: 1 },
+        name: { type: 'string', example: 'Potion de soin' },
+        quantity: { type: 'number', example: 13 },
+        updatedAt: {
+          type: 'string',
+          format: 'date-time',
+          example: '2025-12-12T10:00:00.000Z',
+        },
       },
     },
   })
-  purchase(@Param('id') id: string, @Body() dto: PurchaseConsumableDto) {
-    return this.consumablesService.purchase(+id, dto.quantity);
+  purchase(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: PurchaseConsumableDto,
+  ) {
+    return this.consumablesService.purchase(id, dto.quantity);
   }
 }

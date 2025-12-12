@@ -21,9 +21,12 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
 import { FindAdventurersQueryDto } from '../dto/find-adventurers-query.dto';
 
+@ApiTags('Adventurers')
+@ApiBearerAuth()
 @Controller('adventurers')
 export class AdventurersController {
   constructor(private readonly adventurersService: AdventurersService) {}

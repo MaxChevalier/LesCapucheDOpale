@@ -20,7 +20,6 @@ import { UpdateStatusDto } from '../dto/update-quest-status.dto';
 import { IdsDto } from '../dto/ids.dto';
 import { UserDto } from 'src/dto/user.dto';
 import { ValidateQuestDto } from '../dto/validate-quest.dto';
-import { FinishQuestDto } from '../dto/finish-quest.dto';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -49,16 +48,32 @@ export class QuestsController {
     description: 'List of quests (avec filtres et tri)',
     schema: {
       type: 'array',
-      items: { type: 'object', additionalProperties: true },
-      example: [
-        {
-          id: 1,
-          title: 'Rescue the Merchant',
-          statusId: 1,
-          createdAt: '2025-10-30T12:00:00.000Z',
-          updatedAt: '2025-10-30T12:34:56.000Z',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'number', example: 1 },
+          name: { type: 'string', example: 'Rescue the Merchant' },
+          description: { type: 'string', example: 'Escort mission' },
+          finalDate: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-12-31T23:59:59.000Z',
+          },
+          reward: { type: 'number', example: 500 },
+          estimatedDuration: { type: 'number', example: 5 },
+          statusId: { type: 'number', example: 1 },
+          createdAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:00:00.000Z',
+          },
+          updatedAt: {
+            type: 'string',
+            format: 'date-time',
+            example: '2025-10-30T12:34:56.000Z',
+          },
         },
-      ],
+      },
     },
   })
   findAll(@Query() query: FindQuestsQueryDto) {
@@ -429,36 +444,23 @@ export class QuestsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
   @ApiParam({ name: 'id', example: 42, description: 'Quest ID' })
-  @ApiBody({
-    description:
-      'Terminer la quête et définir la durée de repos des aventuriers',
-    required: true,
-    schema: {
-      type: 'object',
-      properties: {
-        restDurationDays: {
-          type: 'number',
-          description: 'Durée de repos en jours',
-          example: 3,
-        },
-      },
-      required: ['restDurationDays'],
-    },
-  })
   @ApiOkResponse({
-    description: 'Quête terminée, aventuriers mis au repos',
+    description:
+      'Quête terminée, durée de repos calculée automatiquement par aventurier (formule SAM)',
     schema: {
       type: 'object',
       additionalProperties: true,
       example: {
         id: 42,
         statusId: 3,
-        updatedAt: '2025-10-30T13:30:00.000Z',
+        adventurers: [
+          { id: 1, name: 'Aria', experience: 50, availableUntil: '2025-12-15' },
+        ],
       },
     },
   })
-  finish(@Param('id', ParseIntPipe) id: number, @Body() dto: FinishQuestDto) {
-    return this.questsService.finishQuest(id, dto.restDurationDays);
+  finish(@Param('id', ParseIntPipe) id: number) {
+    return this.questsService.finishQuest(id);
   }
 
   @Patch(':id/refuse')

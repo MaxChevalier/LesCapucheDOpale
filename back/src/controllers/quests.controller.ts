@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../guards/roles.decorator';
 import { UpdateStatusDto } from '../dto/update-quest-status.dto';
-import { IdsDto } from '../dto/quest_id.dto';
+import { IdsDto } from '../dto/ids.dto';
 import { UserDto } from 'src/dto/user.dto';
 import { ValidateQuestDto } from '../dto/validate-quest.dto';
 import { FinishQuestDto } from '../dto/finish-quest.dto';

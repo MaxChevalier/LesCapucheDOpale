@@ -7,7 +7,7 @@ import { CreateQuestDto } from '../dto/create-quest.dto';
 import { UpdateQuestDto } from '../dto/update-quest.dto';
 import { UpdateStatusDto } from '../dto/update-quest-status.dto';
 import { ValidateQuestDto } from '../dto/validate-quest.dto';
-import { IdsDto } from '../dto/quest_id.dto';
+import { IdsDto } from '../dto/ids.dto';
 
 describe('QuestsController', () => {
   let controller: QuestsController;

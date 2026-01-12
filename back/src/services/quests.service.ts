@@ -1003,7 +1003,7 @@ export class QuestsService {
     return this.findOne(questId);
   }
 
-  async setConsumables(questId: number,consumables: { consumableId: number; quantity: number }[], ) {
+  async setConsumables(questId: number,consumables: { consumableId: number; quantity: number }[],) {
     if (await this.isStarted(questId)) {
       throw new BadRequestException(
         'Quest is started: cannot change consumables',

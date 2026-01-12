@@ -459,7 +459,7 @@ export class QuestsController {
     },
   })
   @ApiOkResponse({
-   schema: {
+    schema: {
       type: 'object',
       additionalProperties: true,
       example: {

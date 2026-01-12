@@ -45,6 +45,24 @@
   margin-top: 20px;
 }
 
+.commun-input {
+  width: 100% !important;
+}
+
 .error {
   color: red;
+}
+
+
+.register-link {
+  margin-top: 15px;
+  color: $color4;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.register-link:hover {
+  color: lighten($color4, 10%);
+  transition: color 0.3s ease;
 }

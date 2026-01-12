@@ -8,18 +8,19 @@
 
 form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1em;
   background-color: $color3;
   box-shadow: inset 8px 8px 16px #093457, inset -8px -8px 16px #1370bd;
-  border-radius: 10px;
-  padding: 1em;
+  border-radius: 20px;
+  padding: 2em;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+
 
   label {
     font-size: 1em;
@@ -39,6 +40,14 @@ form {
   }
 }
 
+.left, .right {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  flex: 1;
+}
+
+
 //===== SELECTEUR =====
 .custom-form-field {
   width: 100%;
@@ -46,11 +55,12 @@ form {
 
 #name {
   height: 3rem !important;
+  color: $color4 !important;
 }
 ::ng-deep .custom-form-field {
 
   .mat-mdc-form-field-flex {
-    height: 48px;
+    height: 35px;
     align-items: center;
     background-color: none !important;
   }
@@ -87,7 +97,7 @@ form {
   border-radius: 10px !important;
   box-shadow: 0px 3px 6px rgb(0, 0, 0) !important;
   max-height: 300px;
-  margin-top: 8px;
+  margin-top: 4px !important;
 
   .mat-mdc-option {
     font-size: 15px;
@@ -126,14 +136,9 @@ form {
 }
 //=====================
 
-//===== BOUTON =====
-.submit-btn {
-  padding: 0.75em 1.5em;
-  border: none;
-  border-radius: 25px;
-  font-size: 1em;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+::ng-deep app-form-money {
+  .input-money {
+    width: 100% !important;
+    font-size: 90% !important;
+  }
 }
-//=====================

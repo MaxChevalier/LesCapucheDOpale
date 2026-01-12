@@ -24,11 +24,13 @@
   align-items: center;
   justify-content: center;
   margin-top: 13rem;
-  gap: 20px;
+  gap: 15px;
   border-radius: 5px;
-  padding: 60px;
+  padding: 45px;
   border-radius: 50px;
   background: $color3;
+  width: auto;
+  height: auto;
   box-shadow: inset 8px 8px 16px #093457, inset -8px -8px 16px #1370bd;
 
   span {
@@ -44,36 +46,83 @@
       color: $color4;
     }
   }
+}
 
-  .selector {
-    padding: 10px 40px 10px 15px;
-    border: none;
-    border-radius: 10px;
-    width: 90%;
-    min-width: 300px;
-    max-width: auto;
-    font-size: 25px;
-    background: $color3 url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") no-repeat right 10px center;
-    background-size: 20px;
-    box-shadow: inset -9px 9px 18px #093356, inset 9px -9px 18px #1371be;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  
+.commun-input {
+  width: 100% !important;
+}
+
+.custom-form-field {
+  width: 100%;
+}
+
+::ng-deep .custom-form-field {
+
+  .mat-mdc-form-field-flex {
+    height: 48px;
+    align-items: center;
+  }
+
+  .mat-mdc-select-placeholder {
+    color: $color4;
+    font-size: 15px;
+  }
+
+  .mat-mdc-select-value {
+    color: $color4;
+    font-size: 15px;
+  }
+
+  .mat-mdc-select-arrow {
+    color: $color4;
+  }
+
+  .mat-mdc-form-field-underline,
+  .mdc-line-ripple {
+    display: none;
+  }
+}
+
+::ng-deep .select-panel {
+  background-color: $color3 !important;
+  border-radius: 10px !important;
+  box-shadow: 0px 3px 6px rgb(0, 0, 0) !important;
+  max-height: 300px;
+  margin-top: 8px;
+
+  .mat-mdc-option {
+    font-size: 15px;
+    padding: 12px 16px;
+    min-height: 48px;
+    transition: background-color 0.2s ease;
+    color: $color4;
+    background-color: $color3 !important;
+    
     &:hover {
-      box-shadow: inset -12px 12px 24px #093356, inset 12px -12px 24px #1371be;
+      background-color: darken($color3, 8%) !important;
     }
 
-    &:focus {
-      outline: none;
-    }
-  
-    option {
-        background: $color3;
-        color: $color4; 
-
+    &.mat-mdc-option-active,
+    &.mdc-list-item--selected {
+    background-color: $color4 !important;
+      box-shadow: inset 2px 2px 4px rgb(0 0 0 / 0.2),
+        inset -2px -2px 4px rgb(255 255 255 / 0.7) !important;
+      border-color: $color3 !important;
+      border: 2px solid;
     }
   }
+}
+
+
+.register-link {
+  margin-top: 15px;
+  color: $color4;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.register-link:hover {
+  color: lighten($color4, 10%);
+  transition: color 0.3s ease;
 }

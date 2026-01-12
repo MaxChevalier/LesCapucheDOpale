@@ -43,16 +43,24 @@
       />
     </span>
     <span>
-    <label for="roles">Rôle</label>
-    <select id="roles" formControlName="role" class="selector">
-      <option *ngFor="let role of roles" [value]="role">
-        {{ role }}
-      </option>
-    </select>
-    <p>
-      {{ errorMessage }}
-    </p>
-  </span>
+      <label for="roles">Rôle</label>
+      <mat-form-field class="custom-form-field">
+        <mat-select
+          placeholder="Sélectionner un rôle"
+          id="roles"
+          formControlName="role"
+          panelClass="select-panel"
+        >
+          @for (role of roles; track role) {
+          <mat-option [value]="role">{{ role }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <p>
+        {{ errorMessage }}
+      </p>
+    </span>
     <button class="commun-btn" type="submit">SignUp</button>
+    <a routerLink="/login" class="register-link">Déjà un compte ? Connectez-vous</a>
   </form>
 </section>

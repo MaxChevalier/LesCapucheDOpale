@@ -1,3 +1,9 @@
 <section class="update-adventurer-section">
-<app-form-adventurer (formSubmitted)="onFormSubmitted($event)" [initialData]="adventurer" />
+  <div class="contain-title">
+    <h2 class="title">Modifier l'aventurier</h2>
+  </div>
+  <app-form-adventurer
+    (formSubmitted)="onFormSubmitted($event)"
+    [initialData]="adventurer"
+  />
 </section>

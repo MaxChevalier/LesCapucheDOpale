@@ -3,7 +3,7 @@ import { Equipment } from '../../models/models';
 import { EquipmentService } from '../../services/equipment/equipment.service';
 import { Router, RouterLink } from '@angular/router';
 import { ItemEquipment } from '../../components/item-equipment/item-equipment';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-list-equipment',

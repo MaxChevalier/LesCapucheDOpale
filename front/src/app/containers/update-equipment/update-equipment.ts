@@ -28,12 +28,12 @@ export class UpdateEquipment implements OnInit {
 
     if (!idStr || !/^\d+$/.test(idStr) || this.id < 0 || isNaN(this.id)) {
       console.error('Invalid adventurer ID');
-      return;
     }
-
-    this.equipmentService.getEquipmentById(this.id).subscribe(equipment => {
-      this.equipment = equipment;
-    });
+    else {
+      this.equipmentService.getEquipmentById(this.id).subscribe(equipment => {
+        this.equipment = equipment;
+      });
+    }
   }
 
   protected onFormSubmitted(data: EquipmentFormData): void {

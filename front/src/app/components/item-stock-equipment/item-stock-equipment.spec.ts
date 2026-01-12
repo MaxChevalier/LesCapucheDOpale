@@ -1,19 +1,35 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ItemStockEquipment } from './item-stock-equipment';
 
-import { ItemStockEquipement } from './item-stock-equipement';
-
-describe('ItemStockEquipement', () => {
-  let component: ItemStockEquipement;
-  let fixture: ComponentFixture<ItemStockEquipement>;
+describe('ItemStockEquipment', () => {
+  let component: ItemStockEquipment;
+  let fixture: ComponentFixture<ItemStockEquipment>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ItemStockEquipement]
+      imports: [ItemStockEquipment]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ItemStockEquipement);
+    fixture = TestBed.createComponent(ItemStockEquipment);
     component = fixture.componentInstance;
+    component.equipment = {
+      id: 1,
+      durability: 100,
+      equipmentId: 1,
+      equipment: {
+        id: 1,
+        name: 'Sword',
+        equipmentTypeId: 1,
+        equipmentType: {
+          id: 1,
+          name: 'Weapon'
+        },
+        cost: 1500,
+        maxDurability: 100
+      }
+    };
+
     fixture.detectChanges();
   });
 

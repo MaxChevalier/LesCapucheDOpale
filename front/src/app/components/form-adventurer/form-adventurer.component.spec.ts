@@ -15,7 +15,7 @@ describe('FormAdventurerComponent', () => {
 
   beforeEach(async () => {
     specialityServiceSpy = jasmine.createSpyObj('SpecialityService', ['getSpecialities']);
-    equipmentServiceSpy = jasmine.createSpyObj('EquipmentService', ['getEquipment']);
+    equipmentServiceSpy = jasmine.createSpyObj('EquipmentService', ['getEquipmentType']);
     consumableServiceSpy = jasmine.createSpyObj('ConsumableService', ['getConsumables']);
 
     specialityServiceSpy.getSpecialities.and.returnValue(of([{ id: 1, name: 'Guerrier' }]));

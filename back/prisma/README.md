@@ -39,7 +39,7 @@ npm run prisma:reset
 ### accéder aux données sur le navigateur
 
 ```bash 
-npm prisma studio
+npx prisma studio
 ```
 
 ## Données créées

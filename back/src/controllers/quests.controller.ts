@@ -446,22 +446,46 @@ export class QuestsController {
   @Roles(1, 2)
   @ApiParam({ name: 'id', example: 42, description: 'Quest ID' })
   @ApiBody({
-    description: 'Informations de fin de quête',
-    type: FinishQuestDto,
+    schema: {
+      type: 'object',
+      properties: {
+        isSuccess: {
+          type: 'boolean',
+          example: true,
+          description: 'true = succès (XP + 80% récompense), false = échec (40% salaires uniquement)',
+        },
+      },
+      example: { isSuccess: true },
+    },
   })
   @ApiOkResponse({
-    description:
-      'Quête terminée, XP distribué (si succès), équipements libérés, coût financier calculé',
-    schema: {
+   schema: {
       type: 'object',
       additionalProperties: true,
       example: {
         id: 42,
-        statusId: 6,
+        name: 'Quête du Dragon',
+        statusId: 7,
+        startDate: '2026-01-01T10:00:00.000Z',
         adventurers: [
-          { id: 1, name: 'Aria', experience: 60, availableUntil: '2025-12-15' },
+          {
+            id: 1,
+            name: 'Aria',
+            experience: 80,
+            dailyRate: 50,
+            availableUntil: '2026-01-15T10:00:00.000Z',
+          },
         ],
-        totalCost: 500,
+        questStockEquipments: [
+          {
+            equipmentStock: {
+              id: 10,
+              durability: 8,
+              statusId: 1,
+            },
+          },
+        ],
+        totalCost: 600,
       },
     },
   })

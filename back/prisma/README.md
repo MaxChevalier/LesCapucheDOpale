@@ -36,6 +36,12 @@ npm run prisma:reset
 3. Applique toutes les migrations
 4. Exécute le script de seed
 
+### accéder aux données sur le navigateur
+
+```bash 
+npm prisma studio
+```
+
 ## Données créées
 
 Le script crée les données suivantes :

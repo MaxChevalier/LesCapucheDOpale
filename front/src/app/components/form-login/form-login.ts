@@ -34,7 +34,6 @@ export class FormLogin {
   submitForm() {
   
     if (this.formulaire.invalid) return;
-    console.log('test');
     const user = {
       email: this.formulaire.value.email,
       password: this.formulaire.value.password,
@@ -45,7 +44,6 @@ export class FormLogin {
         localStorage.setItem('role', response.role);
         localStorage.setItem('userName', response.userName);
         
-        console.log('Login successful', localStorage.getItem('token'));
         this.router.navigate(['/']);
       },
       error: (error) => {

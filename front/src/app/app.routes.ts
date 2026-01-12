@@ -26,7 +26,7 @@ export const routes: Routes = [
     { path: 'adventurers', component: ListAdventurer, canActivate: [authGuard]},
     { path: 'adventurer/:id', component: UpdateAdventurer, canActivate: [authGuard]},
 
-    // User routes
+    // User
     { path: 'user/new', component: NewUserComponent},
     { path: 'login', component: Login },
 

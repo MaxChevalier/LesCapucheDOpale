@@ -205,24 +205,24 @@ describe('QuestsController', () => {
     });
 
     it('should finish a quest with success', async () => {
-      const dto: FinishQuestDto = { isSuccess: true, duration: 5 };
+      const dto: FinishQuestDto = { isSuccess: true };
       const expected = { id: questId, statusId: 6, totalCost: 500 };
       mockService.finishQuest.mockResolvedValue(expected);
 
       const result = await controller.finish(questId, dto);
 
-      expect(service.finishQuest).toHaveBeenCalledWith(questId, true, 5);
+      expect(service.finishQuest).toHaveBeenCalledWith(questId, true);
       expect(result).toEqual(expected);
     });
 
     it('should finish a quest with failure', async () => {
-      const dto: FinishQuestDto = { isSuccess: false, duration: 3 };
+      const dto: FinishQuestDto = { isSuccess: false };
       const expected = { id: questId, statusId: 7, totalCost: 300 };
       mockService.finishQuest.mockResolvedValue(expected);
 
       const result = await controller.finish(questId, dto);
 
-      expect(service.finishQuest).toHaveBeenCalledWith(questId, false, 3);
+      expect(service.finishQuest).toHaveBeenCalledWith(questId, false);
       expect(result).toEqual(expected);
     });
 

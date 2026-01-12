@@ -465,7 +465,7 @@ export class QuestsController {
     },
   })
   finish(@Param('id', ParseIntPipe) id: number, @Body() dto: FinishQuestDto) {
-    return this.questsService.finishQuest(id, dto.isSuccess, dto.duration);
+    return this.questsService.finishQuest(id, dto.isSuccess);
   }
 
   @Patch(':id/refuse')

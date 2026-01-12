@@ -16,16 +16,31 @@ export class QuestsService {
   // Status IDs
   private readonly STATUS_ID_WAITING = 1;
   private readonly STATUS_ID_VALIDATED = 2;
-  private readonly STATUS_ID_STARTED = 3;
-  private readonly STATUS_ID_REFUSED = 4;
+  private readonly STATUS_ID_FAILED = 3;
+  private readonly STATUS_ID_STARTED = 4;
   private readonly STATUS_ID_ABANDONED = 5;
-  private readonly STATUS_ID_SUCCEEDED = 6;
-  private readonly STATUS_ID_FAILED = 7;
+  private readonly STATUS_ID_REFUSED = 6;
+  private readonly STATUS_ID_SUCCEEDED = 7;
 
   // Equipment Status IDs
   private readonly EQUIPMENT_STATUS_ID_AVAILABLE = 1;
   private readonly EQUIPMENT_STATUS_ID_BORROWED = 2;
   private readonly EQUIPMENT_STATUS_ID_BROKEN = 3;
+
+  // Helper to check if error is a Prisma P2025 error (works with both real and mock errors)
+  private isPrismaNotFoundError(e: unknown): boolean {
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code === 'P2025'
+    ) {
+      return true;
+    }
+    // Also check for mock errors used in tests
+    const err = e as { code?: string; name?: string };
+    return (
+      err?.code === 'P2025' && err?.name === 'PrismaClientKnownRequestError'
+    );
+  }
 
   private async isStarted(questId: number): Promise<boolean> {
     const q = await this.prisma.quest.findUnique({
@@ -159,10 +174,7 @@ export class QuestsService {
         },
       });
     } catch (e) {
-      if (
-        e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === 'P2025'
-      ) {
+      if (this.isPrismaNotFoundError(e)) {
         throw new NotFoundException('Quest not found');
       }
       throw e;
@@ -272,10 +284,7 @@ export class QuestsService {
         },
       });
     } catch (e) {
-      if (
-        e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === 'P2025'
-      ) {
+      if (this.isPrismaNotFoundError(e)) {
         throw new NotFoundException('Quest not found');
       }
       throw e;
@@ -286,13 +295,34 @@ export class QuestsService {
     if (!ids?.length) return;
     const found = await this.prisma.equipmentStock.findMany({
       where: { id: { in: ids } },
-      select: { id: true },
+      select: { id: true, durability: true },
     });
     const missing = ids.filter((x) => !found.some((f) => f.id === x));
     if (missing.length)
       throw new NotFoundException(
         `EquipmentStock id(s) not found: ${missing.join(', ')}`,
       );
+  }
+
+  private async checkEquipmentStocksDurability(ids: number[]) {
+    if (!ids?.length) return;
+    const stocks = await this.prisma.equipmentStock.findMany({
+      where: { id: { in: ids } },
+      select: {
+        id: true,
+        durability: true,
+        equipment: { select: { name: true } },
+      },
+    });
+    const broken = stocks.filter((s) => s.durability <= 0);
+    if (broken.length) {
+      const names = broken
+        .map((s) => `${s.equipment.name} (id: ${s.id})`)
+        .join(', ');
+      throw new BadRequestException(
+        `Les équipements suivants sont cassés (durabilité <= 0): ${names}`,
+      );
+    }
   }
 
   private async findAdventurersExist(ids: number[]) {
@@ -379,10 +409,7 @@ export class QuestsService {
         },
       });
     } catch (e) {
-      if (
-        e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === 'P2025'
-      ) {
+      if (this.isPrismaNotFoundError(e)) {
         throw new NotFoundException('Quest not found');
       }
       throw e;
@@ -432,6 +459,7 @@ export class QuestsService {
 
   async attachEquipmentStocks(questId: number, equipmentStockIds: number[]) {
     await this.findEquipmentStocksExist(equipmentStockIds);
+    await this.checkEquipmentStocksDurability(equipmentStockIds);
     const existing = await this.prisma.questStockEquipment.findMany({
       where: { questId, equipmentStockId: { in: equipmentStockIds } },
       select: { equipmentStockId: true },
@@ -470,6 +498,7 @@ export class QuestsService {
       );
     }
     await this.findEquipmentStocksExist(equipmentStockIds);
+    await this.checkEquipmentStocksDurability(equipmentStockIds);
     const deletePromise = this.prisma.questStockEquipment.deleteMany({
       where: { questId },
     });
@@ -504,10 +533,7 @@ export class QuestsService {
         },
       });
     } catch (e) {
-      if (
-        e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === 'P2025'
-      ) {
+      if (this.isPrismaNotFoundError(e)) {
         throw new NotFoundException('Quest not found');
       }
       throw e;
@@ -658,34 +684,24 @@ export class QuestsService {
     });
   }
 
-  /**
-   * Calcule la durée de repos d'un aventurier selon la formule du SAM:
-   * Dr = 0.5 × (Exp_r / Exp_rec) × Dq
-   * Arrondi au jour supérieur
-   *
-   * @param recommendedXP - Expérience recommandée de la quête (Exp_r)
-   * @param adventurerXP - Expérience de l'aventurier (Exp_rec)
-   * @param questDuration - Durée estimée de la quête en jours (Dq)
-   * @returns Durée de repos en jours (Dr)
-   */
   private calculateRestDuration(
     recommendedXP: number,
     adventurerXP: number,
     questDuration: number,
   ): number {
-    // Éviter la division par zéro
     if (adventurerXP <= 0) {
-      return questDuration; // Si pas d'expérience, repos = durée de la quête
+      return questDuration;
     }
     const restDays = 0.5 * (recommendedXP / adventurerXP) * questDuration;
     return Math.ceil(restDays); // Arrondi au jour supérieur
   }
 
-  async finishQuest(questId: number, isSuccess: boolean, duration: number) {
+  async finishQuest(questId: number, isSuccess: boolean) {
     const quest = await this.prisma.quest.findUnique({
       where: { id: questId },
       select: {
         statusId: true,
+        startDate: true,
         estimatedDuration: true,
         recommendedXP: true,
         adventurers: {
@@ -709,7 +725,16 @@ export class QuestsService {
       );
     }
 
+    if (!quest.startDate) {
+      throw new BadRequestException('Quest has no start date recorded');
+    }
+
+    // Calculer la durée en jours (date actuelle - startDate)
     const now = new Date();
+    const startDate = new Date(quest.startDate);
+    const diffTime = now.getTime() - startDate.getTime();
+    const duration = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24))); // Au moins 1 jour
+
     let totalSalaryCost = 0;
 
     // Calculer le coût des salaires

@@ -58,8 +58,6 @@ export class AdventurersController {
   })
   findAll(@Query() query: FindAdventurersQueryDto) {
     return this.adventurersService.findAll(query);
-  findAll(@Query() query: FindAdventurersQueryDto) {
-    return this.adventurersService.findAll(query);
   }
 
   @Get(':id')

@@ -30,7 +30,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { FindQuestsQueryDto } from '../dto/find-quests-query.dto';
-import { FindQuestsQueryDto } from '../dto/find-quests-query.dto';
 
 export interface AuthenticatedRequest extends Request {
   user: UserDto & { sub: number };
@@ -481,14 +480,6 @@ export class QuestsController {
       properties: {},
     },
   })
-  @ApiBody({
-    description: 'Aucun body requis',
-    required: false,
-    schema: {
-      type: 'object',
-      properties: {},
-    },
-  })
   @ApiOkResponse({
     description: 'Quête refusée',
     schema: {
@@ -496,7 +487,6 @@ export class QuestsController {
       additionalProperties: true,
       example: {
         id: 42,
-        statusId: 4,
         statusId: 4,
         updatedAt: '2025-10-30T13:30:00.000Z',
       },
@@ -518,14 +508,6 @@ export class QuestsController {
       properties: {},
     },
   })
-  @ApiBody({
-    description: 'Aucun body requis',
-    required: false,
-    schema: {
-      type: 'object',
-      properties: {},
-    },
-  })
   @ApiOkResponse({
     description:
       "Quête abandonnée (peut être abandonnée uniquement si elle n'est pas validée ou commencée, typiquement en statut 'en attente')",
@@ -534,7 +516,6 @@ export class QuestsController {
       additionalProperties: true,
       example: {
         id: 42,
-        statusId: 5,
         statusId: 5,
         updatedAt: '2025-10-30T13:35:00.000Z',
       },

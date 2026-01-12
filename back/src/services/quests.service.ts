@@ -14,7 +14,6 @@ export class QuestsService {
   constructor(private prisma: PrismaService) {}
 
   // Status IDs
-  // Status IDs
   private readonly STATUS_ID_WAITING = 1;
   private readonly STATUS_ID_VALIDATED = 2;
   private readonly STATUS_ID_STARTED = 3;
@@ -37,7 +36,6 @@ export class QuestsService {
     return q.statusId === this.STATUS_ID_STARTED;
   }
 
-  async findAll(options: FindQuestsQueryDto = {}) {
   async findAll(options: FindQuestsQueryDto = {}) {
     const {
       rewardMin,
@@ -148,12 +146,10 @@ export class QuestsService {
     }
 
     const targetStatusId = statusId;
-    const targetStatusId = statusId;
 
     try {
       return await this.prisma.quest.update({
         where: { id: questId },
-        data: { status: { connect: { id: targetStatusId } } },
         data: { status: { connect: { id: targetStatusId } } },
         include: {
           status: true,
@@ -174,20 +170,6 @@ export class QuestsService {
   }
 
   async create(userId: number, dto: CreateQuestDto) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      throw new NotFoundException(`User with id ${userId} not found`);
-    }
-
-    const status = await this.prisma.status.findUnique({
-      where: { id: this.STATUS_ID_WAITING },
-    });
-    if (!status) {
-      throw new NotFoundException(
-        `Status with id ${this.STATUS_ID_WAITING} not found`,
-      );
-    }
-
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException(`User with id ${userId} not found`);
@@ -252,7 +234,6 @@ export class QuestsService {
 
     if (dto.adventurerIds?.length) {
       await this.findAdventurersExist(dto.adventurerIds);
-      await this.checkAdventurersAvailability(dto.adventurerIds);
       await this.checkAdventurersAvailability(dto.adventurerIds);
     }
 
@@ -383,65 +364,8 @@ export class QuestsService {
     }
   }
 
-  private async checkAdventurersAvailability(ids: number[]) {
-    if (!ids?.length) return;
-
-    const onActiveQuest = await this.prisma.adventurer.findMany({
-      where: {
-        id: { in: ids },
-        quests: {
-          some: {
-            statusId: this.STATUS_ID_STARTED,
-          },
-        },
-      },
-      select: {
-        id: true,
-        name: true,
-        quests: {
-          where: { statusId: this.STATUS_ID_STARTED },
-          select: { id: true, name: true },
-        },
-      },
-    });
-
-    if (onActiveQuest.length) {
-      const names = onActiveQuest
-        .map(
-          (a) =>
-            `${a.name} (en mission sur: ${a.quests.map((q) => q.name).join(', ')})`,
-        )
-        .join(', ');
-      throw new BadRequestException(
-        `Les aventuriers suivants sont en mission: ${names}`,
-      );
-    }
-
-    const now = new Date();
-    const inRest = await this.prisma.adventurer.findMany({
-      where: {
-        id: { in: ids },
-        availableUntil: { gt: now },
-      },
-      select: { id: true, name: true, availableUntil: true },
-    });
-
-    if (inRest.length) {
-      const names = inRest
-        .map(
-          (a) =>
-            `${a.name} (en repos jusqu'au ${a.availableUntil?.toLocaleDateString('fr-FR')})`,
-        )
-        .join(', ');
-      throw new BadRequestException(
-        `Les aventuriers suivants sont en repos: ${names}`,
-      );
-    }
-  }
-
   async attachAdventurers(questId: number, adventurerIds: number[]) {
     await this.findAdventurersExist(adventurerIds);
-    await this.checkAdventurersAvailability(adventurerIds);
     await this.checkAdventurersAvailability(adventurerIds);
     try {
       return await this.prisma.quest.update({
@@ -493,7 +417,6 @@ export class QuestsService {
       );
     }
     await this.findAdventurersExist(adventurerIds);
-    await this.checkAdventurersAvailability(adventurerIds);
     await this.checkAdventurersAvailability(adventurerIds);
     return this.prisma.quest.update({
       where: { id: questId },
@@ -614,12 +537,6 @@ export class QuestsService {
   async startQuest(questId: number) {
     const quest = await this.prisma.quest.findUnique({
       where: { id: questId },
-      select: {
-        statusId: true,
-        estimatedDuration: true,
-        adventurers: { select: { id: true } },
-        questStockEquipments: { select: { equipmentStockId: true } },
-      },
       select: {
         statusId: true,
         estimatedDuration: true,

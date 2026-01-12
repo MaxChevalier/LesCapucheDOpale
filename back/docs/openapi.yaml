@@ -79,9 +79,6 @@ paths:
                 name:
                   type: string
                   example: John Doe
-                name:
-                  type: string
-                  example: John Doe
                 email:
                   type: string
                   format: email
@@ -92,15 +89,10 @@ paths:
                 roleId:
                   type: number
                   example: 2
-                roleId:
-                  type: number
-                  example: 2
               required:
-                - name
                 - name
                 - email
                 - password
-                - roleId
                 - roleId
               additionalProperties: false
       responses:
@@ -117,15 +109,9 @@ paths:
                   name:
                     type: string
                     example: John Doe
-                  name:
-                    type: string
-                    example: John Doe
                   email:
                     type: string
                     example: john.doe@example.com
-                  roleId:
-                    type: number
-                    example: 2
                   roleId:
                     type: number
                     example: 2
@@ -137,8 +123,6 @@ paths:
                     type: string
                     format: date-time
                     example: '2025-10-30T12:00:00.000Z'
-      security:
-        - bearer: []
       security:
         - bearer: []
       tags:
@@ -162,15 +146,9 @@ paths:
                     name:
                       type: string
                       example: John Doe
-                    name:
-                      type: string
-                      example: John Doe
                     email:
                       type: string
                       example: john.doe@example.com
-                    roleId:
-                      type: number
-                      example: 2
                     roleId:
                       type: number
                       example: 2
@@ -182,8 +160,6 @@ paths:
                       type: string
                       format: date-time
                       example: '2025-10-30T12:34:56.000Z'
-      security:
-        - bearer: []
       security:
         - bearer: []
       tags:
@@ -213,15 +189,9 @@ paths:
                   name:
                     type: string
                     example: John Doe
-                  name:
-                    type: string
-                    example: John Doe
                   email:
                     type: string
                     example: john.doe@example.com
-                  roleId:
-                    type: number
-                    example: 2
                   roleId:
                     type: number
                     example: 2
@@ -233,8 +203,6 @@ paths:
                     type: string
                     format: date-time
                     example: '2025-10-30T12:34:56.000Z'
-      security:
-        - bearer: []
       security:
         - bearer: []
       tags:
@@ -260,9 +228,6 @@ paths:
                 name:
                   type: string
                   example: Johnny Doe
-                name:
-                  type: string
-                  example: Johnny Doe
                 email:
                   type: string
                   format: email
@@ -270,9 +235,6 @@ paths:
                 password:
                   type: string
                   example: NewSecret123!
-                roleId:
-                  type: number
-                  example: 1
                 roleId:
                   type: number
                   example: 1
@@ -291,15 +253,9 @@ paths:
                   name:
                     type: string
                     example: Johnny Doe
-                  name:
-                    type: string
-                    example: Johnny Doe
                   email:
                     type: string
                     example: johnny.doe@example.com
-                  roleId:
-                    type: number
-                    example: 1
                   roleId:
                     type: number
                     example: 1
@@ -311,8 +267,6 @@ paths:
                     type: string
                     format: date-time
                     example: '2025-10-30T12:45:00.000Z'
-      security:
-        - bearer: []
       security:
         - bearer: []
       tags:
@@ -343,8 +297,6 @@ paths:
                     example: true
       security:
         - bearer: []
-      security:
-        - bearer: []
       tags:
         - Users
   /quests:
@@ -352,32 +304,24 @@ paths:
       operationId: QuestsController_findAll
       parameters:
         - name: rewardMin
-        - name: rewardMin
           required: false
           in: query
-          description: Prime minimale (incluse)
           description: Prime minimale (incluse)
           schema:
             example: 100
             type: number
         - name: rewardMax
-        - name: rewardMax
           required: false
           in: query
           description: Prime maximale (incluse)
-          description: Prime maximale (incluse)
           schema:
-            example: 1000
             example: 1000
             type: number
         - name: statusId
-        - name: statusId
           required: false
           in: query
           description: Filtrer par identifiant de statut
-          description: Filtrer par identifiant de statut
           schema:
-            example: 2
             example: 2
             type: number
         - name: finalDateBefore
@@ -398,52 +342,23 @@ paths:
           required: false
           in: query
           description: Filtrer par identifiant d'utilisateur créateur
-          description: Filtrer par identifiant d'utilisateur créateur
           schema:
             example: 1
-            example: 1
             type: number
-        - name: avgXpMin
         - name: avgXpMin
           required: false
           in: query
           description: XP moyen minimum des aventuriers (inclus)
-          description: XP moyen minimum des aventuriers (inclus)
           schema:
-            example: 10
             example: 10
             type: number
         - name: avgXpMax
-        - name: avgXpMax
           required: false
           in: query
-          description: XP moyen maximum des aventuriers (inclus)
           description: XP moyen maximum des aventuriers (inclus)
           schema:
             example: 100
             type: number
-        - name: sortBy
-          required: false
-          in: query
-          description: Champ de tri
-          schema:
-            example: reward
-            type: string
-            enum:
-              - reward
-              - finalDate
-              - avgExperience
-              - createdAt
-        - name: order
-          required: false
-          in: query
-          description: Ordre de tri
-          schema:
-            example: desc
-            type: string
-            enum:
-              - asc
-              - desc
         - name: sortBy
           required: false
           in: query
@@ -506,37 +421,6 @@ paths:
                       type: string
                       format: date-time
                       example: '2025-10-30T12:34:56.000Z'
-                  properties:
-                    id:
-                      type: number
-                      example: 1
-                    name:
-                      type: string
-                      example: Rescue the Merchant
-                    description:
-                      type: string
-                      example: Escort mission
-                    finalDate:
-                      type: string
-                      format: date-time
-                      example: '2025-12-31T23:59:59.000Z'
-                    reward:
-                      type: number
-                      example: 500
-                    estimatedDuration:
-                      type: number
-                      example: 5
-                    statusId:
-                      type: number
-                      example: 1
-                    createdAt:
-                      type: string
-                      format: date-time
-                      example: '2025-10-30T12:00:00.000Z'
-                    updatedAt:
-                      type: string
-                      format: date-time
-                      example: '2025-10-30T12:34:56.000Z'
       security:
         - bearer: []
       tags:
@@ -554,17 +438,7 @@ paths:
               additionalProperties: true
               example:
                 name: Rescue the Merchant
-                name: Rescue the Merchant
                 description: Escort the merchant safely to the city.
-                finalDate: '2025-12-31T23:59:59.000Z'
-                reward: 500
-                estimatedDuration: 5
-                adventurerIds:
-                  - 1
-                  - 2
-                equipmentStockIds:
-                  - 10
-                  - 11
                 finalDate: '2025-12-31T23:59:59.000Z'
                 reward: 500
                 estimatedDuration: 5
@@ -585,11 +459,7 @@ paths:
                 example:
                   id: 42
                   name: Rescue the Merchant
-                  name: Rescue the Merchant
                   description: Escort the merchant safely to the city.
-                  finalDate: '2025-12-31T23:59:59.000Z'
-                  reward: 500
-                  estimatedDuration: 5
                   finalDate: '2025-12-31T23:59:59.000Z'
                   reward: 500
                   estimatedDuration: 5
@@ -650,9 +520,7 @@ paths:
               additionalProperties: true
               example:
                 name: Rescue the Merchant (Hard)
-                name: Rescue the Merchant (Hard)
                 description: Hard mode variant.
-                reward: 750
                 reward: 750
       responses:
         '200':
@@ -665,10 +533,7 @@ paths:
                 example:
                   id: 42
                   name: Rescue the Merchant (Hard)
-                  name: Rescue the Merchant (Hard)
                   description: Hard mode variant.
-                  reward: 750
-                  statusId: 1
                   reward: 750
                   statusId: 1
                   createdAt: '2025-10-30T12:00:00.000Z'
@@ -1110,14 +975,6 @@ paths:
             schema:
               type: object
               properties: {}
-      requestBody:
-        required: false
-        description: Aucun body requis
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: {}
       responses:
         '200':
           description: Quête refusée
@@ -1128,7 +985,6 @@ paths:
                 additionalProperties: true
                 example:
                   id: 42
-                  statusId: 4
                   statusId: 4
                   updatedAt: '2025-10-30T13:30:00.000Z'
       security:
@@ -1154,14 +1010,6 @@ paths:
             schema:
               type: object
               properties: {}
-      requestBody:
-        required: false
-        description: Aucun body requis
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: {}
       responses:
         '200':
           description: >-
@@ -1175,7 +1023,6 @@ paths:
                 example:
                   id: 42
                   statusId: 5
-                  statusId: 5
                   updatedAt: '2025-10-30T13:35:00.000Z'
       security:
         - bearer: []
@@ -1186,26 +1033,19 @@ paths:
       operationId: AdventurersController_findAll
       parameters:
         - name: name
-        - name: name
           required: false
           in: query
           description: Filtrer par nom (contains, insensible à la casse)
-          description: Filtrer par nom (contains, insensible à la casse)
           schema:
-            example: aria
             example: aria
             type: string
         - name: specialityId
-        - name: specialityId
           required: false
           in: query
           description: Filtrer par identifiant de spécialité
-          description: Filtrer par identifiant de spécialité
           schema:
             example: 3
-            example: 3
             type: number
-        - name: experienceMin
         - name: experienceMin
           required: false
           in: query
@@ -1214,28 +1054,19 @@ paths:
             example: 10
             type: number
         - name: experienceMax
-        - name: experienceMax
           required: false
           in: query
           description: Expérience maximale (incluse)
-          description: Expérience maximale (incluse)
           schema:
-            example: 50
             example: 50
             type: number
         - name: dailyRateOrder
-        - name: dailyRateOrder
           required: false
           in: query
           description: Tri par taux journalier
-          description: Tri par taux journalier
           schema:
             example: asc
-            example: asc
             type: string
-            enum:
-              - asc
-              - desc
             enum:
               - asc
               - desc
@@ -1259,13 +1090,7 @@ paths:
                       type: number
                       example: 3
                     dailyRate:
-                    dailyRate:
                       type: number
-                      example: 150
-                    experience:
-                      type: number
-                      example: 120
-                    availableUntil:
                       example: 150
                     experience:
                       type: number
@@ -1273,10 +1098,6 @@ paths:
                     availableUntil:
                       type: string
                       format: date-time
-                      nullable: true
-                      example: '2025-12-31T23:59:59.000Z'
-      security:
-        - bearer: []
                       nullable: true
                       example: '2025-12-31T23:59:59.000Z'
       security:
@@ -1301,22 +1122,7 @@ paths:
                   type: number
                   example: 3
                 dailyRate:
-                dailyRate:
                   type: number
-                  example: 100
-                equipmentTypeIds:
-                  type: array
-                  items:
-                    type: number
-                  example:
-                    - 1
-                    - 2
-                consumableTypeIds:
-                  type: array
-                  items:
-                    type: number
-                  example:
-                    - 1
                   example: 100
                 equipmentTypeIds:
                   type: array
@@ -1334,7 +1140,6 @@ paths:
               required:
                 - name
                 - specialityId
-                - dailyRate
                 - dailyRate
       responses:
         '201':
@@ -1354,13 +1159,7 @@ paths:
                     type: number
                     example: 3
                   dailyRate:
-                  dailyRate:
                     type: number
-                    example: 100
-                  experience:
-                    type: number
-                    example: 0
-                  availableUntil:
                     example: 100
                   experience:
                     type: number
@@ -1368,10 +1167,6 @@ paths:
                   availableUntil:
                     type: string
                     format: date-time
-                    nullable: true
-                    example: null
-      security:
-        - bearer: []
                     nullable: true
                     example: null
       security:
@@ -1407,13 +1202,7 @@ paths:
                     type: number
                     example: 3
                   dailyRate:
-                  dailyRate:
                     type: number
-                    example: 150
-                  experience:
-                    type: number
-                    example: 120
-                  availableUntil:
                     example: 150
                   experience:
                     type: number
@@ -1421,10 +1210,6 @@ paths:
                   availableUntil:
                     type: string
                     format: date-time
-                    nullable: true
-                    example: '2025-12-31T23:59:59.000Z'
-      security:
-        - bearer: []
                     nullable: true
                     example: '2025-12-31T23:59:59.000Z'
       security:
@@ -1455,25 +1240,9 @@ paths:
                 dailyRate:
                   type: number
                   example: 180
-                dailyRate:
-                  type: number
-                  example: 180
                 specialityId:
                   type: number
                   example: 2
-                equipmentTypeIds:
-                  type: array
-                  items:
-                    type: number
-                  example:
-                    - 1
-                    - 3
-                consumableTypeIds:
-                  type: array
-                  items:
-                    type: number
-                  example:
-                    - 2
                 equipmentTypeIds:
                   type: array
                   items:
@@ -1506,13 +1275,7 @@ paths:
                     type: number
                     example: 2
                   dailyRate:
-                  dailyRate:
                     type: number
-                    example: 180
-                  experience:
-                    type: number
-                    example: 120
-                  availableUntil:
                     example: 180
                   experience:
                     type: number
@@ -1520,10 +1283,6 @@ paths:
                   availableUntil:
                     type: string
                     format: date-time
-                    nullable: true
-                    example: '2025-12-31T23:59:59.000Z'
-      security:
-        - bearer: []
                     nullable: true
                     example: '2025-12-31T23:59:59.000Z'
       security:
@@ -1849,7 +1608,6 @@ paths:
       requestBody:
         required: true
         description: New consumable payload
-        description: New consumable payload
         content:
           application/json:
             schema:
@@ -1873,59 +1631,8 @@ paths:
                 - quantity
                 - cost
               additionalProperties: false
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: Potion de soin
-                consumableTypeId:
-                  type: number
-                  example: 1
-                quantity:
-                  type: number
-                  example: 10
-                cost:
-                  type: number
-                  example: 25
-              required:
-                - name
-                - consumableTypeId
-                - quantity
-                - cost
-              additionalProperties: false
       responses:
         '201':
-          description: Consumable created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: number
-                    example: 1
-                  name:
-                    type: string
-                    example: Potion de soin
-                  consumableTypeId:
-                    type: number
-                    example: 1
-                  quantity:
-                    type: number
-                    example: 10
-                  cost:
-                    type: number
-                    example: 25
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-12-12T10:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-12-12T10:00:00.000Z'
-      security:
-        - bearer: []
           description: Consumable created
           content:
             application/json:
@@ -1997,39 +1704,6 @@ paths:
                       example: '2025-12-12T10:00:00.000Z'
       security:
         - bearer: []
-          description: List of consumables
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                      example: 1
-                    name:
-                      type: string
-                      example: Potion de soin
-                    consumableTypeId:
-                      type: number
-                      example: 1
-                    quantity:
-                      type: number
-                      example: 10
-                    cost:
-                      type: number
-                      example: 25
-                    createdAt:
-                      type: string
-                      format: date-time
-                      example: '2025-12-12T10:00:00.000Z'
-                    updatedAt:
-                      type: string
-                      format: date-time
-                      example: '2025-12-12T10:00:00.000Z'
-      security:
-        - bearer: []
       tags:
         - Consumables
   /consumables/{id}:
@@ -2040,45 +1714,11 @@ paths:
           required: true
           in: path
           description: Consumable ID
-          description: Consumable ID
           schema:
-            example: 1
-            type: number
             example: 1
             type: number
       responses:
         '200':
-          description: Consumable by id
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: number
-                    example: 1
-                  name:
-                    type: string
-                    example: Potion de soin
-                  consumableTypeId:
-                    type: number
-                    example: 1
-                  quantity:
-                    type: number
-                    example: 10
-                  cost:
-                    type: number
-                    example: 25
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-12-12T10:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-12-12T10:00:00.000Z'
-      security:
-        - bearer: []
           description: Consumable by id
           content:
             application/json:
@@ -2119,15 +1759,11 @@ paths:
           required: true
           in: path
           description: Consumable ID
-          description: Consumable ID
           schema:
-            example: 1
-            type: number
             example: 1
             type: number
       requestBody:
         required: true
-        description: Fields to update (partial)
         description: Fields to update (partial)
         content:
           application/json:
@@ -2147,54 +1783,8 @@ paths:
                   type: number
                   example: 50
               additionalProperties: false
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: Grande potion de soin
-                consumableTypeId:
-                  type: number
-                  example: 2
-                quantity:
-                  type: number
-                  example: 15
-                cost:
-                  type: number
-                  example: 50
-              additionalProperties: false
       responses:
         '200':
-          description: Updated consumable
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: number
-                    example: 1
-                  name:
-                    type: string
-                    example: Grande potion de soin
-                  consumableTypeId:
-                    type: number
-                    example: 2
-                  quantity:
-                    type: number
-                    example: 15
-                  cost:
-                    type: number
-                    example: 50
-                  createdAt:
-                    type: string
-                    format: date-time
-                    example: '2025-12-12T10:00:00.000Z'
-                  updatedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-12-12T10:30:00.000Z'
-      security:
-        - bearer: []
           description: Updated consumable
           content:
             application/json:
@@ -2235,28 +1825,11 @@ paths:
           required: true
           in: path
           description: Consumable ID
-          description: Consumable ID
           schema:
-            example: 1
-            type: number
             example: 1
             type: number
       responses:
         '200':
-          description: Delete result
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: number
-                    example: 1
-                  deleted:
-                    type: boolean
-                    example: true
-      security:
-        - bearer: []
           description: Delete result
           content:
             application/json:
@@ -2281,25 +1854,15 @@ paths:
           required: true
           in: path
           description: Consumable ID
-          description: Consumable ID
           schema:
             example: 1
             type: number
       requestBody:
         required: true
         description: Quantité à acheter
-        description: Quantité à acheter
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                quantity:
-                  type: number
-                  example: 3
-                  description: Nombre de consommables à acheter
-              required:
-                - quantity
               type: object
               properties:
                 quantity:
@@ -2390,8 +1953,6 @@ paths:
                       example: Health Potion
       security:
         - bearer: []
-      security:
-        - bearer: []
       tags:
         - Consumable Types
   /consumable-types/{id}:
@@ -2419,8 +1980,6 @@ paths:
                   name:
                     type: string
                     example: Health Potion
-      security:
-        - bearer: []
       security:
         - bearer: []
       tags:

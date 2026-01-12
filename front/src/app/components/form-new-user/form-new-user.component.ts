@@ -46,7 +46,7 @@ export class FormNewUserComponent {
     }
     else {
       const user = {
-        roleId : this.formSignUp.value.role,
+        roleId : +this.formSignUp.value.role!,
         name : this.formSignUp.value.username,
         email : this.formSignUp.value.email,
         password : this.formSignUp.value.password

@@ -1,0 +1,340 @@
+{
+	"info": {
+		"_postman_id": "quest-consumables-collection",
+		"name": "Quest Consumables API",
+		"description": "Collection Postman pour tester les routes de gestion des consommables dans les quêtes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "questId",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.access_token) {",
+									"    pm.collectionVariables.set('token', jsonData.access_token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@guild.com\",\n    \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quests",
+			"item": [
+				{
+					"name": "Get All Quests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/quests",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Quest by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/quests/{{questId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests", "{{questId}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Quest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.id) {",
+									"    pm.collectionVariables.set('questId', jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Quête de test consommables\",\n    \"description\": \"Une quête pour tester les consommables\",\n    \"finalDate\": \"2026-02-15T00:00:00.000Z\",\n    \"reward\": 1000,\n    \"estimatedDuration\": 5\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quests",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Consumables",
+			"item": [
+				{
+					"name": "Get All Consumables",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/consumables",
+							"host": ["{{baseUrl}}"],
+							"path": ["consumables"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quest Consumables",
+			"item": [
+				{
+					"name": "Attach Consumables to Quest",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"consumables\": [\n        {\n            \"consumableId\": 1,\n            \"quantity\": 5\n        },\n        {\n            \"consumableId\": 2,\n            \"quantity\": 3\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quests/{{questId}}/consumables/attach",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests", "{{questId}}", "consumables", "attach"]
+						},
+						"description": "Attache des consommables à une quête. Ajoute à la liste existante ou met à jour les quantités."
+					},
+					"response": []
+				},
+				{
+					"name": "Detach Consumables from Quest",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"consumables\": [\n        {\n            \"consumableId\": 1,\n            \"quantity\": 2\n        },\n        {\n            \"consumableId\": 2,\n            \"quantity\": 3\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quests/{{questId}}/consumables/detach",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests", "{{questId}}", "consumables", "detach"]
+						},
+						"description": "Détache des consommables d'une quête. Spécifiez la quantité à retirer. Si la quantité résultante est <= 0, le consommable est complètement retiré. Ne fonctionne pas si la quête est démarrée."
+					},
+					"response": []
+				},
+				{
+					"name": "Set Consumables for Quest",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"consumables\": [\n        {\n            \"consumableId\": 1,\n            \"quantity\": 10\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quests/{{questId}}/consumables/set",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests", "{{questId}}", "consumables", "set"]
+						},
+						"description": "Remplace tous les consommables de la quête par la nouvelle liste. Ne fonctionne pas si la quête est démarrée."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quest Workflow",
+			"item": [
+				{
+					"name": "Validate Quest",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"xp\": 100\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quests/{{questId}}/validate",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests", "{{questId}}", "validate"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start Quest",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/quests/{{questId}}/start",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests", "{{questId}}", "start"]
+						},
+						"description": "Démarre la quête. Enregistre une transaction de 20% de la récompense."
+					},
+					"response": []
+				},
+				{
+					"name": "Finish Quest (Success)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"isSuccess\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quests/{{questId}}/finish",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests", "{{questId}}", "finish"]
+						},
+						"description": "Termine la quête avec succès. Donne 80% de la récompense + XP aux aventuriers + 100% salaires."
+					},
+					"response": []
+				},
+				{
+					"name": "Finish Quest (Failure)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"isSuccess\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quests/{{questId}}/finish",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests", "{{questId}}", "finish"]
+						},
+						"description": "Termine la quête en échec. Pas d'XP, seulement 40% des salaires, pas de récompense supplémentaire."
+					},
+					"response": []
+				},
+				{
+					"name": "Invalidate Quest",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/quests/{{questId}}/invalidate",
+							"host": ["{{baseUrl}}"],
+							"path": ["quests", "{{questId}}", "invalidate"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -9,6 +9,7 @@ import { UpdateStatusDto } from '../dto/update-quest-status.dto';
 import { ValidateQuestDto } from '../dto/validate-quest.dto';
 import { IdsDto } from '../dto/ids.dto';
 import { FinishQuestDto } from '../dto/finish-quest.dto';
+import { QuestConsumablesDto } from '../dto/quest-consumable.dto';
 
 describe('QuestsController', () => {
   let controller: QuestsController;
@@ -32,6 +33,9 @@ describe('QuestsController', () => {
     finishQuest: jest.fn(),
     refuseQuest: jest.fn(),
     abandonQuest: jest.fn(),
+    attachConsumables: jest.fn(),
+    setConsumables: jest.fn(),
+    detachConsumables: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -243,6 +247,55 @@ describe('QuestsController', () => {
       const result = await controller.abandon(questId);
 
       expect(service.abandonQuest).toHaveBeenCalledWith(questId);
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('Consumables Management', () => {
+    const questId = 42;
+
+    it('should attach consumables', async () => {
+      const dto: QuestConsumablesDto = {
+        consumables: [
+          { consumableId: 1, quantity: 5 },
+          { consumableId: 2, quantity: 3 },
+        ],
+      };
+      const expected = { id: questId, questConsumables: dto.consumables };
+      mockService.attachConsumables.mockResolvedValue(expected);
+
+      const result = await controller.attachConsumables(questId, dto);
+
+      expect(service.attachConsumables).toHaveBeenCalledWith(questId, dto.consumables);
+      expect(result).toEqual(expected);
+    });
+
+    it('should detach consumables', async () => {
+      const dto: QuestConsumablesDto = {
+        consumables: [
+          { consumableId: 1, quantity: 2 },
+          { consumableId: 2, quantity: 5 },
+        ],
+      };
+      const expected = { id: questId, questConsumables: [] };
+      mockService.detachConsumables.mockResolvedValue(expected);
+
+      const result = await controller.detachConsumables(questId, dto);
+
+      expect(service.detachConsumables).toHaveBeenCalledWith(questId, dto.consumables);
+      expect(result).toEqual(expected);
+    });
+
+    it('should set consumables', async () => {
+      const dto: QuestConsumablesDto = {
+        consumables: [{ consumableId: 3, quantity: 7 }],
+      };
+      const expected = { id: questId, questConsumables: dto.consumables };
+      mockService.setConsumables.mockResolvedValue(expected);
+
+      const result = await controller.setConsumables(questId, dto);
+
+      expect(service.setConsumables).toHaveBeenCalledWith(questId, dto.consumables);
       expect(result).toEqual(expected);
     });
   });

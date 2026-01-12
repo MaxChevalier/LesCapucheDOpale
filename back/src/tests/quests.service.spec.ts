@@ -25,6 +25,8 @@ type MockedPrismaService = Partial<{
   quest: { create: JestMock; update: JestMock; findMany: JestMock; findUnique: JestMock };
   user: { findUnique: JestMock };
   transaction: { findFirst: JestMock; create: JestMock };
+  consumable: { findMany: JestMock };
+  questConsumable: { findMany: JestMock; createMany: JestMock; deleteMany: JestMock; update: JestMock; delete: JestMock; upsert: JestMock };
   $transaction: JestMock;
 }>;
 
@@ -39,6 +41,8 @@ describe('QuestsService', () => {
     quest: { create: jest.fn(), update: jest.fn(), findMany: jest.fn(), findUnique: jest.fn() },
     user: { findUnique: jest.fn() },
     transaction: { findFirst: jest.fn(), create: jest.fn() },
+    consumable: { findMany: jest.fn() },
+    questConsumable: { findMany: jest.fn(), createMany: jest.fn(), deleteMany: jest.fn(), update: jest.fn(), delete: jest.fn(), upsert: jest.fn() },
     $transaction: jest.fn(),
   };
 
@@ -371,7 +375,7 @@ describe('QuestsService', () => {
     });
 
     it('startQuest should fail if not validated', async () => {
-      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 1, estimatedDuration: 3, adventurers: [] }); // STATUS_ID_WAITING = 1
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 1, estimatedDuration: 3, reward: 100, adventurers: [], questStockEquipments: [] }); // STATUS_ID_WAITING = 1
       await expect(service.startQuest(1)).rejects.toThrow(BadRequestException);
     });
 
@@ -379,6 +383,7 @@ describe('QuestsService', () => {
       mockPrisma.quest!.findUnique.mockResolvedValueOnce({ 
         statusId: 2, // STATUS_ID_VALIDATED = 2
         estimatedDuration: 5,
+        reward: 1000,
         adventurers: [{ id: 1 }, { id: 2 }],
         questStockEquipments: [{ equipmentStockId: 10 }, { equipmentStockId: 11 }]
       });
@@ -390,6 +395,10 @@ describe('QuestsService', () => {
         adventurer: { updateMany: (jest.fn() as JestMock).mockResolvedValue({ count: 2 }) },
         equipmentStock: { updateMany: (jest.fn() as JestMock).mockResolvedValue({ count: 2 }) },
         quest: { update: (jest.fn() as JestMock).mockResolvedValue({ id: 1 }) },
+        transaction: { 
+          findFirst: (jest.fn() as JestMock).mockResolvedValue({ total: 5000 }),
+          create: (jest.fn() as JestMock).mockResolvedValue({})
+        },
       }));
       
       mockPrisma.quest!.findUnique.mockResolvedValueOnce({ 
@@ -410,20 +419,26 @@ describe('QuestsService', () => {
     });
 
     it('invalidateQuest should fail if quest is started', async () => {
+      // isStarted() retourne true si statusId === 4
       mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 4 }); // STATUS_ID_STARTED = 4
       await expect(service.invalidateQuest(1)).rejects.toThrow(BadRequestException);
     });
 
     it('invalidateQuest should throw NotFoundException if quest does not exist', async () => {
+       // Réinitialiser le mock pour ce test
+       mockPrisma.quest!.findUnique.mockReset();
+       // isStarted() appelle findUnique, si null il throw NotFoundException
        mockPrisma.quest!.findUnique.mockResolvedValueOnce(null);
        await expect(service.invalidateQuest(999)).rejects.toThrow(NotFoundException);
     });
     
     it('invalidateQuest should reset XP and status when not started', async () => {
+      // Réinitialiser le mock pour ce test
+      mockPrisma.quest!.findUnique.mockReset();
+      // isStarted() vérifie le statut - retourne false si statusId !== 4
       mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 2 }); // STATUS_ID_VALIDATED = 2
       mockPrisma.$transaction.mockResolvedValueOnce({});
-      mockPrisma.quest!.update.mockResolvedValueOnce({ id: 1, status: { name: 'attendre pour la validation' } });
-
+      // findOne() à la fin de invalidateQuest
       mockPrisma.quest!.findUnique.mockResolvedValueOnce({ id: 1, status: { name: 'attendre pour la validation' } }); 
       
       const res = await service.invalidateQuest(1);
@@ -554,6 +569,7 @@ describe('QuestsService', () => {
         startDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
         estimatedDuration: 5,
         recommendedXP: 100,
+        reward: 500,
         adventurers: [],
         questStockEquipments: [],
       });
@@ -566,6 +582,7 @@ describe('QuestsService', () => {
         startDate: null,
         estimatedDuration: 5,
         recommendedXP: 100,
+        reward: 500,
         adventurers: [],
         questStockEquipments: [],
       });
@@ -580,6 +597,7 @@ describe('QuestsService', () => {
         startDate,
         estimatedDuration: 5,
         recommendedXP: 100,
+        reward: 1000,
         adventurers: [
           { id: 1, experience: 50, dailyRate: 20 },
           { id: 2, experience: 80, dailyRate: 30 },
@@ -633,6 +651,7 @@ describe('QuestsService', () => {
         startDate,
         estimatedDuration: 3,
         recommendedXP: 50,
+        reward: 500,
         adventurers: [{ id: 1, experience: 100, dailyRate: 50 }],
         questStockEquipments: [
           { equipmentStockId: 10, equipmentStock: { id: 10, durability: 5 } },
@@ -682,6 +701,7 @@ describe('QuestsService', () => {
         startDate,
         estimatedDuration: 2,
         recommendedXP: 30,
+        reward: 200,
         adventurers: [],
         questStockEquipments: [],
       };
@@ -709,6 +729,171 @@ describe('QuestsService', () => {
 
       const res = await service.finishQuest(1, true);
       expect(res.totalCost).toBe(0);
+    });
+  });
+
+  // ------------------------ CONSUMABLES MANAGEMENT ------------------------
+  describe('consumables management', () => {
+    beforeEach(() => {
+      mockPrisma.quest!.findUnique.mockReset();
+      mockPrisma.consumable!.findMany.mockReset();
+      mockPrisma.questConsumable!.findMany.mockReset();
+      mockPrisma.questConsumable!.createMany.mockReset();
+      mockPrisma.questConsumable!.deleteMany.mockReset();
+      mockPrisma.questConsumable!.update.mockReset();
+      mockPrisma.questConsumable!.delete.mockReset();
+      mockPrisma.questConsumable!.upsert.mockReset();
+    });
+
+    it('attachConsumables should attach new consumables', async () => {
+      mockPrisma.consumable!.findMany
+        .mockResolvedValueOnce([{ id: 1 }, { id: 2 }]) // findConsumablesExist
+        .mockResolvedValueOnce([{ id: 1, quantity: 100, name: 'Potion' }, { id: 2, quantity: 50, name: 'Antidote' }]); // stock check
+      mockPrisma.questConsumable!.findMany.mockResolvedValueOnce([]); // existing in this quest (none)
+      mockPrisma.questConsumable!.createMany.mockResolvedValueOnce({ count: 2 });
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ id: 1, questConsumables: [] });
+
+      const res = await service.attachConsumables(1, [
+        { consumableId: 1, quantity: 5 },
+        { consumableId: 2, quantity: 3 },
+      ]);
+      expect(mockPrisma.questConsumable!.createMany).toHaveBeenCalled();
+      expect(res).toEqual(expect.objectContaining({ id: 1 }));
+    });
+
+    it('attachConsumables should add quantity to existing consumable', async () => {
+      mockPrisma.consumable!.findMany
+        .mockResolvedValueOnce([{ id: 1 }]) // findConsumablesExist
+        .mockResolvedValueOnce([{ id: 1, quantity: 100, name: 'Potion' }]); // stock check
+      mockPrisma.questConsumable!.findMany.mockResolvedValueOnce([{ consumableId: 1, quantity: 5 }]); // existing in this quest (already has 5)
+      mockPrisma.questConsumable!.update.mockResolvedValueOnce({});
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ id: 1, questConsumables: [{ consumableId: 1, quantity: 8 }] });
+
+      const res = await service.attachConsumables(1, [
+        { consumableId: 1, quantity: 3 }, // Should add 3 to existing 5 = 8
+      ]);
+      expect(mockPrisma.questConsumable!.update).toHaveBeenCalledWith(expect.objectContaining({
+        where: { questId_consumableId: { questId: 1, consumableId: 1 } },
+        data: { quantity: 8 }, // 5 existing + 3 new
+      }));
+      expect(res).toEqual(expect.objectContaining({ id: 1 }));
+    });
+
+    it('attachConsumables should throw NotFoundException if consumable not found', async () => {
+      mockPrisma.consumable!.findMany.mockResolvedValueOnce([{ id: 1 }]); // Missing id: 2
+      await expect(
+        service.attachConsumables(1, [{ consumableId: 1, quantity: 5 }, { consumableId: 2, quantity: 3 }])
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('attachConsumables should throw BadRequestException if not enough stock', async () => {
+      mockPrisma.consumable!.findMany
+        .mockResolvedValueOnce([{ id: 1 }]) // findConsumablesExist
+        .mockResolvedValueOnce([{ id: 1, quantity: 2, name: 'Potion' }]); // stock check - only 2 available
+      mockPrisma.questConsumable!.findMany.mockResolvedValueOnce([]); // no existing in this quest
+      
+      await expect(
+        service.attachConsumables(1, [{ consumableId: 1, quantity: 10 }])
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('attachConsumables should throw BadRequestException if stock minus already assigned is not enough', async () => {
+      mockPrisma.consumable!.findMany
+        .mockResolvedValueOnce([{ id: 1 }]) // findConsumablesExist
+        .mockResolvedValueOnce([{ id: 1, quantity: 20, name: 'Potion' }]); // stock has 20
+      mockPrisma.questConsumable!.findMany.mockResolvedValueOnce([{ consumableId: 1, quantity: 15 }]); // already assigned 15 in this quest
+      
+      // Trying to add 10, but only 5 available (20 - 15)
+      await expect(
+        service.attachConsumables(1, [{ consumableId: 1, quantity: 10 }])
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('detachConsumables should fully remove consumable when quantity becomes <= 0', async () => {
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 1 }); // isStarted check
+      mockPrisma.consumable!.findMany.mockResolvedValueOnce([{ id: 1 }, { id: 2 }]); // findConsumablesExist
+      mockPrisma.questConsumable!.findMany.mockResolvedValueOnce([
+        { consumableId: 1, quantity: 5 },
+        { consumableId: 2, quantity: 3 },
+      ]);
+      mockPrisma.questConsumable!.delete.mockResolvedValue({});
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ id: 1, questConsumables: [] });
+
+      const res = await service.detachConsumables(1, [
+        { consumableId: 1, quantity: 10 }, // More than existing, should delete
+        { consumableId: 2, quantity: 3 },  // Exact quantity, should delete
+      ]);
+      expect(mockPrisma.questConsumable!.delete).toHaveBeenCalledTimes(2);
+      expect(res).toEqual(expect.objectContaining({ id: 1 }));
+    });
+
+    it('detachConsumables should reduce quantity when remaining > 0', async () => {
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 1 }); // isStarted check
+      mockPrisma.consumable!.findMany.mockResolvedValueOnce([{ id: 1 }]); // findConsumablesExist
+      mockPrisma.questConsumable!.findMany.mockResolvedValueOnce([
+        { consumableId: 1, quantity: 10 },
+      ]);
+      mockPrisma.questConsumable!.update.mockResolvedValueOnce({});
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ id: 1, questConsumables: [{ consumableId: 1, quantity: 7 }] });
+
+      const res = await service.detachConsumables(1, [
+        { consumableId: 1, quantity: 3 }, // 10 - 3 = 7, should update
+      ]);
+      expect(mockPrisma.questConsumable!.update).toHaveBeenCalled();
+      expect(res).toEqual(expect.objectContaining({ id: 1 }));
+    });
+
+    it('detachConsumables should throw BadRequestException if quest is started', async () => {
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 4 }); // STATUS_ID_STARTED
+      await expect(service.detachConsumables(1, [{ consumableId: 1, quantity: 5 }])).rejects.toThrow(BadRequestException);
+    });
+
+    it('detachConsumables should skip consumables not in quest', async () => {
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 1 }); // isStarted check
+      mockPrisma.consumable!.findMany.mockResolvedValueOnce([{ id: 1 }, { id: 999 }]); // findConsumablesExist (both exist in DB)
+      mockPrisma.questConsumable!.findMany.mockResolvedValueOnce([
+        { consumableId: 1, quantity: 5 },
+        // 999 is not in the quest
+      ]);
+      mockPrisma.questConsumable!.delete.mockResolvedValueOnce({});
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ id: 1, questConsumables: [] });
+
+      const res = await service.detachConsumables(1, [
+        { consumableId: 1, quantity: 5 },
+        { consumableId: 999, quantity: 2 }, // Not in quest, should be skipped
+      ]);
+      expect(mockPrisma.questConsumable!.delete).toHaveBeenCalledTimes(1);
+      expect(res).toEqual(expect.objectContaining({ id: 1 }));
+    });
+
+    it('setConsumables should replace all consumables', async () => {
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 1 }); // isStarted check
+      mockPrisma.consumable!.findMany
+        .mockResolvedValueOnce([{ id: 3 }]) // findConsumablesExist
+        .mockResolvedValueOnce([{ id: 3, quantity: 50, name: 'Elixir' }]); // stock check
+      mockPrisma.questConsumable!.deleteMany.mockResolvedValueOnce({ count: 2 });
+      mockPrisma.questConsumable!.createMany.mockResolvedValueOnce({ count: 1 });
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ id: 1, questConsumables: [{ consumableId: 3 }] });
+
+      const res = await service.setConsumables(1, [{ consumableId: 3, quantity: 7 }]);
+      expect(mockPrisma.questConsumable!.deleteMany).toHaveBeenCalled();
+      expect(mockPrisma.questConsumable!.createMany).toHaveBeenCalled();
+      expect(res).toEqual(expect.objectContaining({ id: 1 }));
+    });
+
+    it('setConsumables should throw BadRequestException if quest is started', async () => {
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 4 }); // STATUS_ID_STARTED
+      await expect(service.setConsumables(1, [{ consumableId: 1, quantity: 5 }])).rejects.toThrow(BadRequestException);
+    });
+
+    it('setConsumables with empty array should just delete all', async () => {
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ statusId: 1 }); // isStarted check
+      mockPrisma.questConsumable!.deleteMany.mockResolvedValueOnce({ count: 2 });
+      mockPrisma.quest!.findUnique.mockResolvedValueOnce({ id: 1, questConsumables: [] });
+
+      const res = await service.setConsumables(1, []);
+      expect(mockPrisma.questConsumable!.deleteMany).toHaveBeenCalled();
+      expect(res).toEqual(expect.objectContaining({ id: 1 }));
     });
   });
 });

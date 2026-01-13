@@ -18,7 +18,6 @@ export interface TransactionResult {
 export class FinancesService {
   constructor(private prisma: PrismaService) {}
 
-
   async addTransaction(dto: CreateTransactionDto): Promise<TransactionResult> {
     const { amount, description } = dto;
 
@@ -42,7 +41,6 @@ export class FinancesService {
     return transaction;
   }
 
-
   async getBalance(): Promise<{ balance: number }> {
     const lastTransaction = await this.prisma.transaction.findFirst({
       orderBy: { id: 'desc' },
@@ -51,7 +49,6 @@ export class FinancesService {
 
     return { balance: lastTransaction?.total ?? 0 };
   }
-
 
   async getHistory(options: { skip?: number; take?: number } = {}) {
     const { skip = 0, take = 50 } = options;

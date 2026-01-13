@@ -452,7 +452,8 @@ export class QuestsController {
         isSuccess: {
           type: 'boolean',
           example: true,
-          description: 'true = succès (XP + 80% récompense), false = échec (40% salaires uniquement)',
+          description:
+            'true = succès (XP + 80% récompense), false = échec (40% salaires uniquement)',
         },
       },
       example: { isSuccess: true },

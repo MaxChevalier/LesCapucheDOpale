@@ -21,11 +21,11 @@ describe('FormQuest', () => {
   });
 
   it('should have an invalid form by default', () => {
-    expect(component.form.valid).toBeFalse();
+    expect(component.questForm.valid).toBeFalse();
   });
 
   it('should validate form when all fields are filled correctly', () => {
-    component.form.setValue({
+    component.questForm.setValue({
       name: 'Sauver le village',
       description: 'Protéger le village des gobelins',
       finalDate: '2025-12-01',
@@ -33,7 +33,7 @@ describe('FormQuest', () => {
       reward: 500,
     });
 
-    expect(component.form.valid).toBeTrue();
+    expect(component.questForm.valid).toBeTrue();
   });
 
   it('should emit formSubmitted with correct data when form is valid', () => {
@@ -47,7 +47,7 @@ describe('FormQuest', () => {
       reward: 1000,
     };
 
-    component.form.setValue(formValue);
+    component.questForm.setValue(formValue);
     component['onSubmit']();
 
     expect(emitSpy).toHaveBeenCalledWith(formValue);
@@ -55,31 +55,31 @@ describe('FormQuest', () => {
 
   it('should not emit when form is invalid', () => {
     const emitSpy = spyOn(component.formSubmitted, 'emit');
-    component.form.get('name')?.setValue(''); // champ requis vide
+    component.questForm.get('name')?.setValue(''); // champ requis vide
     component['onSubmit']();
     expect(emitSpy).not.toHaveBeenCalled();
   });
 
   it('should call markAllAsTouched when form invalid', () => {
-    const markSpy = spyOn(component.form, 'markAllAsTouched');
+    const markSpy = spyOn(component.questForm, 'markAllAsTouched');
     component['onSubmit']();
     expect(markSpy).toHaveBeenCalled();
   });
 
   it('should getMoney return current reward', () => {
-    component.form.get('reward')?.setValue(750);
+    component.questForm.get('reward')?.setValue(750);
     expect(component['getMoney']()).toBe(750);
   });
 
   it('should getMoney return 0 if reward not set', () => {
-    component.form.get('reward')?.setValue(null);
+    component.questForm.get('reward')?.setValue(null);
     expect(component['getMoney']()).toBe(0);
   });
 
 
   it('should set reward', () => {
     component['setMoney'](1200);
-    expect(component.form.get('reward')?.value).toBe(1200);
+    expect(component.questForm.get('reward')?.value).toBe(1200);
   });
 
     describe('ngOnChanges', () => {
@@ -92,7 +92,7 @@ describe('FormQuest', () => {
         reward: 2500,
       };
 
-      const patchSpy = spyOn(component.form, 'patchValue').and.callThrough();
+      const patchSpy = spyOn(component.questForm, 'patchValue').and.callThrough();
 
       component.initialData = mockQuest;
       component.ngOnChanges();
@@ -105,7 +105,7 @@ describe('FormQuest', () => {
         reward: 2500,
       });
 
-      expect(component.form.value).toEqual({
+      expect(component.questForm.value).toEqual({
         name: 'Mission secrète',
         description: 'Infiltrer le château ennemi',
         finalDate: '2025-12-31',
@@ -115,7 +115,7 @@ describe('FormQuest', () => {
     });
 
     it('should not patch form when initialData is null', () => {
-      const patchSpy = spyOn(component.form, 'patchValue');
+      const patchSpy = spyOn(component.questForm, 'patchValue');
       component.initialData = null;
       component.ngOnChanges();
       expect(patchSpy).not.toHaveBeenCalled();

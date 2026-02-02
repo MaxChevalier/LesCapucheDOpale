@@ -58,7 +58,7 @@ export class AssignQuest implements OnInit {
         (sum, a) => sum + a.dailyRate * quest.estimatedDuration,
         0
       );
-      this.selectedEquipmentIds = new Set<number>(quest.questStockEquipments.map(e => e.id));
+      this.selectedEquipmentIds = new Set<number>(quest.questStockEquipments.map(e => e.equipmentStock.id));
       for (const adventurer of quest.adventurers) {
         this.successRateForAdventurer[adventurer.id] = Math.min(
           this.quest.recommendedXP,

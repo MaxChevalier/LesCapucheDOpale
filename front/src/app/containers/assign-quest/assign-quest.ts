@@ -9,7 +9,6 @@ import { DatePipe } from '@angular/common';
 import { ItemStockEquipment } from '../../components/item-stock-equipment/item-stock-equipment';
 import { EquipmentService } from '../../services/equipment/equipment.service';
 import { ConsumableService } from '../../services/consumable/consumable.service';
-import { ItemConsumable } from '../../components/item-consumable/item-consumable';
 
 @Component({
   selector: 'app-assign-quest',
@@ -47,7 +46,7 @@ export class AssignQuest implements OnInit {
     const idStr = this.activatedRoute.snapshot.paramMap.get('id');
     this.id = idStr ? Number(idStr) : -1;
 
-    if (!idStr || !/^\d+$/.test(idStr) || this.id < 0 || isNaN(this.id)) {
+    if (!idStr || !/^\d+$/.test(idStr) || this.id < 0 || Number.isNaN(this.id)) {
       console.error('Invalid quest ID');
       this.router.navigate(['/quests']);
       return;
@@ -135,9 +134,9 @@ export class AssignQuest implements OnInit {
 
   onConsumableQuantityChange(consumableId: number, event: Event) {
     const inputElement = event.target as HTMLInputElement;
-    const quantity = parseInt(inputElement.value, 10);
+    const quantity = Number.parseInt(inputElement.value, 10);
 
-    if (isNaN(quantity) || quantity < 0) {
+    if (Number.isNaN(quantity) || quantity < 0) {
       delete this.selectedConsumableQuantities[consumableId];
     } else {
       this.selectedConsumableQuantities[consumableId] = quantity;

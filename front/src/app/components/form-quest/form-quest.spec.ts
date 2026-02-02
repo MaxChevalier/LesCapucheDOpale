@@ -27,7 +27,7 @@ describe('FormQuest', () => {
   it('should validate form when all fields are filled correctly', () => {
     component.questForm.setValue({
       name: 'Sauver le village',
-      description: 'Protéger le village des gobelins',
+      description: 'Protéger le village des gobelins qui menacent la population locale',
       finalDate: '2025-12-01',
       estimatedDuration: 3,
       reward: 500,
@@ -41,7 +41,7 @@ describe('FormQuest', () => {
 
     const formValue: QuestForm = {
       name: 'Trouver la relique',
-      description: 'Explorer le donjon et ramener la relique sacrée.',
+      description: 'Explorer le donjon sombre et mystérieux et ramener la relique sacrée.',
       finalDate: '2025-11-15',
       estimatedDuration: 5,
       reward: 1000,
@@ -86,7 +86,7 @@ describe('FormQuest', () => {
     it('should patch form values when initialData is provided', () => {
       const mockQuest: QuestForm = {
         name: 'Mission secrète',
-        description: 'Infiltrer le château ennemi',
+        description: 'Infiltrer le château ennemi pour récupérer les plans secrets',
         finalDate: '2025-12-31T00:00:00',
         estimatedDuration: 7,
         reward: 2500,
@@ -99,7 +99,7 @@ describe('FormQuest', () => {
 
       expect(patchSpy).toHaveBeenCalledWith({
         name: 'Mission secrète',
-        description: 'Infiltrer le château ennemi',
+        description: 'Infiltrer le château ennemi pour récupérer les plans secrets',
         finalDate: '2025-12-31',
         estimatedDuration: 7,
         reward: 2500,
@@ -107,7 +107,7 @@ describe('FormQuest', () => {
 
       expect(component.questForm.value).toEqual({
         name: 'Mission secrète',
-        description: 'Infiltrer le château ennemi',
+        description: 'Infiltrer le château ennemi pour récupérer les plans secrets',
         finalDate: '2025-12-31',
         estimatedDuration: 7,
         reward: 2500,

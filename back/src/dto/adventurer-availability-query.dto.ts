@@ -9,12 +9,18 @@ export class AdventurerAvailabilityQueryDto {
   @IsInt()
   adventurerId?: number;
 
-  @ApiPropertyOptional({ example: '2026-02-01T00:00:00.000Z', description: 'Start of the period to check' })
+  @ApiPropertyOptional({
+    example: '2026-02-01T00:00:00.000Z',
+    description: 'Start of the period to check',
+  })
   @IsOptional()
   @IsDateString()
   startDate?: string;
 
-  @ApiPropertyOptional({ example: '2026-02-28T00:00:00.000Z', description: 'End of the period to check' })
+  @ApiPropertyOptional({
+    example: '2026-02-28T00:00:00.000Z',
+    description: 'End of the period to check',
+  })
   @IsOptional()
   @IsDateString()
   endDate?: string;

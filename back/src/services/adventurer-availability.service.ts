@@ -1,8 +1,11 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAdventurerRestDto } from '../dto/create-adventurer-rest.dto';
 import { UpdateAdventurerRestDto } from '../dto/update-adventurer-rest.dto';
-import { AdventurerAvailabilityQueryDto } from '../dto/adventurer-availability-query.dto';
 
 export interface ScheduleEvent {
   id: number;
@@ -57,13 +60,19 @@ export class AdventurerAvailabilityService {
     let isAvailable = true;
 
     for (const rest of adventurer.rests) {
-      if (this.periodsOverlap(startDate, endDate, rest.startDate, rest.endDate)) {
+      if (
+        this.periodsOverlap(startDate, endDate, rest.startDate, rest.endDate)
+      ) {
         isAvailable = false;
         events.push({
           id: rest.id,
           startDate: rest.startDate,
           endDate: rest.endDate,
-          type: rest.type as 'mission' | 'rest' | 'unavailable' | 'mission_rest',
+          type: rest.type as
+            | 'mission'
+            | 'rest'
+            | 'unavailable'
+            | 'mission_rest',
           reason: rest.reason,
           questId: rest.questId ?? undefined,
         });
@@ -86,7 +95,11 @@ export class AdventurerAvailabilityService {
     startDate: Date,
     endDate: Date,
   ): Promise<DayStatus[]> {
-    const availability = await this.checkAvailability(adventurerId, startDate, endDate);
+    const availability = await this.checkAvailability(
+      adventurerId,
+      startDate,
+      endDate,
+    );
     const dayStatuses: DayStatus[] = [];
 
     const currentDate = new Date(startDate);
@@ -137,7 +150,6 @@ export class AdventurerAvailabilityService {
     return `${day}-${month}-${year}`;
   }
 
-
   async findAllRests(adventurerId: number) {
     const adventurer = await this.prisma.adventurer.findUnique({
       where: { id: adventurerId },
@@ -183,7 +195,9 @@ export class AdventurerAvailabilityService {
     });
 
     if (overlapping) {
-      throw new BadRequestException('Rest period overlaps with an existing rest period');
+      throw new BadRequestException(
+        'Rest period overlaps with an existing rest period',
+      );
     }
 
     return this.prisma.adventurerRest.create({
@@ -228,7 +242,9 @@ export class AdventurerAvailabilityService {
     });
 
     if (overlapping) {
-      throw new BadRequestException('Rest period overlaps with an existing rest period');
+      throw new BadRequestException(
+        'Rest period overlaps with an existing rest period',
+      );
     }
 
     return this.prisma.adventurerRest.update({
@@ -263,7 +279,9 @@ export class AdventurerAvailabilityService {
         speciality: true,
         quests: {
           where: {
-            statusId: { in: [this.STATUS_ID_STARTED, this.STATUS_ID_VALIDATED] },
+            statusId: {
+              in: [this.STATUS_ID_STARTED, this.STATUS_ID_VALIDATED],
+            },
           },
         },
         rests: true,
@@ -288,7 +306,14 @@ export class AdventurerAvailabilityService {
 
       if (isAvailable) {
         for (const rest of adventurer.rests) {
-          if (this.periodsOverlap(startDate, endDate, rest.startDate, rest.endDate)) {
+          if (
+            this.periodsOverlap(
+              startDate,
+              endDate,
+              rest.startDate,
+              rest.endDate,
+            )
+          ) {
             isAvailable = false;
             break;
           }

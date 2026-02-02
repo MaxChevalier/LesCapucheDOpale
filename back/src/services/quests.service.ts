@@ -11,7 +11,7 @@ import { FindQuestsQueryDto } from '../dto/find-quests-query.dto';
 
 @Injectable()
 export class QuestsService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   // Status IDs
   private readonly STATUS_ID_WAITING = 1;
@@ -68,20 +68,20 @@ export class QuestsService {
     const where: Prisma.QuestWhereInput = {
       ...(rewardMin != null || rewardMax != null
         ? {
-          reward: {
-            ...(rewardMin != null ? { gte: rewardMin } : {}),
-            ...(rewardMax != null ? { lte: rewardMax } : {}),
-          },
-        }
+            reward: {
+              ...(rewardMin != null ? { gte: rewardMin } : {}),
+              ...(rewardMax != null ? { lte: rewardMax } : {}),
+            },
+          }
         : {}),
       ...(typeof statusId === 'number' ? { statusId } : {}),
       ...(finalDateBefore || finalDateAfter
         ? {
-          finalDate: {
-            ...(finalDateAfter ? { gte: new Date(finalDateAfter) } : {}),
-            ...(finalDateBefore ? { lte: new Date(finalDateBefore) } : {}),
-          },
-        }
+            finalDate: {
+              ...(finalDateAfter ? { gte: new Date(finalDateAfter) } : {}),
+              ...(finalDateBefore ? { lte: new Date(finalDateBefore) } : {}),
+            },
+          }
         : {}),
       ...(typeof userId === 'number' ? { UserId: userId } : {}),
     };
@@ -115,7 +115,7 @@ export class QuestsService {
       const avgExperience =
         adventurers.length > 0
           ? adventurers.reduce((sum, a) => sum + (a.experience ?? 0), 0) /
-          adventurers.length
+            adventurers.length
           : 0;
       return { ...quest, avgExperience };
     });
@@ -150,7 +150,7 @@ export class QuestsService {
             speciality: true,
             equipmentTypes: true,
             consumableTypes: true,
-          }
+          },
         },
         questStockEquipments: {
           include: {
@@ -159,11 +159,11 @@ export class QuestsService {
                 equipment: {
                   include: {
                     equipmentType: true,
-                  }
+                  },
                 },
-              }
+              },
             },
-          }
+          },
         },
         questConsumables: {
           include: {
@@ -244,10 +244,10 @@ export class QuestsService {
           : undefined,
         questStockEquipments: dto.equipmentStockIds?.length
           ? {
-            create: dto.equipmentStockIds.map((equipmentStockId) => ({
-              equipmentStockId,
-            })),
-          }
+              create: dto.equipmentStockIds.map((equipmentStockId) => ({
+                equipmentStockId,
+              })),
+            }
           : undefined,
       },
       include: {
@@ -398,7 +398,7 @@ export class QuestsService {
     }
 
     const now = new Date();
-    
+
     const inRest = await this.prisma.adventurerRest.findMany({
       where: {
         adventurerId: { in: ids },
@@ -531,14 +531,14 @@ export class QuestsService {
     });
     const tx = equipmentStockIds.length
       ? [
-        deletePromise,
-        this.prisma.questStockEquipment.createMany({
-          data: equipmentStockIds.map((equipmentStockId) => ({
-            questId,
-            equipmentStockId,
-          })),
-        }),
-      ]
+          deletePromise,
+          this.prisma.questStockEquipment.createMany({
+            data: equipmentStockIds.map((equipmentStockId) => ({
+              questId,
+              equipmentStockId,
+            })),
+          }),
+        ]
       : [deletePromise];
     await this.prisma.$transaction(tx);
     return this.findOne(questId);
@@ -622,11 +622,11 @@ export class QuestsService {
     await this.prisma.$transaction(async (tx) => {
       // Créer des entrées de type 'mission' dans adventurer_rest pour les aventuriers
       if (adventurerIds.length) {
-         const questData = await tx.quest.findUnique({
+        const questData = await tx.quest.findUnique({
           where: { id: questId },
           select: { name: true },
         });
-        
+
         await Promise.all(
           adventurerIds.map((adventurerId) =>
             tx.adventurerRest.create({
@@ -638,8 +638,8 @@ export class QuestsService {
                 type: 'mission',
                 reason: `En mission: ${questData?.name || 'Quête #' + questId}`,
               },
-            })
-          )
+            }),
+          ),
         );
       }
 
@@ -858,7 +858,7 @@ export class QuestsService {
         const restEndDate = new Date(now);
         restEndDate.setDate(restEndDate.getDate() + restDays);
 
-         await tx.adventurerRest.create({
+        await tx.adventurerRest.create({
           data: {
             adventurerId: adventurer.id,
             questId,

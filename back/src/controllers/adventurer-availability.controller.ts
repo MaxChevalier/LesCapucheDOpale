@@ -13,7 +13,6 @@ import {
 import { AdventurerAvailabilityService } from '../services/adventurer-availability.service';
 import { CreateAdventurerRestDto } from '../dto/create-adventurer-rest.dto';
 import { UpdateAdventurerRestDto } from '../dto/update-adventurer-rest.dto';
-import { AdventurerAvailabilityQueryDto } from '../dto/adventurer-availability-query.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../guards/roles.decorator';
@@ -31,14 +30,26 @@ import {
 @ApiBearerAuth()
 @Controller('adventurer-availability')
 export class AdventurerAvailabilityController {
-  constructor(private readonly availabilityService: AdventurerAvailabilityService) {}
+  constructor(
+    private readonly availabilityService: AdventurerAvailabilityService,
+  ) {}
 
   @Get(':adventurerId/check')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
   @ApiParam({ name: 'adventurerId', example: 1, description: 'Adventurer ID' })
-  @ApiQuery({ name: 'startDate', required: true, example: '2026-02-01', description: 'Start date of the period' })
-  @ApiQuery({ name: 'endDate', required: true, example: '2026-02-28', description: 'End date of the period' })
+  @ApiQuery({
+    name: 'startDate',
+    required: true,
+    example: '2026-02-01',
+    description: 'Start date of the period',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    required: true,
+    example: '2026-02-28',
+    description: 'End date of the period',
+  })
   @ApiOkResponse({
     description: 'Adventurer availability status',
     schema: {
@@ -53,7 +64,10 @@ export class AdventurerAvailabilityController {
             type: 'object',
             properties: {
               id: { type: 'number', example: 1 },
-              startDate: { type: 'string', example: '2026-02-05T00:00:00.000Z' },
+              startDate: {
+                type: 'string',
+                example: '2026-02-05T00:00:00.000Z',
+              },
               endDate: { type: 'string', example: '2026-02-10T00:00:00.000Z' },
               type: { type: 'string', example: 'mission' },
               reason: { type: 'string', example: 'Quest: Dragon Hunt' },
@@ -79,8 +93,18 @@ export class AdventurerAvailabilityController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
   @ApiParam({ name: 'adventurerId', example: 1, description: 'Adventurer ID' })
-  @ApiQuery({ name: 'startDate', required: true, example: '2026-02-01', description: 'Start date of the period' })
-  @ApiQuery({ name: 'endDate', required: true, example: '2026-02-28', description: 'End date of the period' })
+  @ApiQuery({
+    name: 'startDate',
+    required: true,
+    example: '2026-02-01',
+    description: 'Start date of the period',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    required: true,
+    example: '2026-02-28',
+    description: 'End date of the period',
+  })
   @ApiOkResponse({
     description: 'Adventurer schedule with daily status',
     schema: {
@@ -89,7 +113,16 @@ export class AdventurerAvailabilityController {
         type: 'object',
         properties: {
           date: { type: 'string', example: '2026-02-05' },
-          status: { type: 'string', enum: ['available', 'mission', 'rest', 'unavailable', 'mission_rest'] },
+          status: {
+            type: 'string',
+            enum: [
+              'available',
+              'mission',
+              'rest',
+              'unavailable',
+              'mission_rest',
+            ],
+          },
           events: { type: 'array', items: { type: 'object' } },
         },
       },
@@ -110,8 +143,18 @@ export class AdventurerAvailabilityController {
   @Get('available')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
-  @ApiQuery({ name: 'startDate', required: true, example: '2026-02-01', description: 'Start date of the period' })
-  @ApiQuery({ name: 'endDate', required: true, example: '2026-02-28', description: 'End date of the period' })
+  @ApiQuery({
+    name: 'startDate',
+    required: true,
+    example: '2026-02-01',
+    description: 'Start date of the period',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    required: true,
+    example: '2026-02-28',
+    description: 'End date of the period',
+  })
   @ApiOkResponse({
     description: 'List of available adventurers for the period',
     schema: {
@@ -175,7 +218,11 @@ export class AdventurerAvailabilityController {
         startDate: { type: 'string', example: '2026-02-05T00:00:00.000Z' },
         endDate: { type: 'string', example: '2026-02-10T00:00:00.000Z' },
         reason: { type: 'string', example: 'Repos après mission' },
-        type: { type: 'string', enum: ['rest', 'unavailable', 'mission_rest'], example: 'rest' },
+        type: {
+          type: 'string',
+          enum: ['rest', 'unavailable', 'mission_rest'],
+          example: 'rest',
+        },
       },
       required: ['adventurerId', 'startDate', 'endDate', 'reason', 'type'],
     },

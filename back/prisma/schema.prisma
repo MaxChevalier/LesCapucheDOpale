@@ -34,6 +34,7 @@ model Adventurer {
   experience         Int
   quests             Quest[]
   availableUntil     DateTime?
+  rests              AdventurerRest[]
 }
 
 model Speciality {
@@ -149,4 +150,16 @@ model QuestConsumable {
 
   @@unique([questId, consumableId])
   @@map("quest_consumable")
+}
+
+model AdventurerRest {
+  id           Int        @id @default(autoincrement())
+  adventurerId Int
+  adventurer   Adventurer @relation(fields: [adventurerId], references: [id])
+  startDate    DateTime
+  endDate      DateTime
+  reason       String
+  type         String     @default("rest") // "rest" | "unavailable" | "mission_rest"
+
+  @@map("adventurer_rest")
 }

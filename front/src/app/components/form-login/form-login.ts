@@ -40,7 +40,6 @@ export class FormLogin {
     };
     this.AuthService.login(user).subscribe({
       next: (response) => {
-        console.log('Login successful', response);
         localStorage.setItem('token', response.access_token);
         localStorage.setItem('userName', response.username);
         

@@ -44,15 +44,14 @@ async function main() {
     prisma.role.create({ data: { name: ROLES.CLIENT } }),
   ]);
 
-
   await Promise.all([
     prisma.status.create({ data: { name: STATUSES.STATUS_WAITING } }),
     prisma.status.create({ data: { name: STATUSES.STATUS_VALIDATED } }),
-    prisma.status.create({ data: { name: STATUSES.STATUS_STARTED } }),
-    prisma.status.create({ data: { name: STATUSES.STATUS_REFUSED } }),
-    prisma.status.create({ data: { name: STATUSES.STATUS_CANCELLED } }),
-    prisma.status.create({ data: { name: STATUSES.STATUS_SUCCEEDED } }),
     prisma.status.create({ data: { name: STATUSES.STATUS_FAILED } }),
+    prisma.status.create({ data: { name: STATUSES.STATUS_STARTED } }),
+    prisma.status.create({ data: { name: STATUSES.STATUS_CANCELLED } }),
+    prisma.status.create({ data: { name: STATUSES.STATUS_REFUSED } }),
+    prisma.status.create({ data: { name: STATUSES.STATUS_SUCCEEDED } }),
   ]);
 
 

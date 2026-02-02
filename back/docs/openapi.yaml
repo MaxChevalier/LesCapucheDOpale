@@ -928,16 +928,22 @@ paths:
             type: number
       requestBody:
         required: true
-        description: Informations de fin de quête
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FinishQuestDto'
+              type: object
+              properties:
+                isSuccess:
+                  type: boolean
+                  example: true
+                  description: >-
+                    true = succès (XP + 80% récompense), false = échec (40%
+                    salaires uniquement)
+              example:
+                isSuccess: true
       responses:
         '200':
-          description: >-
-            Quête terminée, XP distribué (si succès), équipements libérés, coût
-            financier calculé
+          description: ''
           content:
             application/json:
               schema:
@@ -945,13 +951,21 @@ paths:
                 additionalProperties: true
                 example:
                   id: 42
-                  statusId: 6
+                  name: Quête du Dragon
+                  statusId: 7
+                  startDate: '2026-01-01T10:00:00.000Z'
                   adventurers:
                     - id: 1
                       name: Aria
-                      experience: 60
-                      availableUntil: '2025-12-15'
-                  totalCost: 500
+                      experience: 80
+                      dailyRate: 50
+                      availableUntil: '2026-01-15T10:00:00.000Z'
+                  questStockEquipments:
+                    - equipmentStock:
+                        id: 10
+                        durability: 8
+                        statusId: 1
+                  totalCost: 600
       security:
         - bearer: []
       tags:
@@ -1024,6 +1038,172 @@ paths:
                   id: 42
                   statusId: 5
                   updatedAt: '2025-10-30T13:35:00.000Z'
+      security:
+        - bearer: []
+      tags:
+        - Quests
+  /quests/{id}/consumables/attach:
+    patch:
+      operationId: QuestsController_attachConsumables
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Quest ID
+          schema:
+            example: 42
+            type: number
+      requestBody:
+        required: true
+        description: >-
+          Liste des consommables à attacher avec leurs quantités. Si le
+          consommable est déjà dans la quête, la quantité est ajoutée.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                consumables:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      consumableId:
+                        type: number
+                        example: 1
+                      quantity:
+                        type: number
+                        example: 5
+              example:
+                consumables:
+                  - consumableId: 1
+                    quantity: 5
+                  - consumableId: 2
+                    quantity: 3
+      responses:
+        '200':
+          description: Consommables attachés à la quête
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                example:
+                  id: 42
+                  name: Quête du Dragon
+                  questConsumables:
+                    - consumableId: 1
+                      quantity: 5
+                    - consumableId: 2
+                      quantity: 3
+      security:
+        - bearer: []
+      tags:
+        - Quests
+  /quests/{id}/consumables/detach:
+    patch:
+      operationId: QuestsController_detachConsumables
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Quest ID
+          schema:
+            example: 42
+            type: number
+      requestBody:
+        required: true
+        description: >-
+          Liste des consommables à détacher avec leurs quantités. Si la quantité
+          résultante <= 0, le consommable est complètement retiré.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                consumables:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      consumableId:
+                        type: number
+                        example: 1
+                      quantity:
+                        type: number
+                        example: 2
+              example:
+                consumables:
+                  - consumableId: 1
+                    quantity: 2
+                  - consumableId: 2
+                    quantity: 3
+      responses:
+        '200':
+          description: Consommables détachés de la quête
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                example:
+                  id: 42
+                  name: Quête du Dragon
+                  questConsumables:
+                    - consumableId: 1
+                      quantity: 3
+      security:
+        - bearer: []
+      tags:
+        - Quests
+  /quests/{id}/consumables/set:
+    patch:
+      operationId: QuestsController_setConsumables
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: Quest ID
+          schema:
+            example: 42
+            type: number
+      requestBody:
+        required: true
+        description: Remplace tous les consommables de la quête par cette nouvelle liste
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                consumables:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      consumableId:
+                        type: number
+                        example: 3
+                      quantity:
+                        type: number
+                        example: 10
+              example:
+                consumables:
+                  - consumableId: 3
+                    quantity: 10
+      responses:
+        '200':
+          description: Consommables de la quête mis à jour
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                example:
+                  id: 42
+                  name: Quête du Dragon
+                  questConsumables:
+                    - consumableId: 3
+                      quantity: 10
       security:
         - bearer: []
       tags:
@@ -2855,6 +3035,160 @@ paths:
         - bearer: []
       tags:
         - Roles
+  /finances/balance:
+    get:
+      operationId: FinancesController_getBalance
+      parameters: []
+      responses:
+        '200':
+          description: Solde actuel de la guilde
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+                    example: 15000
+      security:
+        - bearer: []
+      tags:
+        - Finances
+  /finances/history:
+    get:
+      operationId: FinancesController_getHistory
+      parameters:
+        - name: skip
+          required: false
+          in: query
+          schema:
+            example: 0
+            type: number
+        - name: take
+          required: false
+          in: query
+          schema:
+            example: 50
+            type: number
+      responses:
+        '200':
+          description: Historique des transactions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        amount:
+                          type: number
+                          example: 1000
+                        description:
+                          type: string
+                          example: 'Avance 20% quête #5'
+                        date:
+                          type: string
+                          format: date-time
+                          example: '2026-01-12T10:00:00.000Z'
+                        total:
+                          type: number
+                          example: 15000
+                  totalCount:
+                    type: number
+                    example: 100
+                  skip:
+                    type: number
+                    example: 0
+                  take:
+                    type: number
+                    example: 50
+      security:
+        - bearer: []
+      tags:
+        - Finances
+  /finances/statistics:
+    get:
+      operationId: FinancesController_getStatistics
+      parameters: []
+      responses:
+        '200':
+          description: Statistiques financières
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalIncome:
+                    type: number
+                    example: 50000
+                  totalExpenses:
+                    type: number
+                    example: 35000
+                  balance:
+                    type: number
+                    example: 15000
+                  transactionCount:
+                    type: number
+                    example: 100
+      security:
+        - bearer: []
+      tags:
+        - Finances
+  /finances/transaction:
+    post:
+      operationId: FinancesController_addTransaction
+      parameters: []
+      requestBody:
+        required: true
+        description: Nouvelle transaction (amount positif = recette, négatif = dépense)
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  example: 1000
+                description:
+                  type: string
+                  example: Vente équipement
+              required:
+                - amount
+                - description
+      responses:
+        '201':
+          description: Transaction créée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 42
+                  amount:
+                    type: number
+                    example: 1000
+                  description:
+                    type: string
+                    example: Vente équipement
+                  date:
+                    type: string
+                    format: date-time
+                    example: '2026-01-12T10:00:00.000Z'
+                  total:
+                    type: number
+                    example: 16000
+      security:
+        - bearer: []
+      tags:
+        - Finances
   /:
     get:
       operationId: AppController_getHello

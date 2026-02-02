@@ -14,7 +14,7 @@
           <textarea id="description" formControlName="description" placeholder="Description" class="commun-input"></textarea>
            @if ((questForm.get('description')?.touched || hasSubmitted) &&
             questForm.get('description')?.invalid) {
-            <p class="error">La description ne peut pas etre vide.</p>
+            <p class="error">La description doit contenir au moins 50 caractères.</p>
           }
         </span>
       </div>

@@ -16,7 +16,7 @@ export class FormQuest implements OnChanges {
 
   questForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    description: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.required, Validators.minLength(50)]),
     finalDate: new FormControl('', [Validators.required]),
     estimatedDuration: new FormControl(1, [Validators.required, Validators.min(1)]),
     reward: new FormControl(0, [Validators.required, Validators.min(0)]),

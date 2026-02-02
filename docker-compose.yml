@@ -29,7 +29,6 @@ services:
         networks:
             - opal-network
             - db-network
-        command: ['sh', '-c', 'npx prisma migrate deploy && node dist/main.js']
 
     front:
         build: ./front

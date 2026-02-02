@@ -8,5 +8,3 @@ coverage
 .git
 .gitignore
 Dockerfile
-prisma/*
-!prisma/schema.prisma

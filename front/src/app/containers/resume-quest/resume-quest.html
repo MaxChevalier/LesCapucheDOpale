@@ -1,3 +1,4 @@
+@if (quest) {
 <h2>{{quest.name}}</h2>
 <div class="status">{{quest.status.name}}</div>
 <div class="quest-details">
@@ -80,3 +81,4 @@
         <button (click)="finish(false)">Échec de la quête</button>
     }
 </div>
+}

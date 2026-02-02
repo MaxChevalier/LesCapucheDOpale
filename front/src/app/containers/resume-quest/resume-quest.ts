@@ -59,14 +59,12 @@ export class ResumeQuest implements OnInit {
       if (![3,4,5,6,7].includes(quest.statusId)) {
         this.router.navigate(['/quest/', this.id]);
       }
+      const totalSuccess = this.quest.adventurers.reduce((sum, rate) => sum + rate.experience, 0);
+      const totalAdventurers = this.quest.adventurers.length;
+      this.successRate = totalAdventurers > 0 ? Math.round((Math.min(1, totalSuccess / Math.max(1,totalAdventurers*0.8)) * 80) * 100) / 100 : 0;
+
+      this.cost = this.quest.adventurers.reduce((sum, adv) => sum + adv.dailyRate * this.quest.estimatedDuration, 0);
     });
-
-
-    const totalSuccess = this.quest.adventurers.reduce((sum, rate) => sum + rate.experience, 0);
-    const totalAdventurers = this.quest.adventurers.length;
-    this.successRate = totalAdventurers > 0 ? Math.round((Math.min(1, totalSuccess / Math.max(1,totalAdventurers*0.8)) * 80) * 100) / 100 : 0;
-
-    this.cost = this.quest.adventurers.reduce((sum, adv) => sum + adv.dailyRate * this.quest.estimatedDuration, 0);
   }
 
   finish(isSuccess: boolean) {

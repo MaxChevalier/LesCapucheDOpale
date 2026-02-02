@@ -136,4 +136,12 @@ export class AssignQuest implements OnInit {
     const totalAdventurers = Object.keys(this.successRateForAdventurer).length;
     return totalAdventurers > 0 ? Math.round((Math.min(1, totalSuccess / Math.max(1,totalAdventurers*0.8)) * 80) * 100) / 100 : 0;
   }
+
+  startQuest() {
+    this.questService.startQuest(this.id).subscribe({
+      next: () => {
+        this.router.navigate(['/quest/', this.id]);
+      }
+    });
+  }
 }

@@ -28,6 +28,7 @@ const USERS = {
     name: 'Admin',
     email: 'admin@gmail.com',
     password: 'admin123',
+    roleId: ROLES.ASSISTANT,
   },
 };
 

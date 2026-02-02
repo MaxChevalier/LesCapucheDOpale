@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { ItemStockEquipment } from '../../components/item-stock-equipment/item-stock-equipment';
 import { EquipmentService } from '../../services/equipment/equipment.service';
 import { ConsumableService } from '../../services/consumable/consumable.service';
+import { ItemConsumable } from '../../components/item-consumable/item-consumable';
 
 @Component({
   selector: 'app-assign-quest',
@@ -38,7 +39,7 @@ export class AssignQuest implements OnInit {
   equipments: StockEquipment[] = [];
   selectedEquipmentIds: Set<number> = new Set<number>();
   consumables: Consumable[] = [];
-  selectedConsumableIds: Set<number> = new Set<number>();
+  selectedConsumableQuantities: { [consumableId: number]: number } = {};
   cost: number = 0;
   successRateForAdventurer: { [adventurerId: number]: number } = {};
 
@@ -124,20 +125,22 @@ export class AssignQuest implements OnInit {
     }
   }
 
-  onToggleConsumable(consumable: any) {
-    if (this.selectedConsumableIds.has(consumable.id)) {
-      this.consumableService.detachConsumableFromQuest(this.id, consumable.id).subscribe({
-        next: () => {
-          this.selectedConsumableIds.delete(consumable.id);
-        }
-      });
+  onConsumableQuantityChange(consumableId: number, event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const quantity = parseInt(inputElement.value, 10);
+
+    if (isNaN(quantity) || quantity < 0) {
+      delete this.selectedConsumableQuantities[consumableId];
     } else {
-      this.consumableService.assignConsumableToQuest(this.id, consumable.id).subscribe({
-        next: () => {
-          this.selectedConsumableIds.add(consumable.id);
-        }
-      });
+      this.selectedConsumableQuantities[consumableId] = quantity;
     }
+
+    this.consumableService.setConsumableToQuest(this.id,
+      Object.entries(this.selectedConsumableQuantities).map(([id, qty]) => ({
+        consumableId: Number(id),
+        quantity: qty
+      }))
+    ).subscribe();
   }
 
   get costBreakdown() {
@@ -159,7 +162,7 @@ export class AssignQuest implements OnInit {
   get successRate(): number {
     const totalSuccess = Object.values(this.successRateForAdventurer).reduce((sum, rate) => sum + rate, 0);
     const totalAdventurers = Object.keys(this.successRateForAdventurer).length;
-    return totalAdventurers > 0 ? Math.round((Math.min(1, totalSuccess / Math.max(1,totalAdventurers*0.8)) * 80) * 100) / 100 : 0;
+    return totalAdventurers > 0 ? Math.round((Math.min(1, totalSuccess / Math.max(1, totalAdventurers * 0.8)) * 80) * 100) / 100 : 0;
   }
 
   startQuest() {

@@ -33,7 +33,6 @@ model Adventurer {
   consumableTypes    ConsumableType[]
   experience         Int
   quests             Quest[]
-  availableUntil     DateTime?
   rests              AdventurerRest[]
 }
 
@@ -111,6 +110,7 @@ model Quest {
   questConsumables     QuestConsumable[]
   UserId               Int
   user                 User                  @relation(fields: [UserId], references: [id])
+  adventurerRests      AdventurerRest[]
 }
 
 model Status {
@@ -156,10 +156,12 @@ model AdventurerRest {
   id           Int        @id @default(autoincrement())
   adventurerId Int
   adventurer   Adventurer @relation(fields: [adventurerId], references: [id])
+  questId      Int?
+  quest        Quest?     @relation(fields: [questId], references: [id])
   startDate    DateTime
   endDate      DateTime
   reason       String
-  type         String     @default("rest") // "rest" | "unavailable" | "mission_rest"
+  type         String     @default("rest") // "rest" | "unavailable" | "mission" | "mission_rest"
 
   @@map("adventurer_rest")
 }

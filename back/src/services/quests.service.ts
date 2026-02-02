@@ -186,7 +186,7 @@ export class QuestsService {
     const targetStatusId = statusId;
 
     try {
-      return await this.prisma.quest.update({
+      const quest = await this.prisma.quest.update({
         where: { id: questId },
         data: { status: { connect: { id: targetStatusId } } },
         include: {
@@ -196,6 +196,8 @@ export class QuestsService {
           user: true,
         },
       });
+
+      return quest;
     } catch (e) {
       if (this.isPrismaNotFoundError(e)) {
         throw new NotFoundException('Quest not found');
@@ -396,19 +398,21 @@ export class QuestsService {
     }
 
     const now = new Date();
-    const inRest = await this.prisma.adventurer.findMany({
+    
+    const inRest = await this.prisma.adventurerRest.findMany({
       where: {
-        id: { in: ids },
-        availableUntil: { gt: now },
+        adventurerId: { in: ids },
+        startDate: { lte: now },
+        endDate: { gt: now },
       },
-      select: { id: true, name: true, availableUntil: true },
+      include: { adventurer: { select: { id: true, name: true } } },
     });
 
     if (inRest.length) {
       const names = inRest
         .map(
-          (a) =>
-            `${a.name} (en repos jusqu'au ${a.availableUntil?.toLocaleDateString('fr-FR')})`,
+          (r) =>
+            `${r.adventurer.name} (en repos jusqu'au ${r.endDate.toLocaleDateString('fr-FR')})`,
         )
         .join(', ');
       throw new BadRequestException(
@@ -616,11 +620,27 @@ export class QuestsService {
     const now = new Date();
 
     await this.prisma.$transaction(async (tx) => {
+      // Créer des entrées de type 'mission' dans adventurer_rest pour les aventuriers
       if (adventurerIds.length) {
-        await tx.adventurer.updateMany({
-          where: { id: { in: adventurerIds } },
-          data: { availableUntil },
+         const questData = await tx.quest.findUnique({
+          where: { id: questId },
+          select: { name: true },
         });
+        
+        await Promise.all(
+          adventurerIds.map((adventurerId) =>
+            tx.adventurerRest.create({
+              data: {
+                adventurerId,
+                questId,
+                startDate: now,
+                endDate: availableUntil,
+                type: 'mission',
+                reason: `En mission: ${questData?.name || 'Quête #' + questId}`,
+              },
+            })
+          )
+        );
       }
 
       // Mettre à jour le statut des équipements en "BORROWED"
@@ -743,6 +763,7 @@ export class QuestsService {
     const quest = await this.prisma.quest.findUnique({
       where: { id: questId },
       select: {
+        name: true,
         statusId: true,
         startDate: true,
         estimatedDuration: true,
@@ -787,6 +808,14 @@ export class QuestsService {
     }
 
     await this.prisma.$transaction(async (tx) => {
+      // Supprimer les entrées "mission" des aventuriers pour cette quête
+      await tx.adventurerRest.deleteMany({
+        where: {
+          questId,
+          type: 'mission',
+        },
+      });
+
       if (isSuccess) {
         for (const adventurer of quest.adventurers) {
           await tx.adventurer.update({
@@ -826,12 +855,18 @@ export class QuestsService {
           currentXP,
           duration,
         );
-        const availableUntil = new Date(now);
-        availableUntil.setDate(availableUntil.getDate() + restDays);
+        const restEndDate = new Date(now);
+        restEndDate.setDate(restEndDate.getDate() + restDays);
 
-        await tx.adventurer.update({
-          where: { id: adventurer.id },
-          data: { availableUntil },
+         await tx.adventurerRest.create({
+          data: {
+            adventurerId: adventurer.id,
+            questId,
+            startDate: now,
+            endDate: restEndDate,
+            type: 'mission_rest',
+            reason: `Repos post-mission: ${quest.name}`,
+          },
         });
       }
 

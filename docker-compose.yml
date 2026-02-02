@@ -3,7 +3,7 @@ services:
         image: postgres:15-alpine
         restart: always
         ports:
-            - '5432:5432'  # Expose PostgreSQL pour accès local
+            - '127.0.0.1:5432:5432'  # Expose PostgreSQL uniquement en local
         environment:
             - POSTGRES_DB=${POSTGRES_DB}
             - POSTGRES_USER=${POSTGRES_USER}

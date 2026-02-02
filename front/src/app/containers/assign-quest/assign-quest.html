@@ -88,7 +88,7 @@
                 <p>Coût: {{ consumable.cost }} Pc</p>
                 <p>Quantité en stock: {{ consumable.quantity }}</p>
                 <label for="quantity">Quantité assignée à la quête:</label>
-                <input id="quantity" type="number" (change)="onConsumableQuantityChange(consumable.id, $event)" min="0" />
+                <input id="quantity" type="number" (change)="onConsumableQuantityChange(consumable.id, $event)" min="0" [value]="getQuantityConsumable(consumable.id)"/>
             </div>
         } @empty {
         <p>Aucun Consomable trouvé</p>

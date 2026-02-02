@@ -86,6 +86,14 @@ export class AssignQuest implements OnInit {
     });
   }
 
+  getQuantityConsumable(consumableId: number){
+    if (this.quest?.questConsumables?.map((x) => x.consumableId).includes(consumableId)) {
+      console.log(this.quest.questConsumables?.find((x) => x.consumableId == consumableId).quantity)
+      return this.quest.questConsumables?.find((x) => x.consumableId == consumableId).quantity
+    }
+    return 0
+  }
+
   onToggleAdventurer(adventurer: Adventurer) {
     if (this.selectedAdventurerIds.has(adventurer.id)) {
       this.questService.unassignAdventurer(this.id, adventurer.id).subscribe({
@@ -160,9 +168,10 @@ export class AssignQuest implements OnInit {
   }
 
   get successRate(): number {
-    const totalSuccess = Object.values(this.successRateForAdventurer).reduce((sum, rate) => sum + rate, 0);
+    const totalSuccess = Object.values(this.successRateForAdventurer).reduce((sum, rate) => sum + rate + 0, 0);
     const totalAdventurers = Object.keys(this.successRateForAdventurer).length;
-    return totalAdventurers > 0 ? Math.round((Math.min(1, totalSuccess / Math.max(1, totalAdventurers * 0.8)) * 80) * 100) / 100 : 0;
+    const res = totalAdventurers > 0 ? Math.round((Math.min(1, totalSuccess / Math.max(1, totalAdventurers * 0.8)) * 80) * 100) / 100 : 0;
+    return res ?? 0;
   }
 
   startQuest() {

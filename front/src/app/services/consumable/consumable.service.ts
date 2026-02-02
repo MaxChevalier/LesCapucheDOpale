@@ -43,4 +43,12 @@ export class ConsumableService {
   purchaseConsumable(id: number, quantity: number): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/${id}/purchase`, { quantity });
   }
+
+  assignConsumableToQuest(questId: number, data: {consumableId: number, quantity: number}[]): Observable<any> {
+    return this.http.post<any>(`api/quests/${questId}/consumables/attach`, data);
+  }
+
+  detachConsumableFromQuest(questId: number, data: {consumableId: number, quantity: number}[]): Observable<any> {
+    return this.http.post<any>(`api/quests/${questId}/consumables/detach`, data);
+  }
 }

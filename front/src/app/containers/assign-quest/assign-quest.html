@@ -79,5 +79,14 @@
         <p>Aucun equipment trouvé</p>
         }
     </div>
+    <div assign-container>
+        @for (consumable of consumables; track consumable.id) {
+        <app-item-stock-equipment (click)="onToggleConsumable(consumable)" [equipment]="consumable"
+            [isSelected]="selectedConsumableIds.has(consumable.id)">
+        </app-item-stock-equipment>
+        } @empty {
+        <p>Aucun Consomable trouvé</p>
+        }
+    </div>
     <button (click)="startQuest()" [disabled]="selectedAdventurerIds.size === 0">Démarrer la quête</button>
 </div>

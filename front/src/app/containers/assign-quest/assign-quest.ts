@@ -1,3 +1,4 @@
+import { Consumable } from './../../models/consumable';
 import { Component, OnInit } from '@angular/core';
 import { Adventurer, Quest, StockEquipment } from '../../models/models';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +8,7 @@ import { ItemAdventurer } from '../../components/item-adventurer/item-adventurer
 import { DatePipe } from '@angular/common';
 import { ItemStockEquipment } from '../../components/item-stock-equipment/item-stock-equipment';
 import { EquipmentService } from '../../services/equipment/equipment.service';
+import { ConsumableService } from '../../services/consumable/consumable.service';
 
 @Component({
   selector: 'app-assign-quest',
@@ -24,6 +26,7 @@ export class AssignQuest implements OnInit {
     private readonly questService: QuestService,
     private readonly adventurerService: AdventurerService,
     private readonly equipmentService: EquipmentService,
+    private readonly consumableService: ConsumableService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router
   ) { }
@@ -34,6 +37,8 @@ export class AssignQuest implements OnInit {
   selectedAdventurerIds: Set<number> = new Set<number>();
   equipments: StockEquipment[] = [];
   selectedEquipmentIds: Set<number> = new Set<number>();
+  consumables: Consumable[] = [];
+  selectedConsumableIds: Set<number> = new Set<number>();
   cost: number = 0;
   successRateForAdventurer: { [adventurerId: number]: number } = {};
 
@@ -74,6 +79,10 @@ export class AssignQuest implements OnInit {
     this.equipmentService.getStockEquipments().subscribe((equipments) => {
       this.equipments = equipments;
     });
+
+    this.consumableService.getAllConsumables().subscribe((consumables) => {
+      this.consumables = consumables;
+    });
   }
 
   onToggleAdventurer(adventurer: Adventurer) {
@@ -110,6 +119,22 @@ export class AssignQuest implements OnInit {
       this.equipmentService.assignEquipment(this.id, equipment.id).subscribe({
         next: () => {
           this.selectedEquipmentIds.add(equipment.id);
+        }
+      });
+    }
+  }
+
+  onToggleConsumable(consumable: any) {
+    if (this.selectedConsumableIds.has(consumable.id)) {
+      this.consumableService.detachConsumableFromQuest(this.id, consumable.id).subscribe({
+        next: () => {
+          this.selectedConsumableIds.delete(consumable.id);
+        }
+      });
+    } else {
+      this.consumableService.assignConsumableToQuest(this.id, consumable.id).subscribe({
+        next: () => {
+          this.selectedConsumableIds.add(consumable.id);
         }
       });
     }
